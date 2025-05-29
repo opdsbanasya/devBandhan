@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Web apllication for developers to collabartion with another developers",
+  "keywords": [
+    "devTinder",
+    "NodeJS",
+    "JavaScript",
+    "MERN"
+  ],
+  "homepage": "https://github.com/opdsbanasya/devTinder#readme",
+  "bugs": {
+    "url": "https://github.com/opdsbanasya/devTinder/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opdsbanasya/devTinder.git"
+  },
+  "license": "ISC",
+  "author": "Dharm Singh Saini",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
