@@ -15,8 +15,12 @@ app.post("/signup", async (req, res) => {
   }
   const user = new User(userData);
 
-  await user.save();  
-  res.send("User has been added to database.")
+  try{
+    await user.save();  
+    res.send("User has been added to database.")
+  } catch(err){
+    res.status(400).send("Error occured to seving user Data", err.message);
+  }
 })
 
 connetDB()
