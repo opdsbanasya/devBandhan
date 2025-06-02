@@ -1,27 +1,21 @@
 const express = require("express");
-const {connetDB } = require("./config/database");
-const User = require("./models/user")
+const { connetDB } = require("./config/database");
+const User = require("./models/user");
 
 const app = express();
 
-app.post("/signup", async (req, res) => {
-  console.log(req.query)
-  const userData = {
-    firstName: req.query.firstName,
-    lastName: req.query.lastName,
-    email: req.query.email,
-    password: req.query.password,
-    gender: req.query.gender
-  }
-  const user = new User(userData);
+app.use(express.json());
 
-  try{
-    await user.save();  
-    res.send("User has been added to database.")
-  } catch(err){
+app.post("/signup", async (req, res) => {
+  const user = new User(req.body);
+
+  try {
+    await user.save();
+    res.send("User has been added to database.");
+  } catch (err) {
     res.status(400).send("Error occured to seving user Data", err.message);
   }
-})
+});
 
 connetDB()
   .then(() => {
