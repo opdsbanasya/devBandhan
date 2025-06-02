@@ -13,9 +13,25 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("User has been added to database.");
   } catch (err) {
-    res.status(400).send("Error occured to seving user Data", err.message);
+    res.status(400).send("Error occured to saving user Data", err.message);
   }
 });
+
+// GET API - find user by email
+app.get("/user", async (req, res) => {
+  try {
+    const users = await User.find({ email: req.body.email });
+    if (users.length === 0) {
+      res.status(404).send("User not found");
+    } else {
+      res.send(users);
+    }
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
+
+
 
 connetDB()
   .then(() => {
