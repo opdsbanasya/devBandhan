@@ -33,23 +33,36 @@ app.get("/user", async (req, res) => {
 
 // GET /feed API - finding all users
 app.get("/feed", async (req, res) => {
-  try{
+  try {
     const users = await User.find({});
-    res.send(users)
+    res.send(users);
   } catch (err) {
     res.status(400).send("Something went wrong");
   }
-})
+});
 
 // DELETE /user API - to delete an user
 app.delete("/user", async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.body.userId)
+    const user = await User.findByIdAndDelete(req.body.userId);
     res.send("User deleted successfully");
   } catch (err) {
     res.status(400).send("Something went wrong");
   }
-})
+});
+
+// PATCH /user API - to update an user
+app.patch("/user", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.body.userId, req.body, {
+      returnDocument: "after",
+    });
+    console.log(user);
+    res.send("User updated successfully");
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
 
 connetDB()
   .then(() => {
