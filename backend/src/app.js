@@ -41,6 +41,15 @@ app.get("/feed", async (req, res) => {
   }
 })
 
+// DELETE /user API - to delete an user
+app.delete("/user", async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.body.userId)
+    res.send("User deleted successfully");
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+})
 
 connetDB()
   .then(() => {
