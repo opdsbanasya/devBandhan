@@ -13,7 +13,7 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("User has been added to database.");
   } catch (err) {
-    res.status(400).send("Error occured to saving user Data", err.message);
+    res.status(400).send("Error occured to saving user Data:" + err.message);
   }
 });
 
@@ -52,15 +52,36 @@ app.delete("/user", async (req, res) => {
 });
 
 // PATCH /user API - to update an user
-app.patch("/user", async (req, res) => {
+app.patch("/user/:userId", async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.body.userId, req.body, {
+    const data = req.body;
+    const allowedUpdated = [
+      "firstName",
+      "lastName",
+      "password",
+      "gender",
+      "profilePhoto",
+      "about",
+      "skills",
+    ];
+    const isUpdatesAllowed = Object.keys(data).every((key) =>
+      allowedUpdated.includes(key)
+    );
+
+    if (!isUpdatesAllowed) {
+      throw new Error("Updates are not allowed");
+    }
+    if(data?.skills.length > 10){
+      throw new Error("Skill can't be more than 10");
+    }
+
+    const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
       returnDocument: "after",
+      runValidators: true,
     });
-    console.log(user);
     res.send("User updated successfully");
   } catch (err) {
-    res.status(400).send("Something went wrong");
+    res.status(400).send("Something went wrong: " + err.message);
   }
 });
 
