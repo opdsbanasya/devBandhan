@@ -1,7 +1,7 @@
 const express = require("express");
 const { connetDB } = require("./config/database");
 const User = require("./models/user");
-const { validateSignupData, validateUpdateData } = require("./utils/validate");
+const { validateSignupData, validateUpdateData, validateLoginData } = require("./utils/validate");
 const bcrypt = require("bcrypt");
 
 const app = express();
@@ -26,6 +26,28 @@ app.post("/signup", async (req, res) => {
     res.status(400).send("ERROR:" + err.message);
   }
 });
+
+// POST /login API
+app.post("/login", async (req, res)=>{
+  try {
+    validateLoginData(req.body);
+
+    const user = await User.findOne({email: req.body.email})
+    if(!user){
+      throw new Error("User not found");
+    }
+    
+    const isPasswordMatched = await bcrypt.compare(req.body.password, user.password);
+
+    if(isPasswordMatched){
+      res.send("Login Successful!!");
+    } else {
+      throw new Error("Wrong Email and Password");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR:" + err.message);
+  }
+})
 
 // GET API - find user by email
 app.get("/user", async (req, res) => {

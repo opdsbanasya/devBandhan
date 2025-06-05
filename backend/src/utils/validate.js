@@ -29,4 +29,10 @@ const validateUpdateData = (data) => {
   }
 };
 
-module.exports = { validateSignupData, validateUpdateData };
+const validateLoginData = (data) => {
+    if(!validator.isEmail(data.email)){
+        throw new Error("Invalid Email");
+    }
+}
+
+module.exports = { validateSignupData, validateUpdateData, validateLoginData };
