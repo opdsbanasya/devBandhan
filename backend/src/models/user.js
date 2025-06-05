@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
       },
     },
     age: {
-      type: String,
+      type: Number,
       min: 15,
       max: 80,
     },

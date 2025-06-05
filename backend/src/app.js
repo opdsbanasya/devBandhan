@@ -1,19 +1,24 @@
 const express = require("express");
 const { connetDB } = require("./config/database");
 const User = require("./models/user");
+const { validateSignupData, validateUpdateData } = require("./utils/validate");
 
 const app = express();
 
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
-
   try {
+    // Validate Data
+    validateSignupData(req.body);
+
+    // Encrypt the password
+
+    const user = new User(req.body);
     await user.save();
     res.send("User has been added to database.");
   } catch (err) {
-    res.status(400).send("Error occured to saving user Data:" + err.message);
+    res.status(400).send("ERROR:" + err.message);
   }
 });
 
@@ -55,25 +60,7 @@ app.delete("/user", async (req, res) => {
 app.patch("/user/:userId", async (req, res) => {
   try {
     const data = req.body;
-    const allowedUpdated = [
-      "firstName",
-      "lastName",
-      "password",
-      "gender",
-      "profilePhoto",
-      "about",
-      "skills",
-    ];
-    const isUpdatesAllowed = Object.keys(data).every((key) =>
-      allowedUpdated.includes(key)
-    );
-
-    if (!isUpdatesAllowed) {
-      throw new Error("Updates are not allowed");
-    }
-    if(data?.skills.length > 10){
-      throw new Error("Skill can't be more than 10");
-    }
+    validateUpdateData(data);
 
     const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
       returnDocument: "after",
@@ -81,7 +68,7 @@ app.patch("/user/:userId", async (req, res) => {
     });
     res.send("User updated successfully");
   } catch (err) {
-    res.status(400).send("Something went wrong: " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
