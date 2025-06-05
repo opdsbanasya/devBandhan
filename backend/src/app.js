@@ -2,6 +2,7 @@ const express = require("express");
 const { connetDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignupData, validateUpdateData } = require("./utils/validate");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -10,11 +11,15 @@ app.use(express.json());
 app.post("/signup", async (req, res) => {
   try {
     // Validate Data
-    validateSignupData(req.body);
+    const data = req.body;
+    validateSignupData(data);
 
     // Encrypt the password
-
-    const user = new User(req.body);
+    const passwordHash = await bcrypt.hash(data.password, 10)
+    data.password = passwordHash;
+    console.log(data.password);
+    
+    const user = new User(data);
     await user.save();
     res.send("User has been added to database.");
   } catch (err) {
