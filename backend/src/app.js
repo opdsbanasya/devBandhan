@@ -3,10 +3,13 @@ const { connetDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignupData, validateUpdateData, validateLoginData } = require("./utils/validate");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -40,10 +43,38 @@ app.post("/login", async (req, res)=>{
     const isPasswordMatched = await bcrypt.compare(req.body.password, user.password);
 
     if(isPasswordMatched){
+      // Creating JWT Token
+      const token = await jwt.sign({_id: user._id}, "TINDER@Dev$");
+      
+      // Sending Cookies
+      res.cookie("token", token);
       res.send("Login Successful!!");
     } else {
       throw new Error("Wrong Email and Password");
     }
+  } catch (err) {
+    res.status(400).send("ERROR:" + err.message);
+  }
+})
+
+// Get /profile API
+app.get("/profile", async (req, res)=>{
+  try{
+    // verifing the token
+    const {token} = req.cookies;
+    const decodedMessage = await jwt.verify(token, "TINDER@Dev$")
+
+    const {_id} = decodedMessage;
+    
+    // handling the case if '_id' is not their
+    if(!_id){
+      res.status.send("Invalid token");
+    }
+
+    // finding the user by userId
+    const user = await User.findById(_id);
+
+    res.send(user);
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
