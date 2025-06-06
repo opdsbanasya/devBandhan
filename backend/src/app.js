@@ -5,6 +5,7 @@ const { validateSignupData, validateUpdateData, validateLoginData } = require(".
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const {userAuth} = require("./middlewares/auth")
 
 const app = express();
 
@@ -62,22 +63,9 @@ app.post("/login", async (req, res)=>{
 })
 
 // Get /profile API
-app.get("/profile", async (req, res)=>{
+app.get("/profile", userAuth, async (req, res)=>{
   try{
-    // verifing the token
-    const {token} = req.cookies;
-    const decodedMessage = await jwt.verify(token, "TINDER@Dev$")
-
-    const {_id} = decodedMessage;
-
-    // handling the case if '_id' is not their
-    if(!_id){
-      res.status.send("Invalid token");
-    }
-
-    // finding the user by userId
-    const user = await User.findById(_id);
-
+    const {user} = req;
     res.send(user);
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
