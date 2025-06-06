@@ -22,6 +22,7 @@ app.post("/signup", async (req, res) => {
     data.password = passwordHash;
     console.log(data.password);
     
+    // Registering the user on DB
     const user = new User(data);
     await user.save();
     res.send("User has been added to database.");
@@ -33,13 +34,16 @@ app.post("/signup", async (req, res) => {
 // POST /login API
 app.post("/login", async (req, res)=>{
   try {
+    // Validate email format
     validateLoginData(req.body);
 
+    // Finding user by email
     const user = await User.findOne({email: req.body.email})
     if(!user){
       throw new Error("User not found");
     }
     
+    // Matching password with passwordHash
     const isPasswordMatched = await bcrypt.compare(req.body.password, user.password);
 
     if(isPasswordMatched){
@@ -65,7 +69,7 @@ app.get("/profile", async (req, res)=>{
     const decodedMessage = await jwt.verify(token, "TINDER@Dev$")
 
     const {_id} = decodedMessage;
-    
+
     // handling the case if '_id' is not their
     if(!_id){
       res.status.send("Invalid token");
@@ -83,6 +87,7 @@ app.get("/profile", async (req, res)=>{
 // GET API - find user by email
 app.get("/user", async (req, res) => {
   try {
+    // Finding user by email
     const users = await User.find({ email: req.body.email });
     if (users.length === 0) {
       res.status(404).send("User not found");
@@ -97,6 +102,7 @@ app.get("/user", async (req, res) => {
 // GET /feed API - finding all users
 app.get("/feed", async (req, res) => {
   try {
+    // finding all users
     const users = await User.find({});
     res.send(users);
   } catch (err) {
@@ -107,6 +113,7 @@ app.get("/feed", async (req, res) => {
 // DELETE /user API - to delete an user
 app.delete("/user", async (req, res) => {
   try {
+    // finding the user and deleting the user
     const user = await User.findByIdAndDelete(req.body.userId);
     res.send("User deleted successfully");
   } catch (err) {
@@ -118,8 +125,11 @@ app.delete("/user", async (req, res) => {
 app.patch("/user/:userId", async (req, res) => {
   try {
     const data = req.body;
+
+    // validate the data
     validateUpdateData(data);
 
+    // finding the user and updating their data
     const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
       returnDocument: "after",
       runValidators: true,
