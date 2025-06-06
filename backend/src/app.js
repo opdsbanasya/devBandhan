@@ -1,11 +1,15 @@
 const express = require("express");
 const { connetDB } = require("./config/database");
 const User = require("./models/user");
-const { validateSignupData, validateUpdateData, validateLoginData } = require("./utils/validate");
+const {
+  validateSignupData,
+  validateUpdateData,
+  validateLoginData,
+} = require("./utils/validate");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const {userAuth} = require("./middlewares/auth")
+const { userAuth } = require("./middlewares/auth");
 
 const app = express();
 
@@ -19,10 +23,10 @@ app.post("/signup", async (req, res) => {
     validateSignupData(data);
 
     // Encrypt the password
-    const passwordHash = await bcrypt.hash(data.password, 10)
+    const passwordHash = await bcrypt.hash(data.password, 10);
     data.password = passwordHash;
     console.log(data.password);
-    
+
     // Registering the user on DB
     const user = new User(data);
     await user.save();
@@ -33,26 +37,33 @@ app.post("/signup", async (req, res) => {
 });
 
 // POST /login API
-app.post("/login", async (req, res)=>{
+app.post("/login", async (req, res) => {
   try {
     // Validate email format
     validateLoginData(req.body);
 
     // Finding user by email
-    const user = await User.findOne({email: req.body.email})
-    if(!user){
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
       throw new Error("User not found");
     }
-    
-    // Matching password with passwordHash
-    const isPasswordMatched = await bcrypt.compare(req.body.password, user.password);
 
-    if(isPasswordMatched){
+    // Matching password with passwordHash
+    const isPasswordMatched = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (isPasswordMatched) {
       // Creating JWT Token
-      const token = await jwt.sign({_id: user._id}, "TINDER@Dev$");
-      
+      const token = await jwt.sign({ _id: user._id }, "TINDER@Dev$", {
+        expiresIn: "7d",
+      });
+
       // Sending Cookies
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 7 * 86400000),
+      });
       res.send("Login Successful!!");
     } else {
       throw new Error("Wrong Email and Password");
@@ -60,17 +71,17 @@ app.post("/login", async (req, res)=>{
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
-})
+});
 
 // Get /profile API
-app.get("/profile", userAuth, async (req, res)=>{
-  try{
-    const {user} = req;
+app.get("/profile", userAuth, async (req, res) => {
+  try {
+    const { user } = req;
     res.send(user);
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
-})
+});
 
 // GET API - find user by email
 app.get("/user", async (req, res) => {
