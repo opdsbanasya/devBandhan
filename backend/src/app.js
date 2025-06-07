@@ -8,7 +8,6 @@ const {
 } = require("./utils/validate");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
 const { userAuth } = require("./middlewares/auth");
 
 const app = express();
@@ -49,16 +48,12 @@ app.post("/login", async (req, res) => {
     }
 
     // Matching password with passwordHash
-    const isPasswordMatched = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const isPasswordMatched = user.matchPasswordWithPasswordHash(req.body.password)
 
     if (isPasswordMatched) {
+
       // Creating JWT Token
-      const token = await jwt.sign({ _id: user._id }, "TINDER@Dev$", {
-        expiresIn: "7d",
-      });
+      const token = await user.getJWT();
 
       // Sending Cookies
       res.cookie("token", token, {
