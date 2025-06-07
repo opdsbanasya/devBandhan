@@ -6,6 +6,11 @@ const userAuth = async (req, res, next) => {
     // Reading Token
     const { token } = req.cookies;
 
+    // Handling if token is missing
+    if(!token){
+      throw new Error("Please login to your account")
+    }
+
     // validating the token
     const decodedMessage = await jwt.verify(token, "TINDER@Dev$");
 
@@ -27,7 +32,7 @@ const userAuth = async (req, res, next) => {
 
     next();
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    res.status(err).send("ERROR: " + err.message);
   }
 };
 
