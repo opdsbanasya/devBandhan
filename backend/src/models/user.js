@@ -88,6 +88,11 @@ userSchema.methods.getJWT = async function () {
   return token;
 };
 
+userSchema.methods.getPasswordHash = async function(plainPasswordFromUser){
+  const passwordHash = await bcrypt.hash(plainPasswordFromUser, 10);
+  return passwordHash;
+}
+
 userSchema.methods.matchPasswordWithPasswordHash = async function(plainPasswordFromUser){
   const passwordHash = this.password;
   const isPasswordMatchedWithHash = await bcrypt.compare(plainPasswordFromUser, passwordHash)

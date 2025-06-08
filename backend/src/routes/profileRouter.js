@@ -1,6 +1,7 @@
 const express = require("express");
 const { validateUpdateData } = require("../utils/validate");
 const User = require("../models/user");
+const validator = require("validator");
 
 const { userAuth } = require("../middlewares/authMiddleware");
 
@@ -24,12 +25,42 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     // validate the data
     validateUpdateData(data);
 
-    const {user} = req;
+    const { user } = req;
 
     // finding the user and updating their data
-    const user1 = await User.updateOne({_id: user._id}, data);
-    console.log(user1);
+    await User.updateOne({ _id: user._id }, data);
     res.send("User updated successfully");
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+// GET /profile/password
+profileRouter.patch("/profile/password", userAuth, async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const currentPassword = req.body.password;
+
+    // validate the data
+    if (!validator.isStrongPassword(newPassword)) {
+      throw new Error(
+        "Password must have: minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1"
+      );
+    }
+
+    const { user } = req;
+
+    // Matching password with passwordHash
+    const isPasswordMatched = await user.matchPasswordWithPasswordHash(currentPassword);
+
+    if (!isPasswordMatched) {
+      throw new Error("Incorrect Password");
+    }
+    const newPasswordHash = await user.getPasswordHash(newPassword);
+    console.log(newPasswordHash);
+    await User.updateOne({_id: user._id}, {password: newPasswordHash});
+    res.send("User updated successfully");
+    
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
