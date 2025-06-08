@@ -17,18 +17,18 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
 });
 
 // PATCH /user API - to update an user
-profileRouter.patch("/user/:userId", async (req, res) => {
+profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
     const data = req.body;
 
     // validate the data
     validateUpdateData(data);
 
+    const {user} = req;
+
     // finding the user and updating their data
-    const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
-      returnDocument: "after",
-      runValidators: true,
-    });
+    const user1 = await User.updateOne({_id: user._id}, data);
+    console.log(user1);
     res.send("User updated successfully");
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);

@@ -10,11 +10,11 @@ const validateUpdateData = (data) => {
   const allowedUpdated = [
     "firstName",
     "lastName",
-    "password",
     "gender",
+    "age",
+    "skills",
     "profilePhoto",
     "about",
-    "skills",
   ];
   const isUpdatesAllowed = Object.keys(data).every((key) =>
     allowedUpdated.includes(key)
