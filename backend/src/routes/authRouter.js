@@ -38,7 +38,7 @@ authRouter.post("/login", async (req, res) => {
     }
 
     // Matching password with passwordHash
-    const isPasswordMatched = user.matchPasswordWithPasswordHash(
+    const isPasswordMatched = await user.matchPasswordWithPasswordHash(
       req.body.password
     );
 
