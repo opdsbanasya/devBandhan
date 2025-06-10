@@ -20,12 +20,10 @@ Dev Tinder is inspired by Tinder, but Tinder is a dating app, and Dev Tinder is 
 - DELETE /profile/delete
 
 **userRequestRouter**:
-- POST /request/send/ignored/:userId
-- POST /request/send/intrested/:userId
-- POST /request/review/rejected/:requestId
-- POST /request/review/accepted/:requestId
+- POST /request/send/:status/:userId
+- POST /request/review/:status/:requestId
 
 **userRouter**:
 - GET /user/feed
 - GET /user/connections
-- GET /user/requests
+- GET /user/requests/recieved
