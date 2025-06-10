@@ -57,7 +57,6 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         "firstName lastName about gender age skills profilePhoto"
       );
 
-    console.log(connections);
     const data = connections.map((request) => {
       if (request.fromUserId._id.toString() === loggedInUser._id.toString()) {
         return request.toUserId;
