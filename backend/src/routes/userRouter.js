@@ -24,11 +24,51 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
     const pendingReqeusts = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
       status: "interested",
-    }).populate("fromUserId", "firstName lastName about gender age skills profilePhoto");
+    }).populate(
+      "fromUserId",
+      "firstName lastName about gender age skills profilePhoto"
+    );
 
     res.json({
       message: "All connection request fetched successfully",
       pendingReqeusts,
+    });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+userRouter.get("/user/connections", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connections = await ConnectionRequest.find({
+      $or: [
+        { toUserId: loggedInUser._id, status: "accepted" },
+        { fromUserId: loggedInUser._id, status: "accepted" },
+      ],
+    })
+      .populate(
+        "fromUserId",
+        "firstName lastName about gender age skills profilePhoto"
+      )
+      .populate(
+        "toUserId",
+        "firstName lastName about gender age skills profilePhoto"
+      );
+
+    console.log(connections);
+    const data = connections.map((request) => {
+      if (request.fromUserId._id.toString() === loggedInUser._id.toString()) {
+        return request.toUserId;
+      } else {
+        return request.fromUserId;
+      }
+    });
+
+    res.json({
+      message: "All connection request fetched successfully",
+      data,
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
