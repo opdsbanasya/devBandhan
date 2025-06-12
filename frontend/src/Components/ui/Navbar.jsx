@@ -1,12 +1,21 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div data-theme="black" className="navbar shadow-sm px-20 bg-base-100">
+    <div data-theme="black" className="navbar shadow-sm px-20 bg-base-100 h-[10vh]">
       <div className="flex-1">
         <a className=" text-xl">🧑‍💻 Dev Tinder</a>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-10">
+        <div className="flex item-center gap-5">
+          <button className="px-5 font-semibold rounded-full cursor-pointer border hover:bg-green-100 hover:text-green-500 transition-all duration-500">
+            <Link to={"/signup"}>Sign up</Link>
+          </button>
+          <button className="px-5 font-semibold rounded-full cursor-pointer border hover:bg-blue-100 hover:text-blue-500 transition-all duration-500">
+            <Link to={"/login"}>Login</Link>
+          </button>
+        </div>
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
