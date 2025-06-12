@@ -5,7 +5,7 @@ import Footer from "./ui/Footer";
 
 function Body() {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Navbar />
       <Outlet />
       <Footer />
