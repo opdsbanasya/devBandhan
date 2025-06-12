@@ -68,6 +68,9 @@ userRouter.get("/feed", userAuth, async (req, res) => {
   try {
     // data reading
     const loggedInUser = req.user;
+    const page = req.query.page || 1;
+    const results = (req.query.results > 3 && 3) || 10;
+    const skipResults = (page - 1) * results;
 
     // Finding user those are hidden from users feed
     const connections = await ConnectionRequest.find({
@@ -87,7 +90,10 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         { _id: { $nin: Array.from(hiddenUserFromFeed) } },
         { _id: { $ne: loggedInUser._id } },
       ],
-    }).select("firstName lastName about gender age skills profilePhoto");
+    })
+      .select("firstName lastName about gender age skills profilePhoto")
+      .skip(skipResults)
+      .limit(results);
 
     res.json({ message: "User feed Data", usersForFeed });
   } catch (err) {
