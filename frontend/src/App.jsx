@@ -1,11 +1,20 @@
-import { Globe } from "./components/magicui/globe";
+import { Route, Routes } from "react-router-dom";
+import Body from "./Components/Body";
+import Login from "./Components/ui/Login"
+import Signup from "./Components/ui/Signup";
+import Profile from "./Components/ui/Profile";
 
 function App() {
   return (
-    <div>
-      <h1>Devtinder</h1>
-      <Globe />
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Body />}>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
