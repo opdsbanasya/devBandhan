@@ -1,14 +1,56 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { BorderBeam } from "../magicui/border-beam";
 import { Link } from "react-router-dom";
+import {
+  signUpDataValidation,
+  validateSingupContinueData,
+} from "@/utils/validation";
 
 const Signup = () => {
   const [isContinue, setIsContinue] = useState(false);
-  console.log(isContinue);
+  const [signupData, setSignupData] = useState({});
+
+  const firstName = useRef(null);
+  const lastName = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const dateOfBirth = useRef(null);
+  const domain = useRef(null);
+  const skills = useRef(null);
+  const about = useRef(null);
+  const photoUrl = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("User sign successfully");
+    if (!isContinue) {
+      const validateData = signUpDataValidation({
+        firstName: firstName.current.value,
+        lastName: lastName.current.value,
+        email: email.current.value,
+        password: password.current.value,
+        dateOfBirth: dateOfBirth.current.value,
+      });
+
+      console.log(validateData);
+
+      const isNoError = Object.keys(validateData).length === 0;
+      console.log(isNoError);
+      if (isNoError) {
+        setIsContinue(true);
+      }
+    } else {
+      const continueValidateData = validateSingupContinueData({
+        domain: domain.current ? domain.current.value : "",
+        skills: skills.current ? skills.current.value : "",
+        about: about.current ? about.current.value : "",
+        photoUrl: photoUrl.current ? photoUrl.current.value : "",
+      });
+
+      const isAgainNoError = Object.keys(continueValidateData).length === 0;
+      if (isAgainNoError) {
+        alert("You have been registered");
+      }
+    }
   };
 
   return (
@@ -30,7 +72,9 @@ const Signup = () => {
         <div className="relative w-[30%] h-[85%] rounded-lg shadow-2xl z-10 transform translate-x-30 bg-base-300">
           <div className="space-y-5 py-5">
             <div>
-              <h5 className="tex-xl font-semibold text-center shadow-lg mb-2">Sign up</h5>
+              <h5 className="tex-xl font-semibold text-center shadow-lg mb-2">
+                Sign up
+              </h5>
               <p className=" text-center">
                 Enter your details below to register on <span>DevTinder</span>
               </p>
@@ -47,6 +91,8 @@ const Signup = () => {
                       placeholder="Firstname"
                       id="firstname"
                       name="firstname"
+                      ref={firstName}
+                      required
                       className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400"
                     />
 
@@ -58,6 +104,8 @@ const Signup = () => {
                       placeholder="LastName"
                       id="lastname"
                       name="lastname"
+                      ref={lastName}
+                      required
                       className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400"
                     />
                     <label htmlFor="email" className="pl-2">
@@ -68,6 +116,8 @@ const Signup = () => {
                       placeholder="Email"
                       id="email"
                       name="email"
+                      ref={email}
+                      required
                       className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400"
                     />
 
@@ -79,6 +129,8 @@ const Signup = () => {
                       placeholder="Password"
                       id="password"
                       name="password"
+                      ref={password}
+                      required
                       className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400"
                     />
 
@@ -89,12 +141,16 @@ const Signup = () => {
                       type="date"
                       id="dob"
                       name="dob"
+                      ref={dateOfBirth}
+                      required
                       className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-6 focus-within:border-zinc-400"
                     />
 
                     <button
                       className="px-3 py-2 text-red-500 bg-red-100 w-fit mx-auto rounded-md font-semibold cursor-pointer"
-                      onClick={() => setIsContinue(true)}
+                      onClick={(e) => {
+                        handleSubmit(e);
+                      }}
                     >
                       Continue
                     </button>
@@ -158,7 +214,10 @@ const Signup = () => {
             <div className="px-10">
               <p className="text-sm">
                 Already have an account?{" "}
-                <Link to={"/login"} className="text-blue-400 underline font-semibold">
+                <Link
+                  to={"/login"}
+                  className="text-blue-400 underline font-semibold"
+                >
                   Login
                 </Link>
               </p>
