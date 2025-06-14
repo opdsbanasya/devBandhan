@@ -1,14 +1,14 @@
 import validator from "validator";
 
 export const signUpDataValidation = (data) => {
+  const errors = {};
+  console.log(data);
+
   const firstName = data.firstName.trim();
   const lastName = data.lastName.trim();
   const email = data.email.trim().toLowerCase();
   const password = data.password;
   const dateOfBirth = data.dateOfBirth;
-
-  const errors = {};
-  console.log(dateOfBirth);
 
   // fistName
   if (firstName.length === 0) {
@@ -43,28 +43,12 @@ export const signUpDataValidation = (data) => {
     errors.dobError = "Enter a valid date";
   }
 
-  return errors;
-};
-
-export const validateSingupContinueData = (data) => {
   const domain = data.domain;
   const skills = data.skills;
   const about = data.about && data.about.trim();
   const photoUlr = data.photoUlr && data.photoUlr.trim();
 
-  const errors = {};
-
-  // about
-  if (about.length === 0) {
-    errors.aboutError = "Enter your bio";
-  } else if (about.length >= 10) {
-    errors.aboutError = "Your bio is too short";
-  }
-
-  // photoUrl
-  if(!validator.isURL(photoUlr)){
-    errors.photUrlError = "Enter a valid url";
-  }
-
   return errors;
 };
+
+export default signUpDataValidation;

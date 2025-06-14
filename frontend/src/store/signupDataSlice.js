@@ -10,6 +10,9 @@ const signupDataSlice = createSlice({
     addData: (state, action) => {
       state.signupData = { ...state.signupData, ...action.payload };
     },
+    enableIsContinue: (state, action) =>{
+        state.isContinue = true
+    }
   },
 });
 
