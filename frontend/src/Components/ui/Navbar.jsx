@@ -10,8 +10,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(user);
-
   const handleLogout = async () => {
     const response = await axios.post(BASE_URL+"/logout")
     console.log(response);
@@ -25,7 +23,7 @@ const Navbar = () => {
       className="navbar shadow-sm px-20 bg-base-100 h-[10vh]"
     >
       <div className="flex-1">
-        <a className=" text-xl">🧑‍💻 Dev Tinder</a>
+        <Link to={"/feed"} className=" text-xl">🧑‍💻 Dev Tinder</Link>
       </div>
       <div className="flex gap-10">
         {!user && (
@@ -60,10 +58,10 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-14 w-52 p-2 shadow-xl shadow-zinc-900"
             >
               <li>
-                <a className="justify-between text-[14px]">
+                <Link to={"/profile"} className="justify-between text-[14px]">
                   Profile
                   <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
                 <a className="text-[14px]">Settings</a>
