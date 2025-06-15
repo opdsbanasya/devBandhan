@@ -11,11 +11,15 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const response = await axios.post(BASE_URL+"/logout")
+    const response = await axios.post(
+      BASE_URL + "/logout",
+      {},
+      { withCredentials: true }
+    );
     console.log(response);
     dispatch(removeUser());
     navigate("/");
-  }
+  };
 
   return (
     <div
@@ -23,7 +27,9 @@ const Navbar = () => {
       className="navbar shadow-sm px-20 bg-base-100 h-[10vh]"
     >
       <div className="flex-1">
-        <Link to={"/feed"} className=" text-xl">🧑‍💻 Dev Tinder</Link>
+        <Link to={"/feed"} className=" text-xl">
+          🧑‍💻 Dev Tinder
+        </Link>
       </div>
       <div className="flex gap-10">
         {!user && (
@@ -67,7 +73,9 @@ const Navbar = () => {
                 <a className="text-[14px]">Settings</a>
               </li>
               <li>
-                <p className="text-[14px]" onClick={handleLogout}>Logout</p>
+                <p className="text-[14px]" onClick={handleLogout}>
+                  Logout
+                </p>
               </li>
             </ul>
           </div>
