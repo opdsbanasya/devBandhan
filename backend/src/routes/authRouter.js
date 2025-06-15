@@ -19,7 +19,7 @@ authRouter.post("/signup", async (req, res) => {
     // Registering the user on DB
     const user = new User(data);
     await user.save();
-    res.send("User has been added to database.");
+    res.json({ message: "User has been added to database." });
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
@@ -46,24 +46,38 @@ authRouter.post("/login", async (req, res) => {
       // Creating JWT Token
       const token = await user.getJWT();
 
+      const { firstName, lastName, about, gender, age, skills, profilePhoto } =
+        user;
+
       // Sending Cookies
       res.cookie("token", token, {
         expires: new Date(Date.now() + 7 * 86400000),
       });
-      res.send("Login Successful!!");
+      res.json({
+        message: "Login Successful!!",
+        userData: {
+          firstName,
+          lastName,
+          about,
+          gender,
+          age,
+          skills,
+          profilePhoto,
+        },
+      });
     } else {
       throw new Error("Wrong Email and Password");
     }
   } catch (err) {
-    res.status(400).send("ERROR:" + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
 // POST /logout API
-authRouter.post("/logout", (req, res)=>{
+authRouter.post("/logout", (req, res) => {
   res.clearCookie("token");
   // res.cookie("token", null, {expires: new Date(Date.now())})
-  res.send("logout successful 📤")
-})
+  res.json({ message: "logout successful 📤" });
+});
 
 module.exports = authRouter;
