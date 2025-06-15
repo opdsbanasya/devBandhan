@@ -1,12 +1,17 @@
 import React, { useRef } from "react";
 import { BorderBeam } from "../magicui/border-beam";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginDataValiadation } from "@/utils/validation";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import {addUser} from "../../store/userSlice";
+import { BASE_URL } from "@/utils/constants";
 
 const Login = () => {
   const email = useRef();
   const password = useRef();
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,12 +23,12 @@ const Login = () => {
       const isOk = loginDataValiadation(
         loginData
       );
-      console.log(loginData);
-      console.log(isOk);
 
       if(isOk){
-        const user = await axios.post("http://localhost:3000/login", loginData, {withCredentials: true});
-        console.log(user);
+        const user = await axios.post(BASE_URL + "/login", loginData, {withCredentials: true});
+
+        dispatch(addUser(user?.data?.userData))
+        navigate("/feed")
       }
     } catch (err) {
       console.log("ERROR" + err.message);
