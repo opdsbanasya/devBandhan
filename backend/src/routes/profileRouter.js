@@ -8,10 +8,10 @@ const { userAuth } = require("../middlewares/authMiddleware");
 const profileRouter = express.Router();
 
 // Get /profile API
-profileRouter.get("/profile", userAuth, async (req, res) => {
+profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const { user } = req;
-    res.send(user);
+    res.json({ message: "Fetch successfully", user });
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
@@ -51,16 +51,17 @@ profileRouter.patch("/profile/password", userAuth, async (req, res) => {
     const { user } = req;
 
     // Matching password with passwordHash
-    const isPasswordMatched = await user.matchPasswordWithPasswordHash(currentPassword);
+    const isPasswordMatched = await user.matchPasswordWithPasswordHash(
+      currentPassword
+    );
 
     if (!isPasswordMatched) {
       throw new Error("Incorrect Password");
     }
     const newPasswordHash = await user.getPasswordHash(newPassword);
     console.log(newPasswordHash);
-    await User.updateOne({_id: user._id}, {password: newPasswordHash});
+    await User.updateOne({ _id: user._id }, { password: newPasswordHash });
     res.send("User updated successfully");
-    
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }

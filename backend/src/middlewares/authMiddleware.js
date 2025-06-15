@@ -8,7 +8,7 @@ const userAuth = async (req, res, next) => {
 
     // Handling if token is missing
     if(!token){
-      throw new Error("Please login to your account")
+      return res.status(401).send("Invalid token");
     }
 
     // validating the token
@@ -18,7 +18,7 @@ const userAuth = async (req, res, next) => {
 
     // handling the case if '_id' is not their
     if (!_id) {
-      res.status.send("Invalid token");
+      return res.status(400).send("Invalid id");
     }
 
     // finding the user by userId
@@ -26,7 +26,7 @@ const userAuth = async (req, res, next) => {
 
     // Hnadling the case if user not found
     if (!user) {
-      throw new Error("User not found");
+      return res.status(404).send("User not found");
     }
     req.user = user;
 
