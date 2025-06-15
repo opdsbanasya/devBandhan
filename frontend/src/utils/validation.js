@@ -51,4 +51,14 @@ export const signUpDataValidation = (data) => {
   return errors;
 };
 
-export default signUpDataValidation;
+export const loginDataValiadation = (data) => {
+  const email = data.email;
+  const password = data.password;
+  const loginErrors = {};
+
+  if (!validator.isEmail(email)) {
+    throw new Error("Enter a valid email.");
+  }
+
+  return true;
+};

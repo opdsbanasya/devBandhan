@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useRef } from "react";
 import { BorderBeam } from "../magicui/border-beam";
 import { Link } from "react-router-dom";
+import { loginDataValiadation } from "@/utils/validation";
+import axios from "axios";
 
 const Login = () => {
+  const email = useRef();
+  const password = useRef();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const loginData = {
+        email: email.current.value.trim(),
+        password: password.current.value,
+      };
+      const isOk = loginDataValiadation(
+        loginData
+      );
+      console.log(loginData);
+      console.log(isOk);
+
+      if(isOk){
+        const user = await axios.post("http://localhost:3000/login", loginData, {withCredentials: true});
+        console.log(user);
+      }
+    } catch (err) {
+      console.log("ERROR" + err.message);
+    }
+  };
+
   return (
     <section
       data-theme="black"
@@ -39,6 +66,7 @@ const Login = () => {
                     placeholder="Email"
                     id="email"
                     name="email"
+                    ref={email}
                     className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-5 focus-within:border-zinc-400"
                   />
 
@@ -50,12 +78,13 @@ const Login = () => {
                     placeholder="Password"
                     id="password"
                     name="password"
+                    ref={password}
                     className="px-2 py-2 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400"
                   />
 
                   <button
                     className="px-3 py-2 text-red-500 bg-red-100 w-fit mx-auto rounded-md font-semibold cursor-pointer mt-10"
-                    onClick={() => setIsContinue(true)}
+                    onClick={(e) => handleLogin(e)}
                   >
                     Login
                   </button>
