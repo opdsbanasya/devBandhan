@@ -12,14 +12,21 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Body />}>
-          <Route path="/" element={<Home />}> 
-            <Route path="/" element={<Feed />} />
-            <Route path="/connetion/:userId" element={<Profile />} />
-          </Route>
-          <Route path="/get-started" element={<GetStarted />} />
+          {/* Auth and landing */}
+          <Route path="/get-stared" element={<GetStarted />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
+
+          {/* Feed, connection, and request */}
+          <Route path="/" element={<Home />}>
+            <Route path="/" element={<Feed />} />
+            <Route path="/connection/:connectionId" element={<Feed />} />
+            <Route path="/requests/:requestId" element={<Feed />} />
+          </Route>
+
+          {/*User Related */}
+          <Route path="/profile/:userId" element={<Profile />} />
+          <Route path="/profile/edit/:userId" element={<Profile />} />
         </Route>
       </Routes>
     </>
