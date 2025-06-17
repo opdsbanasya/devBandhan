@@ -1,3 +1,4 @@
+import { removeFeedData } from "@/store/userFeedSlice";
 import { removeUser } from "@/store/userSlice";
 import { BASE_URL } from "@/utils/constants";
 import axios from "axios";
@@ -18,6 +19,7 @@ const Navbar = () => {
     );
     console.log(response);
     dispatch(removeUser());
+    dispatch(removeFeedData());
     navigate("/");
   };
 
