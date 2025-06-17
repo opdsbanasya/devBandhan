@@ -10,9 +10,14 @@ const profileRouter = express.Router();
 // Get /profile API
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
-    const { user } = req;
-    res.json({ message: "Fetch successfully", user });
-  } catch (err) {
+    const userData = req.user;
+    const { firstName, lastName, about, gender, age, skills, profilePhoto } =
+      userData;
+    res.json({
+      message: "Fetch successfully",
+      user: { firstName, lastName, about, gender, age, skills, profilePhoto },
+    });
+  } catch (err) { 
     res.status(400).send("ERROR:" + err.message);
   }
 });
