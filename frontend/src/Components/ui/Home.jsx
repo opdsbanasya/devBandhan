@@ -3,6 +3,7 @@ import Feed from "./Feed";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Connections from "./Connections";
 import { MessageCircle, UserPlus, Users } from "lucide-react";
+import Requests from "./Requests";
 
 const Home = () => {
   const [tabName, setTabName] = useState("chat");
@@ -53,7 +54,7 @@ const Home = () => {
         <div>
           {tabName === "chat" && "Chats"}
           {tabName === "connection" && <Connections />}
-          {tabName === "request" && "Request"}
+          {tabName === "request" && <Requests />}
         </div>
       </div>
       <div className="w-3/4 h-full bg-transparent flex items-center justify-center relative flex-wrap gap-5">
