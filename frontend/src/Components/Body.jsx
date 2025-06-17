@@ -24,6 +24,8 @@ function Body() {
     } catch (err) {
       if (err.status === 401) {
         navigate("/login");
+      } else {
+        navigate("/get-started")
       }
       console.log(err.message);
     }
@@ -38,6 +40,8 @@ function Body() {
     } catch (err) {
       if (err.status === 401) {
         navigate("/login");
+      } else {
+        navigate("/get-started")
       }
       console.log(err.message);
     }

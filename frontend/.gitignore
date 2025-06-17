@@ -34,3 +34,6 @@ dist-ssr
 .env.production
 # Build output
 build
+
+# constantly changing files
+src/utils/constants.js

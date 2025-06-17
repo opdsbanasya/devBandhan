@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import signUpDataValidation from "@/utils/validation";
+import {signUpDataValidation} from "@/utils/validation";
 import axios from "axios";
 
 const Signup = () => {
