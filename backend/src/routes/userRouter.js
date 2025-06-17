@@ -10,7 +10,7 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
 
-    const pendingReqeusts = await ConnectionRequest.find({
+    const pendingRequests = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
       status: "interested",
     }).populate(
@@ -20,7 +20,7 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
 
     res.json({
       message: "All connection request fetched successfully",
-      pendingReqeusts,
+      pendingRequests,
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
