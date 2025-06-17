@@ -19,8 +19,8 @@ const Navbar = () => {
     );
     console.log(response);
     dispatch(removeUser());
-    dispatch(removeFeedData());
-    navigate("/");
+    dispatch(removeFeedData()); 
+    navigate("/login");
   };
 
   return (

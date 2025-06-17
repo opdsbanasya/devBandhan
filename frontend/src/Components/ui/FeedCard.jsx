@@ -16,9 +16,7 @@ const FeedCard = ({ user, handleUser, index }) => {
         { withCredentials: true }
       );
 
-      console.log(request);
       dispatch(removeUserFromFeed(toUserId));
-      console.log("request sent!!" + user?.firstName);
     } catch (err) {
       console.log(err);
     }

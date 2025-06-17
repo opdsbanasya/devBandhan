@@ -11,7 +11,6 @@ const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const [userIndex, setUserIndex] = useState(0);
 
-  console.log(feed);
 
   const getUserFeed = async () => {
     try {
