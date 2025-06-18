@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
+    dateOfBirth: {
+      type: Date,
+    },
     age: {
       type: Number,
       min: 15,
@@ -77,6 +80,9 @@ const userSchema = new mongoose.Schema(
     },
     achievements: {
       type: [String],
+    },
+    profession: {
+      type: String
     }
   },
   {

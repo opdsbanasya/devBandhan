@@ -11,11 +11,11 @@ const profileRouter = express.Router();
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const userData = req.user;
-    const { firstName, lastName, about, gender, age, skills, profilePhoto, _id, achievements } =
+    const { firstName, lastName, about, gender, age, skills, profilePhoto, _id, achievements, dateOfBirth, profession } =
       userData;
     res.json({
       message: "Fetch successfully",
-      user: { firstName, lastName, about, gender, age, skills, profilePhoto, _id, achievements },
+      user: { firstName, lastName, about, gender, age, skills, profilePhoto, _id, achievements, dateOfBirth, profession },
     });
   } catch (err) { 
     res.status(400).send("ERROR:" + err.message);
