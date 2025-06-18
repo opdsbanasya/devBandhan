@@ -15,6 +15,7 @@ const validateUpdateData = (data) => {
     "skills",
     "profilePhoto",
     "about",
+    "achievements"
   ];
   const isUpdatesAllowed = Object.keys(data).every((key) =>
     allowedUpdated.includes(key)
@@ -22,6 +23,10 @@ const validateUpdateData = (data) => {
 
   if (!isUpdatesAllowed) {
     throw new Error("Updates are not allowed");
+  }
+
+  if(data?.achievements.length>10){
+    throw new Error("Your achievements are too large")
   }
 
   if (data?.skills && data?.skills.length > 10) {

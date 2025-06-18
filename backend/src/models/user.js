@@ -75,6 +75,9 @@ const userSchema = new mongoose.Schema(
         "Curious learner, creative thinker, problem solver, tech enthusiast. Passionate about growth, innovation, and meaningful connections. Always open to opportunities.",
       trim: true,
     },
+    achievements: {
+      type: [String],
+    }
   },
   {
     timestamps: true,
@@ -89,16 +92,21 @@ userSchema.methods.getJWT = async function () {
   return token;
 };
 
-userSchema.methods.getPasswordHash = async function(plainPasswordFromUser){
+userSchema.methods.getPasswordHash = async function (plainPasswordFromUser) {
   const passwordHash = await bcrypt.hash(plainPasswordFromUser, 10);
   return passwordHash;
-}
+};
 
-userSchema.methods.matchPasswordWithPasswordHash = async function(plainPasswordFromUser){
+userSchema.methods.matchPasswordWithPasswordHash = async function (
+  plainPasswordFromUser
+) {
   const passwordHash = this.password;
-  const isPasswordMatchedWithHash = await bcrypt.compare(plainPasswordFromUser, passwordHash)
+  const isPasswordMatchedWithHash = await bcrypt.compare(
+    plainPasswordFromUser,
+    passwordHash
+  );
   return isPasswordMatchedWithHash;
-}
+};
 
 const User = mongoose.model("User", userSchema);
 
