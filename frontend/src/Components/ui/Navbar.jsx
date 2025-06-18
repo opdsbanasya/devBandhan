@@ -17,7 +17,6 @@ const Navbar = () => {
       {},
       { withCredentials: true }
     );
-    console.log(response);
     dispatch(removeUser());
     dispatch(removeFeedData()); 
     navigate("/login");

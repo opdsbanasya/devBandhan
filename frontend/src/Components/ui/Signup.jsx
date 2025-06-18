@@ -21,10 +21,7 @@ const Signup = () => {
     };
     const validateData = signUpDataValidation(signupData);
 
-    console.log(validateData);
-
     const isNoError = Object.keys(validateData).length === 0;
-    console.log(isNoError);
     if (isNoError) {
       try {
         const res = await axios({
@@ -32,7 +29,6 @@ const Signup = () => {
           url: "http://localhost:3000/signup",
           signupData,
         });
-        console.log(res);
       } catch (err) {
         console.log("ERROR: " + err.message);
       }

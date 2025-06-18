@@ -2,7 +2,6 @@ import validator from "validator";
 
 export const signUpDataValidation = (data) => {
   const errors = {};
-  console.log(data);
 
   const firstName = data.firstName.trim();
   const lastName = data.lastName.trim();
