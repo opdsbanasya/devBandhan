@@ -13,13 +13,13 @@ const connectionRequestSlice = createSlice({
     addRequests: (state, action) => {
       state.requests = action.payload;
     },
-    removeConnectionRequest: (state, action) => {
-      return null;
+    removeRequest: (state, action) => {
+      state.requests =  state.requests.filter(req => req._id !== action.payload);
     },
   },
 });
 
-export const { addConnections, addRequests, removeConnectionRequest } =
+export const { addConnections, addRequests, removeRequest } =
   connectionRequestSlice.actions;
 
 export default connectionRequestSlice.reducer;
