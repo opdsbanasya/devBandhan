@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Connections from "./Connections";
 import { MessageCircle, UserPlus, Users } from "lucide-react";
 import Requests from "./Requests";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addConnections, addRequests } from "@/store/connectionRequestSlice";
 import { BASE_URL } from "@/utils/constants";
 import axios from "axios";
@@ -12,6 +12,14 @@ const Home = () => {
   const [tabName, setTabName] = useState("chat");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(store => store.user);
+
+  useEffect(()=>{
+    if(!user){
+      navigate("/get-started")
+    }
+  })
+
 
   const getConnections = async () => {
     const userConnections = await axios.get(`${BASE_URL}/user/connections`, {
