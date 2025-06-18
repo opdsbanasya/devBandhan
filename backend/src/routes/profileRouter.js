@@ -64,7 +64,6 @@ profileRouter.patch("/profile/password", userAuth, async (req, res) => {
       throw new Error("Incorrect Password");
     }
     const newPasswordHash = await user.getPasswordHash(newPassword);
-    console.log(newPasswordHash);
     await User.updateOne({ _id: user._id }, { password: newPasswordHash });
     res.send("User updated successfully");
   } catch (err) {
