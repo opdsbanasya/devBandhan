@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import Feed from "./Feed";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Connections from "./Connections";
 import { MessageCircle, UserPlus, Users } from "lucide-react";
 import Requests from "./Requests";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [tabName, setTabName] = useState("chat");
   const navigate = useNavigate();
+
+  const user = useSelector((store) => store.user);
+  if (!user) {
+    navigate("/get-started");
+  }
+
   const handleTabs = (tab) => {
     setTabName(tab);
     navigate("/?tab=" + tab);
