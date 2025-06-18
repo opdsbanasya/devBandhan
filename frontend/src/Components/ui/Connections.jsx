@@ -25,9 +25,10 @@ const Connections = () => {
 
   return (
     <div className="w-full ">
+      {connections && connections.length === 0 && <div>No connections</div>}
       {connections &&
-        connections.map((connection) => (
-          <div className="flex items-center gap-5 py-3 px-5 border-b border-b-zinc-800">
+        (connections.map((connection) => (
+          <div key={connection._id} className="flex items-center gap-5 py-3 px-5 border-b border-b-zinc-800">
             <figure className="w-2/12 cursor-pointer">
               <img
                 src={connection?.profilePhoto}
@@ -45,7 +46,7 @@ const Connections = () => {
               {/* <button>❌</button> */}
             </div>
           </div>
-        ))}
+        )))}
     </div>
   );
 };
