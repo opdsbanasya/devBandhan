@@ -1,21 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Connections from "./Connections";
 import { MessageCircle, UserPlus, Users } from "lucide-react";
 import Requests from "./Requests";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addConnections, addRequests } from "@/store/connectionRequestSlice";
+import { BASE_URL } from "@/utils/constants";
+import axios from "axios";
 
 const Home = () => {
   const [tabName, setTabName] = useState("chat");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const user = useSelector((store) => store.user);
-  if (!user) {
-    navigate("/get-started");
-  }
+  const getConnections = async () => {
+    const userConnections = await axios.get(`${BASE_URL}/user/connections`, {
+      withCredentials: true,
+    });
+
+    dispatch(addConnections(userConnections?.data?.data));
+  };
+
+  const getRequests = async () => {
+    const userRequests = await axios.get(`${BASE_URL}/user/requests/recieved`, {
+      withCredentials: true,
+    });
+
+    dispatch(addRequests(userRequests?.data?.pendingRequests));
+  };
 
   const handleTabs = (tab) => {
     setTabName(tab);
+    if (tab === "connection") {
+      getConnections();
+    }
+    if (tab === "request") {
+      getRequests();
+    }
     navigate("/?tab=" + tab);
   };
 

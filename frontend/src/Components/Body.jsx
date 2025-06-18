@@ -30,7 +30,7 @@ function Body() {
   };
   const handleUserFeed = async () => {
     try {
-      const userData = await axios.get(BASE_URL + "/feed", {
+      const feedData = await axios.get(BASE_URL + "/feed", {
         withCredentials: true,
       });
 
