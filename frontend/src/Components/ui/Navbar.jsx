@@ -5,6 +5,7 @@ import axios from "axios";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { TypingAnimation } from "../magicui/typing-animation";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -12,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const response = await axios.post(
+    await axios.post(
       BASE_URL + "/logout",
       {},
       { withCredentials: true }
@@ -28,7 +29,7 @@ const Navbar = () => {
       className="navbar shadow-sm px-20 bg-base-100 h-[10vh]"
     >
       <div className="flex-1">
-        <Link to={"/feed"} className=" text-xl">
+        <Link to={"/"} className=" text-xl">
           🧑‍💻 Dev Tinder
         </Link>
       </div>
@@ -44,9 +45,9 @@ const Navbar = () => {
           </div>
         )}
         {user && (
-          <div className="dropdown dropdown-end flex gap-10">
+          <div className="dropdown dropdown-end flex gap-5">
             <div className="flex items-center">
-              <p>Welcome, {user?.firstName}</p>
+              <div className="flex items-center gap-2">Welcome, <TypingAnimation>{user?.firstName}</TypingAnimation></div>
             </div>
             <div
               tabIndex={0}
@@ -65,7 +66,7 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-14 w-52 p-2 shadow-xl shadow-zinc-900"
             >
               <li>
-                <Link to={"/profile"} className="justify-between text-[14px]">
+                <Link to={`/profile/${user._id}`} className="justify-between text-[14px]">
                   Profile
                   <span className="badge">New</span>
                 </Link>
