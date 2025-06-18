@@ -6,6 +6,7 @@ import Profile from "./Components/ui/Profile";
 import Feed from "./Components/ui/Feed";
 import GetStarted from "./Components/ui/GetStarted";
 import Home from "./Components/ui/Home";
+import EditProfile from "./Components/ui/EditProfile";
 
 function App() {
   return (
@@ -25,8 +26,9 @@ function App() {
           </Route>
 
           {/*User Related */}
-          <Route path="/profile/:userId" element={<Profile />} />
-          <Route path="/profile/edit/:userId" element={<Profile />} />
+          <Route path="/profile/:userId" element={<Profile />}>
+            <Route path="edit" element={<EditProfile />} />
+          </Route>
         </Route>
       </Routes>
     </>
