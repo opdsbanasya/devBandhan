@@ -46,7 +46,7 @@ authRouter.post("/login", async (req, res) => {
       // Creating JWT Token
       const token = await user.getJWT();
 
-      const { firstName, lastName, about, gender, age, skills, profilePhoto } =
+      const {_id, firstName, lastName, about, gender, age, skills, profilePhoto } =
         user;
 
       // Sending Cookies
@@ -56,6 +56,7 @@ authRouter.post("/login", async (req, res) => {
       res.json({
         message: "Login Successful!!",
         userData: {
+          _id,
           firstName,
           lastName,
           about,
