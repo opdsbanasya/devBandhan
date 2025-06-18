@@ -5,19 +5,22 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 const Request = ({ request }) => {
-
   const dispatch = useDispatch();
 
   const { firstName, lastName, profilePhoto } = request.fromUserId;
 
   const reviewRequest = async (requestId, status) => {
-    await axios.post(
-      `${BASE_URL}/request/review/${status}/${requestId}`,
-      "",
-      { withCredentials: true }
-    );
+    try {
+      await axios.post(
+        `${BASE_URL}/request/review/${status}/${requestId}`,
+        "",
+        { withCredentials: true }
+      );
 
-    dispatch(removeRequest(requestId));
+      dispatch(removeRequest(requestId));
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
