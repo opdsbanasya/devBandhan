@@ -67,10 +67,18 @@ export const loginDataValiadation = (data) => {
 export const editDataValidation = async (
   data,
   user,
-  { basicData, skills, achievements }
+  { basicData, skills, achievements, profileImage, profession }
 ) => {
   try {
-    const { about, dateOfBirth, male, female, other } = data || {};
+    const {
+      about,
+      dateOfBirth,
+      male,
+      female,
+      other,
+      profileImageLink,
+      professionData,
+    } = data || {};
 
     let gender = "";
     let editData = {};
@@ -92,13 +100,17 @@ export const editDataValidation = async (
       editData = { ...editData, skills: [...user.skills] };
     } else if (achievements) {
       editData = { ...editData, achievements: [...user.achievements] };
+    } else if (profileImage) {
+      editData = { ...editData, profilePhoto: profileImageLink.current.value };
+    } else if (profession) {
+      editData = { ...editData, profession: professionData.current.value };
     }
 
     const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
       withCredentials: true,
     });
 
-    alert("Data Updated");
+    return editData;
   } catch (err) {
     console.log(err);
   }
