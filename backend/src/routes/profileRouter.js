@@ -41,10 +41,10 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
 });
 
 // GET /profile/password
-profileRouter.patch("/profile/password", userAuth, async (req, res) => {
+profileRouter.patch("/profile/password/change", userAuth, async (req, res) => {
   try {
-    const { newPassword } = req.body;
-    const currentPassword = req.body.password;
+    const newPassword = req.body.newPassword;
+    const currentPassword = req.body.password; 
 
     // validate the data
     if (!validator.isStrongPassword(newPassword)) {

@@ -72,7 +72,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a className="text-[14px]">Settings</a>
+                <Link to={"/settings"} className="text-[14px]">Settings</Link>
               </li>
               <li>
                 <p className="text-[14px]" onClick={handleLogout}>

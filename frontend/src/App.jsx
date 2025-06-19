@@ -7,6 +7,7 @@ import Feed from "./Components/ui/Feed";
 import GetStarted from "./Components/ui/GetStarted";
 import Home from "./Components/ui/Home";
 import EditProfile from "./Components/ui/EditProfile";
+import Settings from "./Components/ui/Settings";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<Feed />} />
             <Route path="/connection/:connectionId" element={<Feed />} />
             <Route path="/requests/:requestId" element={<Feed />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
 
           {/*User Related */}
