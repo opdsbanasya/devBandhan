@@ -12,7 +12,8 @@ const EditProfile = () => {
   const location = useLocation() || {};
   const dispatch = useDispatch();
 
-  const { basicData, skills, achievements } = location.state || {};
+  const { basicData, skills, achievements, profileImage, profession } =
+    location.state || {};
 
   const about = useRef();
   const dateOfBirth = useRef();
@@ -21,15 +22,35 @@ const EditProfile = () => {
   const other = useRef();
   const skillsNewData = useRef();
   const achievementsNewData = useRef();
+  const profileImageLink = useRef();
+  const professionData = useRef();
 
   const handleEditInfo = async (e) => {
     e.preventDefault();
-    editDataValidation({ about, dateOfBirth, male, female, other }, user, {
-      basicData,
-      skills,
-      achievements,
-    });
+    const editData = await editDataValidation(
+      {
+        about,
+        dateOfBirth,
+        male,
+        female,
+        other,
+        profileImageLink,
+        professionData,
+      },
+      user,
+      {
+        basicData,
+        skills,
+        achievements,
+        profileImage,
+        profession,
+      }
+    );
+    if (basicData || profileImage || profession) {
+      dispatch(updateUser(editData));
+    }
     navigate("/profile/" + user._id);
+    alert("Data Updated");
   };
 
   const handleAddChips = (e, field) => {
@@ -82,7 +103,7 @@ const EditProfile = () => {
       data-theme="black"
       className="w-screen h-[90vh] bg-transparent relative min-h-full flex items-center overflow-x-hidden"
     >
-      <div className="relative w-[30%] min-h-[50%] rounded-lg shadow-2xl z-10 bg-base-300 py-5 mx-auto">
+      <div className="relative w-[30%] min-h-[40%] rounded-lg shadow-2xl z-10 bg-base-300 py-5 mx-auto">
         <div className="space-y-4">
           <div className="px-10">
             <h5 className="text-xl font-semibold text-center shadow-lg mb-2">
@@ -100,7 +121,41 @@ const EditProfile = () => {
           </div>
           <div className="">
             <form action="#" className="flex flex-col px-10 gap-2 relative">
-              {/* Edit Basic Detail */}
+              {/* Profile Image */}
+              {profileImage && (
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="photo" className="pl-2 font-medium py-3">
+                    Enter the profile photo url
+                  </label>
+                  <input
+                    type="text"
+                    id="photo"
+                    name="photo"
+                    ref={profileImageLink}
+                    placeholder="Enter photo URL"
+                    required
+                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400 focus-within:text-white"
+                  />
+                </div>
+              )}
+
+              {/* Profession */}
+              {profession && (
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="profession" className="pl-2 font-medium py-3">
+                    Enter your profession
+                  </label>
+                  <input
+                    type="text"
+                    id="profession"
+                    name="profession"
+                    ref={professionData}
+                    required
+                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400 focus-within:text-white"
+                  />
+                </div>
+              )}
+              
               {basicData && (
                 <div className="flex flex-col gap-2">
                   <label
@@ -156,7 +211,7 @@ const EditProfile = () => {
                     name="dob"
                     ref={dateOfBirth}
                     required
-                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400"
+                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400 focus-within:text-white"
                   />
 
                   <label htmlFor="about" className={"pl-2 font-medium"}>
@@ -169,7 +224,7 @@ const EditProfile = () => {
                     name="about"
                     required
                     ref={about}
-                    className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400 resize-none h-28"
+                    className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400 focus-within:text-white resize-none h-28"
                   />
                 </div>
               )}
@@ -188,7 +243,7 @@ const EditProfile = () => {
                       placeholder="Enter Skills"
                       ref={skillsNewData}
                       required
-                      className="w-11/12 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm  focus-within:border-zinc-400"
+                      className="w-11/12 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm  focus-within:border-zinc-400 focus-within:text-white"
                     />
                     <button
                       onClick={(e) => handleAddChips(e, "skills")}
@@ -236,7 +291,7 @@ const EditProfile = () => {
                       ref={achievementsNewData}
                       placeholder="Enter achievements & awards"
                       required
-                      className="w-11/12 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm  focus-within:border-zinc-400"
+                      className="w-11/12 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm  focus-within:border-zinc-400 focus-within:text-white"
                     />
                     <button
                       onClick={(e) => handleAddChips(e, "achievements")}

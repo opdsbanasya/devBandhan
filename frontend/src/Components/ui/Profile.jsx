@@ -1,5 +1,6 @@
 import { Facebook, Github, Instagram, Linkedin, SquarePen } from "lucide-react";
-import React from "react";
+import { MdEdit } from "react-icons/md";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { AuroraText } from "../magicui/aurora-text";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -7,11 +8,12 @@ import { Outlet, useNavigate } from "react-router-dom";
 const Profile = () => {
   const user = useSelector((store) => store.user);
   const navigate = useNavigate();
+  const [isEditIconHidden, setIsEditIconHidden] = useState(true);
 
   if (!user) return;
 
   const handleEditClick = (data) => {
-    navigate("edit", {state: data});
+    navigate("edit", { state: data });
   };
   return (
     <div
@@ -21,22 +23,43 @@ const Profile = () => {
       <div className="w-full">
         <div className="w-full py-10">
           <div className="w-10/12 mx-auto flex items-center gap-10">
-            <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-[#2e5bef] shadow-md">
+            <div
+              onMouseOver={() => setIsEditIconHidden(false)}
+              onMouseOut={() => setIsEditIconHidden(true)}
+              className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-[#2e5bef] shadow-md relative cursor-pointer"
+            >
               <img
                 alt="Profile Photo"
                 src={user?.profilePhoto}
                 className="w-full h-full object-cover"
               />
+              <div
+                onClick={() => !isEditIconHidden && handleEditClick({ profileImage: true })}
+                className={`w-full h-full flex items-center ${
+                  isEditIconHidden ? "hidden" : "block"
+                } justify-center bg-transparent hover:bg-zinc-500/75 hover:text-white absolute top-0 text-black z-10 transition-all duration-200 cursor-pointer`}
+              >
+                <MdEdit className="bg-transparent text-2xl transition-all duration-200" />
+              </div>
             </div>
             <div>
-              <h2 className="text-4xl font-extrabold bg-clip-text text-transparent">
+              <h2 className="text-4xl font-extrabold bg-clip-text text-transparent mb-3">
                 <AuroraText>
                   {" "}
                   {user?.firstName} {user?.lastName}
                 </AuroraText>
               </h2>
               <p className="text-lg text-zinc-400">
-                {user?.profession && user?.profession}
+                {user?.profession ? (
+                  user?.profession
+                ) : (
+                  <span
+                    onClick={() => handleEditClick({ profession: true })}
+                    className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
+                  >
+                    Add Profession
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -109,9 +132,7 @@ const Profile = () => {
                   </p>
                 ))
               ) : (
-                <p className="text-sm text-zinc-500">
-                  No Skills.{" "}
-                </p>
+                <p className="text-sm text-zinc-500">No Skills. </p>
               )}
               <p
                 onClick={() => handleEditClick({ skills: true })}
