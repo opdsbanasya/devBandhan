@@ -1,18 +1,18 @@
 const validator = require("validator");
 
 const validateSignupData = (data) => {
-  const dateOfBirth = new Date(data?.dateOfBirth);
+  const dateOfBirth = data?.dateOfBirth && new Date(data?.dateOfBirth);
 
   if (!validator.isEmail(data.email)) {
     throw new Error("Invalid email");
   }
   if (dateOfBirth && !validator.isDate(dateOfBirth)) {
-    throw new Error("Invalid Data");
+    throw new Error("Invalid Date");
   }
 };
 
 const validateUpdateData = (data) => {
-  const dateOfBirth = new Date(data?.dateOfBirth);
+  const dateOfBirth = data?.dateOfBirth && new Date(data?.dateOfBirth);
   const allowedUpdated = [
     "firstName",
     "lastName",
@@ -32,7 +32,7 @@ const validateUpdateData = (data) => {
     throw new Error("Updates are not allowed");
   }
 
-  if (data?.achievements.length > 10) {
+  if (data?.achievements && data?.achievements.length > 10) {
     throw new Error("Your achievements are too large");
   }
 
@@ -41,7 +41,7 @@ const validateUpdateData = (data) => {
   }
 
   if (dateOfBirth && !validator.isDate(dateOfBirth)) {
-    throw new Error("Invalid Data");
+    throw new Error("Invalid Date");
   }
 };
 
