@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Navbar from "./ui/Navbar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "./ui/Footer";
 import axios from "axios";
 import { BASE_URL } from "@/utils/constants";
@@ -13,6 +13,7 @@ function Body() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const feed = useSelector((store) => store.feed);
+  const location = useLocation();
 
   const handleUserData = async () => {
     try {
@@ -44,13 +45,16 @@ function Body() {
   };
 
   useEffect(() => {
+    if (location.pathname === "/signup") {
+      return;
+    }
     if (!user) {
       handleUserData();
     }
     if (!feed) {
       handleUserFeed();
     }
-  }, []);
+  }, [location.pathname, user, feed]);
 
   return (
     <div className="overflow-x-hidden">

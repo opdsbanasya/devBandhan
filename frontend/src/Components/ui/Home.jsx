@@ -12,14 +12,13 @@ const Home = () => {
   const [tabName, setTabName] = useState("chat");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector(store => store.user);
+  const user = useSelector((store) => store.user);
 
-  useEffect(()=>{
-    if(!user){
-      navigate("/get-started")
+  useEffect(() => {
+    if (!user) {
+      navigate("/get-started");
     }
-  })
-
+  });
 
   const getConnections = async () => {
     const userConnections = await axios.get(`${BASE_URL}/user/connections`, {
