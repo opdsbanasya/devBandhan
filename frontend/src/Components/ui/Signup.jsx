@@ -1,10 +1,15 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {signUpDataValidation} from "@/utils/validation";
 import axios from "axios";
 import bgImagesignup from "../../assets/match-image-1.webp"
+import { BASE_URL } from "@/utils/constants";
+import { useDispatch } from "react-redux";
+import { addUser } from "@/store/userSlice";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const firstName = useRef();
   const lastName = useRef();
   const email = useRef();
@@ -25,13 +30,12 @@ const Signup = () => {
     const isNoError = Object.keys(validateData).length === 0;
     if (isNoError) {
       try {
-        const res = await axios({
-          method: "post",
-          url: "http://localhost:3000/signup",
-          signupData,
-        });
+        const res = await axios.post(`${BASE_URL}/signup`, signupData);
+        dispatch(addUser(res.data.userData));
+        console.log(res.data.userData);
+        navigate("/");
       } catch (err) {
-        console.log("ERROR: " + err.message);
+        console.log(err);
       }
     }
   };
