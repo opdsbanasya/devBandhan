@@ -10,16 +10,46 @@ authRouter.post("/signup", async (req, res) => {
   try {
     // Validate Data
     const data = req.body;
-    validateSignupData(data);
+    const sanitizedData = validateSignupData(data);
 
     // Encrypt the password
-    const passwordHash = await bcrypt.hash(data.password, 10);
-    data.password = passwordHash;
+    const passwordHash = await bcrypt.hash(sanitizedData.password, 10);
+    sanitizedData.password = passwordHash;
 
     // Registering the user on DB
-    const user = new User(data);
-    await user.save();
-    res.json({ message: "User has been added to database." });
+    const user = new User(sanitizedData);
+    const userData = await user.save();
+
+    const {
+      firstName,
+      lastName,
+      about,
+      gender,
+      age,
+      skills,
+      profilePhoto,
+      _id,
+      achievements,
+      dateOfBirth,
+      profession,
+    } = userData;
+
+    res.json({
+      message: "User has been added to database.",
+      userData: {
+        firstName,
+        lastName,
+        about,
+        gender,
+        age,
+        skills,
+        profilePhoto,
+        _id,
+        achievements,
+        dateOfBirth,
+        profession,
+      },
+    });
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
@@ -46,8 +76,18 @@ authRouter.post("/login", async (req, res) => {
       // Creating JWT Token
       const token = await user.getJWT();
 
-      const {_id, firstName, lastName, about, gender, age, skills, profilePhoto, achievements, profession } =
-        user;
+      const {
+        _id,
+        firstName,
+        lastName,
+        about,
+        gender,
+        age,
+        skills,
+        profilePhoto,
+        achievements,
+        profession,
+      } = user;
 
       // Sending Cookies
       res.cookie("token", token, {
@@ -65,7 +105,7 @@ authRouter.post("/login", async (req, res) => {
           skills,
           profilePhoto,
           achievements,
-          profession
+          profession,
         },
       });
     } else {

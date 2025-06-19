@@ -9,6 +9,21 @@ const validateSignupData = (data) => {
   if (dateOfBirth && !validator.isDate(dateOfBirth)) {
     throw new Error("Invalid Date");
   }
+
+  const today = new Date();
+
+  var years = today.getFullYear() - dateOfBirth.getFullYear();
+
+  if (
+    today.getMonth() < dateOfBirth.getMonth() ||
+    (today.getMonth() == dateOfBirth.getMonth() &&
+      today.getDate() < dateOfBirth.getDate())
+  ) {
+    years--;
+  }
+
+  data.age = years;
+  return data;
 };
 
 const validateUpdateData = (data) => {
@@ -23,6 +38,7 @@ const validateUpdateData = (data) => {
     "about",
     "achievements",
     "dateOfBirth",
+    "profession",
   ];
   const isUpdatesAllowed = Object.keys(data).every((key) =>
     allowedUpdated.includes(key)
