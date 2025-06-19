@@ -1,4 +1,6 @@
+import axios from "axios";
 import validator from "validator";
+import { BASE_URL } from "./constants";
 
 export const signUpDataValidation = (data) => {
   const errors = {};
@@ -60,4 +62,44 @@ export const loginDataValiadation = (data) => {
   }
 
   return true;
+};
+
+export const editDataValidation = async (
+  data,
+  user,
+  { basicData, skills, achievements }
+) => {
+  try {
+    const { about, dateOfBirth, male, female, other } = data || {};
+
+    let gender = "";
+    let editData = {};
+    if (basicData && male.current.checked) {
+      gender = "male";
+    } else if (basicData && female.current.checked) {
+      gender = "female";
+    } else if (basicData && other.current.checked) {
+      gender = "other";
+    }
+    if (basicData) {
+      editData = {
+        ...editData,
+        about: about.current.value,
+        dateOfBirth: dateOfBirth.current.value,
+        gender,
+      };
+    } else if (skills) {
+      editData = { ...editData, skills: [...user.skills] };
+    } else if (achievements) {
+      editData = { ...editData, achievements: [...user.achievements] };
+    }
+
+    const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
+      withCredentials: true,
+    });
+
+    alert("Data Updated");
+  } catch (err) {
+    console.log(err);
+  }
 };

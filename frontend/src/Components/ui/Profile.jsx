@@ -1,14 +1,18 @@
-import { Facebook, Github, Instagram, Linkedin, Outdent, SquarePen } from "lucide-react";
+import { Facebook, Github, Instagram, Linkedin, SquarePen } from "lucide-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { AuroraText } from "../magicui/aurora-text";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
+  const navigate = useNavigate();
 
   if (!user) return;
 
+  const handleEditClick = (data) => {
+    navigate("edit", {state: data});
+  };
   return (
     <div
       data-theme="black"
@@ -31,7 +35,9 @@ const Profile = () => {
                   {user?.firstName} {user?.lastName}
                 </AuroraText>
               </h2>
-              <p className="text-lg text-zinc-400">{user?.profession && user?.profession}</p>
+              <p className="text-lg text-zinc-400">
+                {user?.profession && user?.profession}
+              </p>
             </div>
           </div>
 
@@ -54,9 +60,12 @@ const Profile = () => {
         <div className="w-8/12 mx-auto space-y-10">
           {/* Basic Info */}
           <div className="border-b border-zinc-700 pb-4 relative">
-            <Link to={`edit`} className="absolute right-0 top-0 cursor-pointer">
+            <p
+              onClick={() => handleEditClick({ basicData: true })}
+              className="absolute right-0 top-0 cursor-pointer"
+            >
               <SquarePen />
-            </Link>
+            </p>
             <h4 className="text-xl font-semibold text-zinc-100 pb-2">
               Basic Info
             </h4>
@@ -66,8 +75,14 @@ const Profile = () => {
                 {user?.gender}
               </li>
               <li>
-                <span className={`w-20 inline-block font-semibold `}>Birthday:</span>
-                <span className={`${!user?.dateOfBirth && "text-zinc-500"}`}>{user?.dateOfBirth ? user?.dateOfBirth.split("T")[0]: "YYYY-MM-DD"}</span>
+                <span className={`w-20 inline-block font-semibold `}>
+                  Birthday:
+                </span>
+                <span className={`${!user?.dateOfBirth && "text-zinc-500"}`}>
+                  {user?.dateOfBirth
+                    ? user?.dateOfBirth.split("T")[0]
+                    : "YYYY-MM-DD"}
+                </span>
               </li>
               <li>
                 <span className="w-20 inline-block font-semibold">Age:</span>
@@ -95,12 +110,15 @@ const Profile = () => {
                 ))
               ) : (
                 <p className="text-sm text-zinc-500">
-                  No Award & Achievements.{" "}
+                  No Skills.{" "}
                 </p>
               )}
-              <span className="absolute right-0 text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200">
+              <p
+                onClick={() => handleEditClick({ skills: true })}
+                className="absolute right-0 -top-7 text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
+              >
                 + Add
-              </span>
+              </p>
             </div>
           </div>
 
@@ -124,9 +142,12 @@ const Profile = () => {
                   No Award & Achievements.{" "}
                 </p>
               )}
-              <span className="absolute right-0 text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200">
+              <p
+                onClick={() => handleEditClick({ achievements: true })}
+                className="absolute right-0 -top-7 text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
+              >
                 + Add
-              </span>
+              </p>
             </div>
           </div>
         </div>
