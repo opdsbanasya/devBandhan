@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import {addUser} from "../../store/userSlice";
 import { BASE_URL } from "@/utils/constants";
+import bgImagelogin from "../../assets/match-image-2.webp"
 
 const Login = () => {
   const email = useRef();
@@ -46,7 +47,7 @@ const Login = () => {
           <img
             alt="signup-image"
             className="w-full h-full object-cover"
-            src="https://videos.openai.com/vg-assets/assets%2Ftask_01jxjzw2qwft7vp3zf7xz08twa%2F1749762931_img_2.webp?st=2025-06-12T20%3A09%3A33Z&se=2025-06-18T21%3A09%3A33Z&sks=b&skt=2025-06-12T20%3A09%3A33Z&ske=2025-06-18T21%3A09%3A33Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=QMOsAPL6H37Ls%2F1YS6Gk9YBflVI370Wo0NG%2BpCioobw%3D&az=oaivgprodscus"
+            src={bgImagelogin}
           />
         </div>
 

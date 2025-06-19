@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {signUpDataValidation} from "@/utils/validation";
 import axios from "axios";
+import bgImagesignup from "../../assets/match-image-1.webp"
 
 const Signup = () => {
   const firstName = useRef();
@@ -43,7 +44,7 @@ const Signup = () => {
           <img
             alt="signup-image"
             className="w-full h-full object-cover"
-            src="https://videos.openai.com/vg-assets/assets%2Ftask_01jxjzw2qwft7vp3zf7xz08twa%2F1749762931_img_0.webp?st=2025-06-12T20%3A09%3A33Z&se=2025-06-18T21%3A09%3A33Z&sks=b&skt=2025-06-12T20%3A09%3A33Z&ske=2025-06-18T21%3A09%3A33Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=%2FuTRPurMqYP%2FlkDw0YMmnTLI3uiqvg%2Bj5DXhQeHZMRc%3D&az=oaivgprodscus"
+            src={bgImagesignup}
           />
         </div>
 
