@@ -43,7 +43,7 @@ requestRouter.post(
         status,
       });
 
-      // const request = await connectionRequest.save();
+      const request = await connectionRequest.save();
       
       const email = {
         title: req.user.firstName,
