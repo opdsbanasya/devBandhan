@@ -2,16 +2,11 @@ const { SendEmailCommand } = require("@aws-sdk/client-ses");
 const { sesClient } = require("./sesClient");
 
 const createSendEmailCommand = (toAddress, fromAddress, email) => {
-    console.log(email);
-    
-    return new SendEmailCommand({
+  return new SendEmailCommand({
     Destination: {
       /* required */
-      CcAddresses: [
-      ],
-      ToAddresses: [
-        toAddress,
-      ],
+      CcAddresses: [],
+      ToAddresses: [toAddress],
     },
     Message: {
       /* required */
@@ -28,7 +23,9 @@ const createSendEmailCommand = (toAddress, fromAddress, email) => {
       },
       Subject: {
         Charset: "UTF-8",
-        Data: email?.title ? `${email?.title} sent request` : "You have recieved a request",
+        Data: email?.title
+          ? `${email?.title} sent request`
+          : "You have recieved a request",
       },
     },
     Source: fromAddress,
@@ -57,4 +54,4 @@ const run = async (email) => {
 };
 
 // snippet-end:[ses.JavaScript.email.sendEmailV3]
-module.exports =  { run };
+module.exports = { run };

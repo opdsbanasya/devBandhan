@@ -6,6 +6,7 @@ const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");
 const userRouter = require("./routes/userRouter");
 const cors = require("cors");
+require("./utils/jobCron")
 
 const app = express();
 
