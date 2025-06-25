@@ -38,6 +38,9 @@ const paymentSchema = new mongoose.Schema(
         type: String,
       },
     },
+    plan: {
+        type: String
+    }
   },
   { timestamps: true }
 );
