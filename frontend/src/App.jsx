@@ -8,6 +8,7 @@ import GetStarted from "./Components/ui/GetStarted";
 import Home from "./Components/ui/Home";
 import EditProfile from "./Components/ui/EditProfile";
 import Settings from "./Components/ui/Settings";
+import Premium from "./Components/ui/Premium";
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
           <Route path="/profile/:userId" element={<Profile />}>
             <Route path="edit" element={<EditProfile />} />
           </Route>
+
+          {/* Upgrade or payment releted */}
+          <Route path="/upgrade" element={<Premium />} />
         </Route>
       </Routes>
     </>

@@ -1,4 +1,5 @@
-"use client";;
+"use client";
+
 import { motion, useMotionTemplate, useMotionValue } from "motion/react";
 import React, { useCallback, useEffect, useRef } from "react";
 
@@ -8,10 +9,10 @@ export function MagicCard({
   children,
   className,
   gradientSize = 200,
-  gradientColor = "#262626",
+  gradientColor = "#1f1f1f", // Dark overlay
   gradientOpacity = 0.8,
-  gradientFrom = "#9E7AFF",
-  gradientTo = "#FE8BBB"
+  gradientFrom = "#8A2BE2", // Deep violet
+  gradientTo = "#FF69B4" // Hot pink
 }) {
   const cardRef = useRef(null);
   const mouseX = useMotionValue(-gradientSize);
@@ -61,19 +62,24 @@ export function MagicCard({
   return (
     <div
       ref={cardRef}
-      className={cn("group relative rounded-[inherit]", className)}>
+      className={cn(
+        "group relative rounded-[inherit] bg-[#121212] text-white shadow-xl border border-[#2a2a2a]",
+        className
+      )}
+    >
       <motion.div
-        className="pointer-events-none absolute inset-0 rounded-[inherit] bg-border duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 rounded-[inherit] duration-300 group-hover:opacity-100"
         style={{
           background: useMotionTemplate`
-          radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
-          ${gradientFrom}, 
-          ${gradientTo}, 
-          var(--border) 100%
-          )
-          `,
-        }} />
-      <div className="absolute inset-px rounded-[inherit] bg-background" />
+            radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px,
+              ${gradientFrom}, 
+              ${gradientTo}, 
+              #121212 100%
+            )
+          `
+        }}
+      />
+      <div className="absolute inset-px rounded-[inherit] bg-[#1e1e1e]" />
       <motion.div
         className="pointer-events-none absolute inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
@@ -81,8 +87,9 @@ export function MagicCard({
             radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px, ${gradientColor}, transparent 100%)
           `,
           opacity: gradientOpacity,
-        }} />
-      <div className="relative">{children}</div>
+        }}
+      />
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }

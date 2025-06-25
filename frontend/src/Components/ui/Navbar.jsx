@@ -72,6 +72,9 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
+                <Link to={"/upgrade"} className="text-[14px]">Upgrade</Link>
+              </li>
+              <li>
                 <Link to={"/settings"} className="text-[14px]">Settings</Link>
               </li>
               <li>
