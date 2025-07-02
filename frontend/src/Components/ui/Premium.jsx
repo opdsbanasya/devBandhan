@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MagicCard } from "../magicui/magic-card";
 import axios from "axios";
 import { BASE_URL } from "@/utils/constants";
 
 const Premium = () => {
+  const [isPremium, setIsPremium] = useState();
+
+  const verifyPremium = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/payment/verify`, {
+        withCredentials: true,
+      });
+      console.log(response);
+      setIsPremium(response?.data?.isPremium);
+    } catch (err) {
+      return err;
+    }
+  };
+
+  useEffect(() => {
+    verifyPremium();
+  }, []);
+
   const handlePayClick = async (membershipType) => {
     try {
       const order = await axios.post(
@@ -29,6 +47,7 @@ const Premium = () => {
         theme: {
           color: "#3399cc",
         },
+        handler: verifyPremium,
       };
 
       var rzp = new Razorpay(options);
@@ -38,7 +57,14 @@ const Premium = () => {
     }
   };
 
-  return (
+  return isPremium ? (
+    <div
+      data-theme="black"
+      className="w-screen min-h-[90vh] bg-gradient-to-br from-zinc-900 to-black text-white py-10 flex justify-center gap-32"
+    >
+      <p className="text-2xl font-semibold">You are already premium user</p>
+    </div>
+  ) : (
     <div
       data-theme="black"
       className="w-screen min-h-[90vh] bg-gradient-to-br from-zinc-900 to-black text-white py-10 flex justify-center gap-32"
