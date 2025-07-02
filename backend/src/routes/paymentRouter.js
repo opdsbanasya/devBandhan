@@ -17,7 +17,7 @@ paymentRouter.post("/create/order", userAuth, async (req, res) => {
 
     if (membershipType === "gold") {
       amount = 100000;
-    } else if ((membershipType = "silver")) {
+    } else if ((membershipType === "silver")) {
       amount = 50000;
     }
 
