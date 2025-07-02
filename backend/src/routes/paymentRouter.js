@@ -40,7 +40,7 @@ paymentRouter.post("/create/order", userAuth, async (req, res) => {
       notes: order.notes,
       receipt: order.receipt,
       status: order.status,
-      plan: membershipType,
+      membershipType: membershipType,
     });
 
     const orderData = await createOrder.save();
