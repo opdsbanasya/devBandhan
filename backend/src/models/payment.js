@@ -38,7 +38,7 @@ const paymentSchema = new mongoose.Schema(
         type: String,
       },
     },
-    plan: {
+    membershipType: {
         type: String
     }
   },

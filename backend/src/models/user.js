@@ -82,8 +82,14 @@ const userSchema = new mongoose.Schema(
       type: [String],
     },
     profession: {
-      type: String
-    }
+      type: String,
+    },
+    isPremium: {
+      type: Boolean,
+    },
+    membershipType: {
+      type: String,
+    },
   },
   {
     timestamps: true,
