@@ -70,10 +70,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     if (!isWebhookValid) {
       throw new Error("Invalid signature");
     }
-
-    console.log("Sinature valid");
     
-
     const paymentDetails = req.body.payload.payment.entity;
     console.log(paymentDetails);
 
@@ -83,14 +80,12 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     });
     payment.status = paymentDetails.status;
     await payment.save();
-    console.log("Payment Saved");
     
     // update the user as premium
     const user = await User.findById({_id: payment.userId});
     user.isPremium = true;
     user.membershipType = payment.membershipType;
     user.save();
-    console.log("User saved");
     
     // return success response to razorpay with 200 status
     return res.status(200).json({ message: "Webhook received" });
