@@ -6,8 +6,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../store/userSlice";
 import { BASE_URL } from "@/utils/constants";
-import bgImageloginDesktop from "../../assets/mainBgImageDesktop.webp";
-import bgImageloginMobile from "../../assets/mainBgImageMobile.webp";
+import bgImageloginDesktop from "../../assets/bgImageDesktop.webp";
+import bgImageloginMobile from "../../assets/bgImageMobile.webp";
 
 const Login = () => {
   const email = useRef();
