@@ -86,7 +86,7 @@ const Login = () => {
                     id="email"
                     name="email"
                     ref={email}
-                    className="p-2 md:p-4 border border-zinc-500 outline-none rounded-sm mb-3 md:mb-5 focus-within:border-zinc-400 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                    className="p-2 md:p-4 xl:p-2 border border-zinc-500 outline-none rounded-sm mb-3 md:mb-5 focus-within:border-zinc-400 text-[14px] md:text-lg lg:text-2xl xl:text-base"
                   />
 
                   <label
@@ -101,7 +101,7 @@ const Login = () => {
                     id="password"
                     name="password"
                     ref={password}
-                    className="p-2 md:p-4 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                    className="p-2 md:p-4 xl:p-2 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 text-[14px] md:text-lg lg:text-2xl xl:text-base"
                   />
 
                   <button
