@@ -31,14 +31,14 @@ export const ShinyButton = React.forwardRef(
       <motion.button
         ref={ref}
         className={cn(
-          "relative cursor-pointer rounded-lg px-2 md:px-4 py-1 md:py-2 font-medium backdrop-blur-xl border transition-shadow duration-300 ease-in-out hover:shadow dark:bg-[radial-gradient(circle_at_50%_0%,var(--primary)/10%_0%,transparent_60%)] dark:hover:shadow-[0_0_20px_var(--primary)/10%]",
+          "relative cursor-pointer rounded-lg px-2 md:px-4 lg:px-6 xl:px-4 py-1 md:py-2 lg:py-3 xl:py-2 font-medium backdrop-blur-xl border transition-shadow duration-300 ease-in-out hover:shadow dark:bg-[radial-gradient(circle_at_50%_0%,var(--primary)/10%_0%,transparent_60%)] dark:hover:shadow-[0_0_20px_var(--primary)/10%]",
           className
         )}
         {...animationProps}
         {...props}
       >
         <span
-          className="relative block size-full text-sm tracking-wide text-[rgb(255,255,255,90%)] dark:font-light dark:text-[rgb(255,255,255,90%)]"
+          className="relative block size-full text-xs md:text-sm lg:text-xl xl:text-sm tracking-wide text-[rgb(255,255,255,90%)] dark:font-light dark:text-[rgb(255,255,255,90%)]"
           style={{
             maskImage:
               "linear-gradient(-75deg,var(--primary) calc(var(--x) + 20%),transparent calc(var(--x) + 30%),var(--primary) calc(var(--x) + 100%))",
