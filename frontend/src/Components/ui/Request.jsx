@@ -32,7 +32,7 @@ const Request = ({ request, idx }) => {
           className="w-full object-cover aspect-square rounded-full border border-zinc-400"
         />
       </figure>
-      <div className="w-6/12 md:w-8/12 text-sm md:text-lg lg:text-xl xl:text-base">
+      <div className="w-6/12 md:w-8/12 md:text-lg lg:text-xl xl:text-base">
         <h2>{`${firstName} ${lastName}`}</h2>
       </div>
       <div className="space-x-3 md:space-x-4 xl:space-x-2 w-20 text-sm md:text-lg lg:text-xl xl:text-base">

@@ -6,7 +6,7 @@ const Connections = () => {
   const { connections } = useSelector((store) => store.connectionRequest);
 
   return (
-    <div className="w-full md:w-3/4 xl:w-full mx-auto px-2 md:px-5">
+    <div className="w-full md:w-3/4 xl:w-full mx-auto px-3 py-3 md:px-5">
       {connections && connections.length === 0 && <div>No connections</div>}
       {connections &&
         connections.map((connection, idx) => (
