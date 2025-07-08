@@ -25,8 +25,8 @@ function App() {
             <Route path="/" element={<Feed />} />
             <Route path="/connection/:connectionId" element={<Feed />} />
             <Route path="/requests/:requestId" element={<Feed />} />
-            <Route path="/settings" element={<Settings />} />
           </Route>
+          <Route path="/settings" element={<Settings />} />
 
           {/*User Related */}
           <Route path="/profile/:userId" element={<Profile />}>
