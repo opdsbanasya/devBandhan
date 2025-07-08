@@ -29,7 +29,7 @@ const Feed = () => {
   }, []);
 
   return (
-    <div className="w-3/4 h-full bg-transparent flex items-center justify-center relative flex-wrap gap-5">
+    <div className="w-11/12 xl:w-full h-full bg-transparent flex items-center justify-center relative flex-wrap py-2 xl:py-12">
       {/* {feed && feed.map(user => <FeedCard user={user} key={user?._id}/>)} */}
       {feed && feed.length > userIndex ? (
         <FeedCard
