@@ -29,7 +29,7 @@ const Navbar = () => {
         <Link to={"/"} className="">
           <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-wide animate-fade-in flex items-center gap-2">
             <span class="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-              &lt;/&gt; 
+              &lt;/&gt;
             </span>
             <span class="hidden md:block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
               DevBandhan
@@ -40,12 +40,12 @@ const Navbar = () => {
       <div className="flex gap-10">
         {!user && (
           <div className="flex item-center gap-3 md:gap-5">
-            <ShinyButton className="">
-              <Link to={"/signup"}>Sign up</Link>
-            </ShinyButton>
-            <ShinyButton className="">
-              <Link to={"/login"}>Login</Link>
-            </ShinyButton>
+            <Link to={"/signup"}>
+              <ShinyButton>Sign up</ShinyButton>
+            </Link>
+            <Link to={"/login"}>
+              <ShinyButton>Login</ShinyButton>
+            </Link>
           </div>
         )}
         {user && (
