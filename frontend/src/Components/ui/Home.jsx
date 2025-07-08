@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addConnections, addRequests } from "@/store/connectionRequestSlice";
 import { BASE_URL } from "@/utils/constants";
 import axios from "axios";
-import { Dock, DockIcon } from "@/components/magicui/dock";
+import { Dock, DockIcon } from "../magicui/dock";
 
 const Home = () => {
   const [tabName, setTabName] = useState("chat");
