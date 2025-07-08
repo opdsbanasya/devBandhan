@@ -27,8 +27,8 @@ const Navbar = () => {
     >
       <div className="flex-1">
         <Link to={"/"} className="">
-          <h1 class="text-xl md:text-3xl font-extrabold text-white tracking-wide animate-fade-in flex items-center gap-2">
-            <span class="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-xl md:text-3xl font-extrabold text-white tracking-wide animate-fade-in flex items-center gap-2">
+            <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
               &lt;/&gt;
             </span>
             <span class="hidden md:block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
@@ -51,7 +51,7 @@ const Navbar = () => {
         {user && (
           <div className="dropdown dropdown-end flex gap-5">
             <div className="flex items-center">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-base md:text-lg lg:text-xl xl:text-lg">
                 Welcome, <TypingAnimation>{user?.firstName}</TypingAnimation>
               </div>
             </div>
@@ -74,23 +74,23 @@ const Navbar = () => {
               <li>
                 <Link
                   to={`/profile/${user._id}`}
-                  className="justify-between text-[14px]"
+                  className="justify-between text-[14px] md:text-lg xl:text-base"
                 >
                   Profile
                 </Link>
               </li>
               <li>
-                <Link to={"/upgrade"} className="text-[14px]">
+                <Link to={"/upgrade"} className="text-[14px] md:text-lg xl:text-base">
                   Upgrade
                 </Link>
               </li>
               <li>
-                <Link to={"/settings"} className="text-[14px]">
+                <Link to={"/settings"} className="text-[14px] md:text-lg xl:text-base">
                   Settings
                 </Link>
               </li>
               <li>
-                <p className="text-[14px]" onClick={handleLogout}>
+                <p className="text-[14px] md:text-lg xl:text-base" onClick={handleLogout}>
                   Logout
                 </p>
               </li>
