@@ -53,8 +53,8 @@ const FeedCard = ({ user, handleUser, index }) => {
         </div>
 
         <p className="md:mt-4 text-sm md:text-lg lg:text-xl xl:text-sm text-zinc-300 hidden md:block">
-          {user?.about.length >= 105
-            ? `${user.about.slice(0, 105)}...`
+          {user?.about.length >= 100
+            ? `${user.about.slice(0, 100)}...`
             : user?.about}
         </p>
 

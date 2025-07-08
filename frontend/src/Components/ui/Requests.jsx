@@ -6,10 +6,10 @@ const Requests = () => {
   const { requests } = useSelector((store) => store.connectionRequest);
 
   return (
-    <div className="w-full ">
+    <div className="w-full md:w-3/4 xl:w-full mx-auto px-2 md:px-5">
       {requests &&
-        requests.map((request) => (
-          <Request request={request} key={request._id} />
+        requests.map((request, idx) => (
+          <Request request={request} key={request._id} idx={idx} />
         ))}
     </div>
   );

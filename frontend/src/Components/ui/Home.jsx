@@ -53,7 +53,7 @@ const Home = () => {
 
   return (
     <div data-theme="black" className="w-screen min-h-[90vh] bg-base-200 xl:flex">
-      <div className="w-11/12 xl:w-1/4 min-h-full bg-base-200 xl:border-r border-zinc-700 text-white mx-auto">
+      <div className="w-11/12 xl:w-[28%] min-h-full bg-base-200 xl:border-r border-zinc-700 text-white mx-auto">
         <div className="relative flex w-full px-5 gap-4 xl:border-b border-zinc-500 py-5 justify-center">
           <Dock direction="middle" >
             <div className="block xl:hidden">
@@ -97,7 +97,7 @@ const Home = () => {
         </div>
       </div>
       <div
-        className={`w-11/12 xl:w-3/4 h-full bg-transparent flex items-center justify-center relative flex-wrap gap-5 ${
+        className={`w-11/12 xl:w-[72%] h-full bg-transparent flex items-center justify-center relative flex-wrap gap-5 ${
           tabName === "" ? "block" : "hidden"
         } xl:block mx-auto`}
       >
