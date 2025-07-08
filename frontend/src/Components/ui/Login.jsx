@@ -50,11 +50,6 @@ const Login = () => {
             className="w-full h-full object-cover "
             src={bgImageloginDesktop}
           />
-          <img
-            alt="login-image "
-            className="w-full h-full object-cover hidden"
-            src={bgImageloginMobile}
-          />
         </div>
 
         {/* Card 1 - front */}
@@ -76,7 +71,7 @@ const Login = () => {
                 <div className="flex flex-col px-5 md:px-10 gap-1 lg:gap-2 xl:gap-1 pt-5 md:pt-10">
                   <label
                     htmlFor="email"
-                    className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base font-semibold"
+                    className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
                   >
                     Email
                   </label>
@@ -91,7 +86,7 @@ const Login = () => {
 
                   <label
                     htmlFor="password"
-                    className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base font-semibold"
+                    className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
                   >
                     Password
                   </label>
