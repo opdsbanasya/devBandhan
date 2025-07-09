@@ -19,7 +19,12 @@ const Home = () => {
     if (!user) {
       navigate("/get-started");
     }
-  });
+
+    if(window.innerWidth < 1280){
+      setTabName("");
+    }
+    
+  }, [window.innerWidth]);
 
   const getConnections = async () => {
     const userConnections = await axios.get(`${BASE_URL}/user/connections`, {
@@ -55,7 +60,7 @@ const Home = () => {
     <div data-theme="black" className="w-screen min-h-[90vh] bg-base-200 xl:flex">
       <div className="w-11/12 xl:w-[28%] min-h-full bg-base-200 xl:border-r border-zinc-700 text-white mx-auto">
         <div className="relative flex w-full px-5 gap-4 xl:border-b border-zinc-500 py-5 justify-center">
-          <Dock direction="middle" >
+          <Dock direction="middle">
             <div className="block xl:hidden">
             <DockIcon
               onClick={() => handleTabs("")}
