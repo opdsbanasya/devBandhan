@@ -143,7 +143,6 @@ const EditProfile = () => {
                     name="photo"
                     ref={profileImageLink}
                     placeholder="Enter photo URL"
-                    value={user?.profilePhoto}
                     required
                     className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
@@ -165,7 +164,6 @@ const EditProfile = () => {
                     name="profession"
                     ref={professionData}
                     required
-                    value={user?.profession}
                     className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
                 </div>
@@ -188,7 +186,6 @@ const EditProfile = () => {
                         id="male"
                         value="male"
                         ref={male}
-                        checked={user?.gender === "male"}
                         className="form-radio text-blue-500 focus:ring-blue-400"
                       /> 
                       <span className="text-zinc-200 text-sm sm:text-base">
@@ -203,7 +200,6 @@ const EditProfile = () => {
                         id="female"
                         value="female"
                         ref={female}
-                        checked={user?.gender === "female"}
                         className="form-radio text-pink-400 focus:ring-pink-300"
                       />
                       <span className="text-zinc-200 text-sm sm:text-base">
@@ -218,7 +214,6 @@ const EditProfile = () => {
                         id="other"
                         value="other"
                         ref={other}
-                        checked={user?.gender === "other"}
                         className="form-radio text-violet-400 focus:ring-violet-300"
                       />
                       <span className="text-zinc-200 text-sm sm:text-base">
@@ -238,7 +233,6 @@ const EditProfile = () => {
                     id="dob"
                     name="dob"
                     ref={dateOfBirth}
-                    value={user?.dateOfBirth}
                     required
                     className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
@@ -256,7 +250,6 @@ const EditProfile = () => {
                     name="about"
                     required
                     ref={about}
-                    value={user?.about}
                     className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400 focus-within:text-white h-20 sm:h-28 text-sm resize-y max-h-[30vh] min-h-[15vh] xl:min-h-[10vh]"
                   />
                 </div>
