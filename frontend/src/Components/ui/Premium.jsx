@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { MagicCard } from "../magicui/magic-card";
 import axios from "axios";
 import { BASE_URL } from "@/utils/constants";
+import { ArrowLeftCircle, Eye, Headphones, ShieldCheckIcon, Sparkles, Star, UserPlus2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Premium = () => {
   const [isPremium, setIsPremium] = useState();
+  const navigate = useNavigate();
 
   const verifyPremium = async () => {
     try {
@@ -60,53 +63,94 @@ const Premium = () => {
   return isPremium ? (
     <div
       data-theme="black"
-      className="w-screen min-h-[90vh] bg-gradient-to-br from-zinc-900 to-black text-white py-10 flex justify-center gap-32"
+      className="w-screen min-h-[90vh] bg-gradient-to-br from-zinc-900 to-black text-white py-10 flex justify-center items-center px-4"
     >
-      <p className="text-2xl font-semibold">You are already premium user</p>
+      <div className="text-center max-w-md flex flex-col items-center gap-4 animate-fade-in">
+        <ShieldCheckIcon size={48} className="text-blue-400 drop-shadow-md" />
+        <h1 className="text-2xl sm:text-3xl font-bold">
+          You’re already a premium user!
+        </h1>
+        <p className="text-base sm:text-lg text-zinc-300">
+          Thanks for supporting us 🙌. You already have access to all premium
+          features.
+        </p>
+        <button
+          className="mt-4 px-5 py-2 flex items-center gap-2 bg-blue-400 text-white hover:text-black font-semibold rounded-md hover:bg-blue-300 transition cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          <ArrowLeftCircle size={20} />
+          Back to Dashboard
+        </button>
+      </div>
     </div>
   ) : (
     <div
       data-theme="black"
-      className="w-screen min-h-[90vh] bg-gradient-to-br from-zinc-900 to-black text-white py-10 flex justify-center gap-32"
+      className="w-screen min-h-[90vh] bg-gradient-to-br from-zinc-900 to-black text-white py-10 px-4 flex flex-col lg:flex-row lg:justify-center items-center lg:items-start gap-10 md:gap-12 lg:gap-16"
     >
-      <div className="w-1/3 rounded-lg">
-        <MagicCard className="px-10 py-5">
-          <h2 className="text-xl font-semibold pb-4 text-center">
+      {/* Silver Membership */}
+      <div className="w-full sm:w-4/5 md:w-1/2 lg:w-1/3 rounded-lg hover:scale-[1.02] transition duration-300">
+        <MagicCard className="px-6 py-5 shadow-md">
+          <h2 className="text-xl font-bold text-center pb-4 text-slate-100">
             🥈 Silver Membership
           </h2>
-          <div className="">
-            <p className="pb-2 text-lg">Perks and banefits</p>
-            <ul className="px-5">
-              <li className="list-disc">Unlimited chat</li>
-              <li className="list-disc">Unlimited connections</li>
-              <li className="list-disc">Unlimited profile view</li>
-            </ul>
+          <p className="pb-2 text-base sm:text-lg font-medium text-center text-slate-300">
+            Perfect for starting out
+          </p>
+          <ul className="list-none pl-0 text-sm sm:text-base space-y-3 mt-4">
+            <li className="flex items-center gap-2">
+              <Sparkles size={18} className="text-blue-400" />
+              Unlimited Chat
+            </li>
+            <li className="flex items-center gap-2">
+              <UserPlus2 size={18} className="text-blue-400" />
+              Unlimited Connections
+            </li>
+            <li className="flex items-center gap-2">
+              <Eye size={18} className="text-blue-400" />
+              Unlimited Profile Views
+            </li>
+          </ul>
+          <div className="flex justify-center">
             <button
               onClick={() => handlePayClick("silver")}
-              className="w-fit px-4 py-2 bg-[#F5F5F5] text-black font-semibold rounded-md mx-auto mt-4 cursor-pointer"
+              className="px-5 py-2 bg-white text-black font-semibold rounded-md mt-6 hover:bg-gray-200 transition"
             >
-              Buy
+              Buy Silver
             </button>
           </div>
         </MagicCard>
       </div>
-      <div className="w-1/3 rounded-lg">
-        <MagicCard className="px-10 py-5">
-          <h2 className="text-xl font-semibold pb-4 text-center">
+
+      {/* Gold Membership */}
+      <div className="w-full sm:w-4/5 md:w-1/2 lg:w-1/3 rounded-lg hover:scale-[1.02] transition duration-300">
+        <MagicCard className="px-6 py-5 shadow-md border ">
+          <h2 className="text-xl font-bold text-center pb-4 text-yellow-300">
             🥇 Gold Membership
           </h2>
-          <div className="">
-            <p className="pb-2 text-lg">Perks and banefits</p>
-            <ul className="px-5">
-              <li className="list-disc">Unlimited chat</li>
-              <li className="list-disc">Unlimited connections</li>
-              <li className="list-disc">Unlimited profile view</li>
-            </ul>
+          <p className="pb-2 text-base sm:text-lg font-medium text-center text-yellow-100">
+            Unlock all premium features
+          </p>
+          <ul className="list-none pl-0 text-sm sm:text-base space-y-3 mt-4">
+            <li className="flex items-center gap-2">
+              <Sparkles size={18} className="text-yellow-400" />
+              Everything in Silver
+            </li>
+            <li className="flex items-center gap-2">
+              <Headphones size={18} className="text-yellow-400" />
+              Priority Support
+            </li>
+            <li className="flex items-center gap-2">
+              <Star size={18} className="text-yellow-400" />
+              Access to Exclusive Features
+            </li>
+          </ul>
+          <div className="flex justify-center">
             <button
               onClick={() => handlePayClick("gold")}
-              className="w-fit px-4 py-2 bg-[#FCEF91] text-black font-semibold rounded-md mx-auto mt-4 cursor-pointer"
+              className="px-5 py-2 bg-yellow-300 text-black font-semibold rounded-md mt-6 hover:bg-yellow-200 transition"
             >
-              Buy
+              Buy Gold
             </button>
           </div>
         </MagicCard>
