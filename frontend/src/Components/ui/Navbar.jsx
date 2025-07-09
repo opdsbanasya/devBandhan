@@ -31,7 +31,7 @@ const Navbar = () => {
             <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
               &lt;/&gt;
             </span>
-            <span class="hidden md:block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="hidden md:block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
               DevBandhan
             </span>
           </h1>
