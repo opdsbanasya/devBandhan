@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { updateUser } from "@/store/userSlice";
+import checkbox from "daisyui/components/checkbox";
 
 const EditProfile = () => {
   const user = useSelector((store) => store.user);
@@ -101,30 +102,39 @@ const EditProfile = () => {
   return (
     <section
       data-theme="black"
-      className="w-screen h-[90vh] bg-transparent relative min-h-full flex items-center overflow-x-hidden"
+      className="w-screen h-[90vh] bg-transparent relative min-h-full flex items-center justify-center overflow-x-hidden px-4"
     >
-      <div className="relative w-[30%] min-h-[40%] rounded-lg shadow-2xl z-10 bg-base-300 py-5 mx-auto">
-        <div className="space-y-4">
-          <div className="px-10">
-            <h5 className="text-xl font-semibold text-center shadow-lg mb-2">
+      <div className="relative w-full md:w-[60%] lg:w-[50%] xl:w-[30%] max-w-2xl min-h-[40%] max-h-[85vh] mr-10 md:ml-10 rounded-lg shadow-2xl z-10 bg-base-300 py-4 sm:py-5 mx-auto overflow-y-auto">
+        <div className="space-y-3 sm:space-y-4">
+          {/* Header */}
+          <div className="px-4 sm:px-6 lg:px-10">
+            <h5 className="text-lg sm:text-xl font-semibold text-center shadow-lg mb-2">
               Edit Profile
             </h5>
-            <p className="text-center italic text-sm">
+            <p className="text-center italic text-xs sm:text-sm">
               Enter your details below to edit you on <span>DevTinder</span>
             </p>
             <p
-              className="absolute top-5 right-5 cursor-pointer"
+              className="absolute top-3 sm:top-5 right-3 sm:right-5 cursor-pointer hover:scale-110 transition-transform duration-200"
               onClick={() => navigate("/profile/" + user._id)}
             >
-              <X />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </p>
           </div>
+
+          {/* Form Container */}
           <div className="">
-            <form action="#" className="flex flex-col px-10 gap-2 relative">
+            <form
+              action="#"
+              className="flex flex-col px-4 sm:px-6 lg:px-10 gap-2 relative"
+            >
               {/* Profile Image */}
               {profileImage && (
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="photo" className="pl-2 font-medium py-3">
+                  <label
+                    htmlFor="photo"
+                    className="pl-2 font-medium py-2 sm:py-3 text-sm sm:text-base"
+                  >
                     Enter the profile photo url
                   </label>
                   <input
@@ -133,8 +143,9 @@ const EditProfile = () => {
                     name="photo"
                     ref={profileImageLink}
                     placeholder="Enter photo URL"
+                    value={user?.profilePhoto}
                     required
-                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400 focus-within:text-white"
+                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
                 </div>
               )}
@@ -142,7 +153,10 @@ const EditProfile = () => {
               {/* Profession */}
               {profession && (
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="profession" className="pl-2 font-medium py-3">
+                  <label
+                    htmlFor="profession"
+                    className="pl-2 font-medium py-2 sm:py-3 text-sm sm:text-base"
+                  >
                     Enter your profession
                   </label>
                   <input
@@ -151,20 +165,22 @@ const EditProfile = () => {
                     name="profession"
                     ref={professionData}
                     required
-                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400 focus-within:text-white"
+                    value={user?.profession}
+                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
                 </div>
               )}
-              
+
+              {/* Basic Data */}
               {basicData && (
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="gender"
-                    className="pl-2 block font-medium text-zinc-300 mb-2"
+                    className="pl-2 block font-medium text-zinc-300 mb-2 text-sm sm:text-base"
                   >
                     Gender
                   </label>
-                  <div className="flex gap-6 pl-2 mb-4">
+                  <div className="flex gap-3 sm:gap-6 pl-2 mb-3 sm:mb-4">
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
@@ -172,9 +188,12 @@ const EditProfile = () => {
                         id="male"
                         value="male"
                         ref={male}
+                        checked={user?.gender === "male"}
                         className="form-radio text-blue-500 focus:ring-blue-400"
-                      />
-                      <span className="text-zinc-200">Male</span>
+                      /> 
+                      <span className="text-zinc-200 text-sm sm:text-base">
+                        Male
+                      </span>
                     </label>
 
                     <label className="inline-flex items-center gap-2 cursor-pointer">
@@ -184,9 +203,12 @@ const EditProfile = () => {
                         id="female"
                         value="female"
                         ref={female}
+                        checked={user?.gender === "female"}
                         className="form-radio text-pink-400 focus:ring-pink-300"
                       />
-                      <span className="text-zinc-200">Female</span>
+                      <span className="text-zinc-200 text-sm sm:text-base">
+                        Female
+                      </span>
                     </label>
 
                     <label className="inline-flex items-center gap-2 cursor-pointer">
@@ -196,13 +218,19 @@ const EditProfile = () => {
                         id="other"
                         value="other"
                         ref={other}
+                        checked={user?.gender === "other"}
                         className="form-radio text-violet-400 focus:ring-violet-300"
                       />
-                      <span className="text-zinc-200">Other</span>
+                      <span className="text-zinc-200 text-sm sm:text-base">
+                        Other
+                      </span>
                     </label>
                   </div>
 
-                  <label htmlFor="dob" className="pl-2 font-medium">
+                  <label
+                    htmlFor="dob"
+                    className="pl-2 font-medium text-sm sm:text-base"
+                  >
                     Date of birth
                   </label>
                   <input
@@ -210,11 +238,15 @@ const EditProfile = () => {
                     id="dob"
                     name="dob"
                     ref={dateOfBirth}
+                    value={user?.dateOfBirth}
                     required
-                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-4 focus-within:border-zinc-400 focus-within:text-white"
+                    className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
 
-                  <label htmlFor="about" className={"pl-2 font-medium"}>
+                  <label
+                    htmlFor="about"
+                    className="pl-2 font-medium text-sm sm:text-base"
+                  >
                     About
                   </label>
                   <textarea
@@ -224,7 +256,8 @@ const EditProfile = () => {
                     name="about"
                     required
                     ref={about}
-                    className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400 focus-within:text-white resize-none h-28"
+                    value={user?.about}
+                    className="px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 focus-within:border-zinc-400 focus-within:text-white h-20 sm:h-28 text-sm resize-y max-h-[30vh] min-h-[15vh] xl:min-h-[10vh]"
                   />
                 </div>
               )}
@@ -232,10 +265,13 @@ const EditProfile = () => {
               {/* Skills */}
               {skills && (
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="skills" className="pl-2 font-medium">
+                  <label
+                    htmlFor="skills"
+                    className="pl-2 font-medium text-sm sm:text-base"
+                  >
                     Skills <span></span>
                   </label>
-                  <span className="w-full flex items-center justify-between mb-4 gap-2">
+                  <div className="w-full flex items-center justify-between mb-3 sm:mb-4 gap-2">
                     <input
                       type="text"
                       id="skills"
@@ -243,33 +279,33 @@ const EditProfile = () => {
                       placeholder="Enter Skills"
                       ref={skillsNewData}
                       required
-                      className="w-11/12 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm  focus-within:border-zinc-400 focus-within:text-white"
+                      className="flex-1 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                     />
                     <button
                       onClick={(e) => handleAddChips(e, "skills")}
-                      className="px-2 py-2 bg-blue-100 text-blue-500 rounded-full cursor-pointer"
+                      className="px-2 py-2 bg-blue-100 text-blue-500 rounded-full cursor-pointer hover:bg-blue-200 transition-colors duration-200 flex-shrink-0"
                     >
-                      <Plus />
+                      <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
-                  </span>
+                  </div>
 
-                  <div className="flex flex-wrap gap-3 relative mb-6">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 relative mb-4 sm:mb-6">
                     {user?.skills &&
                       user?.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className="flex items-center justify-between gap-2 px-3 py-1 bg-[#FFFACD]/10 rounded-md"
+                          className="flex items-center justify-between gap-2 px-2 sm:px-3 py-1 bg-[#FFFACD]/10 rounded-md"
                         >
-                          <p className="   text-[#FFFACD] text-sm tracking-wide">
+                          <p className="text-[#FFFACD] text-xs sm:text-sm tracking-wide">
                             {skill}
                           </p>
                           <p
                             onClick={(e) =>
                               handleRemoveChips(e, index, "skills")
                             }
-                            className="text-red-500 cursor-pointer"
+                            className="text-red-500 cursor-pointer hover:text-red-400 transition-colors duration-200"
                           >
-                            <RxCross2 />
+                            <RxCross2 className="w-3 h-3 sm:w-4 sm:h-4" />
                           </p>
                         </span>
                       ))}
@@ -280,10 +316,13 @@ const EditProfile = () => {
               {/* Achievements & Awards */}
               {achievements && (
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="achievements" className="pl-2 font-medium">
+                  <label
+                    htmlFor="achievements"
+                    className="pl-2 font-medium text-sm sm:text-base"
+                  >
                     Achievements & Awards <span></span>
                   </label>
-                  <span className="w-full flex items-center justify-between mb-4 gap-2">
+                  <div className="w-full flex items-center justify-between mb-3 sm:mb-4 gap-2">
                     <input
                       type="text"
                       id="achievements"
@@ -291,33 +330,33 @@ const EditProfile = () => {
                       ref={achievementsNewData}
                       placeholder="Enter achievements & awards"
                       required
-                      className="w-11/12 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm  focus-within:border-zinc-400 focus-within:text-white"
+                      className="flex-1 text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                     />
                     <button
                       onClick={(e) => handleAddChips(e, "achievements")}
-                      className="px-2 py-2 bg-blue-100 text-blue-500 rounded-full cursor-pointer"
+                      className="px-2 py-2 bg-blue-100 text-blue-500 rounded-full cursor-pointer hover:bg-blue-200 transition-colors duration-200 flex-shrink-0"
                     >
-                      <Plus />
+                      <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
-                  </span>
+                  </div>
 
-                  <div className="flex flex-wrap gap-3 relative mb-6">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 relative mb-4 sm:mb-6">
                     {user?.achievements &&
                       user?.achievements.map((achievement, index) => (
                         <span
                           key={index}
-                          className="flex items-center justify-between gap-2 px-3 py-1 bg-[#FFFACD]/10 rounded-md"
+                          className="flex items-center justify-between gap-2 px-2 sm:px-3 py-1 bg-[#FFFACD]/10 rounded-md"
                         >
-                          <p className="   text-[#FFFACD] text-sm tracking-wide">
+                          <p className="text-[#FFFACD] text-xs sm:text-sm tracking-wide">
                             {achievement}
                           </p>
                           <p
                             onClick={(e) =>
                               handleRemoveChips(e, index, "achievements")
                             }
-                            className="text-red-500 cursor-pointer"
+                            className="text-red-500 cursor-pointer hover:text-red-400 transition-colors duration-200"
                           >
-                            <RxCross2 />
+                            <RxCross2 className="w-3 h-3 sm:w-4 sm:h-4" />
                           </p>
                         </span>
                       ))}
@@ -325,9 +364,10 @@ const EditProfile = () => {
                 </div>
               )}
 
-              <div className="flex justify-center">
+              {/* Submit Button */}
+              <div className="flex justify-center pt-2">
                 <button
-                  className="px-3 py-2 text-blue-500 bg-blue-100 w-fit mx-auto rounded-md font-semibold cursor-pointer"
+                  className="px-4 sm:px-6 py-2 sm:py-3 text-blue-500 bg-blue-100 w-fit mx-auto rounded-md font-semibold cursor-pointer hover:bg-blue-200 transition-colors duration-200 text-sm sm:text-base"
                   onClick={(e) => handleEditInfo(e)}
                 >
                   Submit
