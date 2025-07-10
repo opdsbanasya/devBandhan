@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { BorderBeam } from "../magicui/border-beam";
 import { Link, useNavigate } from "react-router-dom";
 import { loginDataValiadation } from "@/utils/validation";
@@ -7,13 +7,14 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../../store/userSlice";
 import { BASE_URL } from "@/utils/constants";
 import bgImageloginDesktop from "../../assets/bgImageDesktop.webp";
-import bgImageloginMobile from "../../assets/bgImageMobile.webp";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const email = useRef();
   const password = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [inputType, setInputType] = useState("password");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -90,14 +91,35 @@ const Login = () => {
                   >
                     Password
                   </label>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    id="password"
-                    name="password"
-                    ref={password}
-                    className="p-2 md:p-4 xl:p-2 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 text-[14px] md:text-lg lg:text-2xl xl:text-base"
-                  />
+                  <div className="w-full flex items-center justify-between border border-zinc-500 rounded-sm focus-within:border-zinc-400">
+                    <input
+                      type={inputType}
+                      placeholder="Password"
+                      id="password"
+                      name="password"
+                      ref={password}
+                      required
+                      className="flex-1 text-zinc-500 p-2 md:p-4 xl:p-2 outline-none focus-within:text-white text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                    />
+                    {inputType === "password" && (
+                      <button
+                        type="button"
+                        className="px-2 py-2 rounded-full cursor-pointer transition-colors duration-200 flex-shrink-0"
+                        onClick={(e) => setInputType("text")}
+                      >
+                        <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </button>
+                    )}
+                    {inputType === "text" && (
+                      <button
+                        type="button"
+                        className="px-2 py-2 rounded-full cursor-pointer transition-colors duration-200 flex-shrink-0"
+                        onClick={(e) => setInputType("password")}
+                      >
+                        <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </button>
+                    )}
+                  </div>
 
                   <button
                     className="px-2 md:px-3 lg:px-5 xl:px-3 py-1 md:py-2 lg:py-3 xl:py-2 text-sm md:text-base lg:text-2xl xl:text-base text-red-500 bg-red-100 w-fit mx-auto rounded-md font-semibold cursor-pointer mt-5 md:mt-10"
