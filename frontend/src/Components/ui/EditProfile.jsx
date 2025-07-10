@@ -54,12 +54,11 @@ const EditProfile = () => {
           links,
         }
       );
-      if (basicData || profileImage || profession || skills) {
+      if (basicData || profileImage || profession || links) {
         dispatch(updateUser(editData));
       }
-      if (skills) {
-        navigate("/profile/" + user._id);
-      }
+
+      navigate("/profile/" + user._id);
       alert("Data Updated");
     } catch (err) {
       console.log("ERROR: " + err.message);
