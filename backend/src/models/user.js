@@ -81,6 +81,20 @@ const userSchema = new mongoose.Schema(
     achievements: {
       type: [String],
     },
+    socialLinks: {
+      github: {
+        type: String
+      },
+      linkedin: {
+        type: String
+      },
+      twitterX: {
+        type: String
+      },
+      instagram: {
+        type: String
+      },
+    },
     profession: {
       type: String,
     },

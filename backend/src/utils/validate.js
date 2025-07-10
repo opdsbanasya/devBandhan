@@ -39,6 +39,7 @@ const validateUpdateData = (data) => {
     "achievements",
     "dateOfBirth",
     "profession",
+    "socialLinks"
   ];
   const isUpdatesAllowed = Object.keys(data).every((key) =>
     allowedUpdated.includes(key)
@@ -59,6 +60,20 @@ const validateUpdateData = (data) => {
   if (dateOfBirth && !validator.isDate(dateOfBirth)) {
     throw new Error("Invalid Date");
   }
+
+  
+  if(data?.socialLinks){
+    
+    if(data?.socialLinks.length > 4) {
+      throw new Error("Links can't be more than 4")
+    }
+    for(let link in data?.socialLinks){
+      if(!validator.isURL(data?.socialLinks[link])){
+        throw new Error(`${link} link is invalid`)
+      }
+    }
+  }
+
 };
 
 const validateLoginData = (data) => {
