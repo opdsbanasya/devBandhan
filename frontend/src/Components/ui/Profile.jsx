@@ -1,9 +1,11 @@
 import { Facebook, Github, Instagram, Linkedin, SquarePen } from "lucide-react";
+import { FaXTwitter, FaLinkedin, FaInstagram } from "react-icons/fa6";
+import { FiGithub } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { AuroraText } from "../magicui/aurora-text";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
@@ -11,6 +13,8 @@ const Profile = () => {
   const [isEditIconHidden, setIsEditIconHidden] = useState(true);
 
   if (!user) return;
+
+  const { socialLinks } = user || {};
 
   const handleEditClick = (data) => {
     navigate("edit", { state: data });
@@ -73,30 +77,45 @@ const Profile = () => {
 
           {/* Social Links */}
           <div className="w-11/12 sm:w-10/12 lg:w-9/12 xl:w-8/12 mx-auto flex justify-center sm:justify-end gap-3 sm:gap-4 mt-4 sm:mt-6 border-b border-zinc-700 pb-3 sm:pb-4">
-            <a
+            {socialLinks?.github && (
+              <a
+                href={socialLinks?.github}
+                className="hover:scale-110 transition-transform duration-200"
+              >
+                <FiGithub size={24} />
+              </a>
+            )}
+            {socialLinks?.linkedin && (
+              <a
+                href={socialLinks?.github}
+                className="hover:scale-110 transition-transform duration-200"
+              >
+                <FaLinkedin size={24} />
+              </a>
+            )}
+            {socialLinks?.twitterX && (
+              <a
+                href={socialLinks?.twitterX}
+                className="hover:scale-110 transition-transform duration-200"
+              >
+                <FaXTwitter size={24} />
+              </a>
+            )}
+            {socialLinks?.instagram && (
+              <a
+                href={socialLinks?.instagram}
+                className="hover:scale-110 transition-transform duration-200"
+              >
+                <FaInstagram size={24} />
+              </a>
+            )}
+            <p
               href="#"
-              className="hover:scale-110 transition-transform duration-200"
+              className="hover:scale-110 transition-transform duration-200 text-zinc-500 hover:text-zinc-100"
+              onClick={() => handleEditClick({ links: true })}
             >
-              <Github />
-            </a>
-            <a
-              href="#"
-              className="hover:scale-110 transition-transform duration-200"
-            >
-              <Linkedin />
-            </a>
-            <a
-              href="#"
-              className="hover:scale-110 transition-transform duration-200"
-            >
-              <Facebook />
-            </a>
-            <a
-              href="#"
-              className="hover:scale-110 transition-transform duration-200"
-            >
-              <Instagram />
-            </a>
+              <MdEdit size={20} />
+            </p>
           </div>
         </div>
 

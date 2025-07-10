@@ -13,7 +13,7 @@ const EditProfile = () => {
   const location = useLocation() || {};
   const dispatch = useDispatch();
 
-  const { basicData, skills, achievements, profileImage, profession } =
+  const { basicData, skills, achievements, profileImage, profession, links } =
     location.state || {};
 
   const about = useRef();
@@ -25,33 +25,45 @@ const EditProfile = () => {
   const achievementsNewData = useRef();
   const profileImageLink = useRef();
   const professionData = useRef();
+  const platformName = useRef();
+  const platformUrl = useRef();
 
   const handleEditInfo = async (e) => {
-    e.preventDefault();
-    const editData = await editDataValidation(
-      {
-        about,
-        dateOfBirth,
-        male,
-        female,
-        other,
-        profileImageLink,
-        professionData,
-      },
-      user,
-      {
-        basicData,
-        skills,
-        achievements,
-        profileImage,
-        profession,
+    try {
+      e.preventDefault();
+
+      const editData = await editDataValidation(
+        {
+          about,
+          dateOfBirth,
+          male,
+          female,
+          other,
+          profileImageLink,
+          professionData,
+          platformName,
+          platformUrl,
+        },
+        user,
+        {
+          basicData,
+          skills,
+          achievements,
+          profileImage,
+          profession,
+          links,
+        }
+      );
+      if (basicData || profileImage || profession || skills) {
+        dispatch(updateUser(editData));
       }
-    );
-    if (basicData || profileImage || profession) {
-      dispatch(updateUser(editData));
+      if (skills) {
+        navigate("/profile/" + user._id);
+      }
+      alert("Data Updated");
+    } catch (err) {
+      console.log("ERROR: " + err.message);
     }
-    navigate("/profile/" + user._id);
-    alert("Data Updated");
   };
 
   const handleAddChips = (e, field) => {
@@ -123,10 +135,10 @@ const EditProfile = () => {
           </div>
 
           {/* Form Container */}
-          <div className="">
+          <div className="w-full">
             <form
               action="#"
-              className="flex flex-col px-4 sm:px-6 lg:px-10 gap-2 relative"
+              className="flex flex-col px-4 sm:px-6 lg:px-10 gap-2 relative w-full"
             >
               {/* Profile Image */}
               {profileImage && (
@@ -169,6 +181,54 @@ const EditProfile = () => {
                 </div>
               )}
 
+              {/*Social links */}
+              {links && (
+                <div className="flex flex-col gap-2 w-full">
+                  <fieldset className="fieldset w-full">
+                    <legend className="fieldset-legend pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base font-normal">
+                      Select Social platform
+                    </legend>
+                    <select
+                      defaultValue="Pick a browser"
+                      className="select flex-1 w-full md:h-16 xl:h-fit text-zinc-500 p-2 md:px-4 xl:px-2  border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 focus-within:text-white text-[14px] md:text-lg lg:text-2xl xl:text-base bg-base-300"
+                      ref={platformName}
+                    >
+                      <option disabled={true} selected className="text-base">
+                        Select a platform{" "}
+                      </option>
+                      <option value="github" className="text-base">
+                        GitHub
+                      </option>
+                      <option value="linkedin" className="text-base">
+                        LinkedIn
+                      </option>
+                      <option value="twitterX" className="text-base">
+                        X
+                      </option>
+                      <option value="instagram" className="text-base">
+                        Instagram
+                      </option>
+                    </select>
+                  </fieldset>
+
+                  <label
+                    htmlFor="links"
+                    className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  >
+                    Enter the links
+                  </label>
+                  <input
+                    type="text"
+                    id="link"
+                    name="link"
+                    ref={platformUrl}
+                    placeholder="Enter URL"
+                    required
+                    className="p-2 md:p-4 xl:p-2 border border-zinc-500 outline-none rounded-sm mb-3 md:mb-5 focus-within:border-zinc-400 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  />
+                </div>
+              )}
+
               {/* Basic Data */}
               {basicData && (
                 <div className="flex flex-col gap-2">
@@ -187,7 +247,7 @@ const EditProfile = () => {
                         value="male"
                         ref={male}
                         className="form-radio text-blue-500 focus:ring-blue-400"
-                      /> 
+                      />
                       <span className="text-zinc-200 text-sm sm:text-base">
                         Male
                       </span>
@@ -363,7 +423,7 @@ const EditProfile = () => {
                   className="px-4 sm:px-6 py-2 sm:py-3 text-blue-500 bg-blue-100 w-fit mx-auto rounded-md font-semibold cursor-pointer hover:bg-blue-200 transition-colors duration-200 text-sm sm:text-base"
                   onClick={(e) => handleEditInfo(e)}
                 >
-                  Submit
+                  Update
                 </button>
               </div>
             </form>

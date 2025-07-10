@@ -67,7 +67,7 @@ export const loginDataValiadation = (data) => {
 export const editDataValidation = async (
   data,
   user,
-  { basicData, skills, achievements, profileImage, profession }
+  { basicData, skills, achievements, profileImage, profession, links }
 ) => {
   try {
     const {
@@ -78,10 +78,13 @@ export const editDataValidation = async (
       other,
       profileImageLink,
       professionData,
+      platformName,
+      platformUrl,
     } = data || {};
 
-    let gender = "";
     let editData = {};
+
+    let gender = "";
     if (basicData && male.current.checked) {
       gender = "male";
     } else if (basicData && female.current.checked) {
@@ -89,6 +92,7 @@ export const editDataValidation = async (
     } else if (basicData && other.current.checked) {
       gender = "other";
     }
+
     if (basicData) {
       editData = {
         ...editData,
@@ -104,12 +108,13 @@ export const editDataValidation = async (
       editData = { ...editData, profilePhoto: profileImageLink.current.value };
     } else if (profession) {
       editData = { ...editData, profession: professionData.current.value };
+    } else if(platformName && platformUrl){
+      editData = {...editData, socialLinks: {...user?.socialLinks, [platformName.current.value]: platformUrl.current.value}}
     }
-
+    
     const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
       withCredentials: true,
     });
-
     return editData;
   } catch (err) {
     console.log(err);
