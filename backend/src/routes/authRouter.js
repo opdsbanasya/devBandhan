@@ -32,6 +32,7 @@ authRouter.post("/signup", async (req, res) => {
       achievements,
       dateOfBirth,
       profession,
+      socialLinks,
     } = userData;
 
     res.json({
@@ -48,10 +49,11 @@ authRouter.post("/signup", async (req, res) => {
         achievements,
         dateOfBirth,
         profession,
+        socialLinks,
       },
     });
   } catch (err) {
-    res.status(400).send("ERROR:" + err.message);
+    res.status(400).send(err.message);
   }
 });
 
@@ -112,7 +114,7 @@ authRouter.post("/login", async (req, res) => {
       throw new Error("Wrong Email and Password");
     }
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    res.status(400).send(err.message);
   }
 });
 
