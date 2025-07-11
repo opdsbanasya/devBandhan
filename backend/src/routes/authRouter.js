@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../models/user");
 const { validateSignupData, validateLoginData } = require("../utils/validate");
 const bcrypt = require("bcrypt");
+const { sendMailViaNodeMailer } = require("../utils/nodeMailer");
 
 const authRouter = express.Router();
 
@@ -20,8 +21,13 @@ authRouter.post("/signup", async (req, res) => {
     const user = new User(sanitizedData);
     const userData = await user.save();
 
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    console.log("auth calling...");
+    await sendMailViaNodeMailer(otp, sanitizedData.email);
+
     res.json({
-      message: "User has been added to database.",
+      message: "User has been added to database. Next, verify the code",
     });
   } catch (err) {
     res.status(400).send(err.message);
@@ -94,6 +100,14 @@ authRouter.post("/logout", (req, res) => {
   res.clearCookie("token");
   // res.cookie("token", null, {expires: new Date(Date.now())})
   res.json({ message: "logout successful 📤" });
+});
+
+authRouter.post("/authcode/verify", async (req, res) => {
+  try {
+    
+  } catch (err) {
+    res.status(400).json({ message: "failed to verify" });
+  }
 });
 
 module.exports = authRouter;
