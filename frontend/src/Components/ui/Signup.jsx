@@ -6,6 +6,7 @@ import { BASE_URL } from "@/utils/constants";
 import { useDispatch } from "react-redux";
 import { addUser } from "@/store/userSlice";
 import bgImagesignup from "../../assets/match-image-1.webp";
+import { WordRotate } from "../magicui/word-rotate";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,9 @@ const Signup = () => {
   const email = useRef();
   const password = useRef();
   const dateOfBirth = useRef();
+  const [validationErrors, setValidationErrors] = useState("");
+
+  console.log(validationErrors);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +29,11 @@ const Signup = () => {
       password: password.current.value,
       dateOfBirth: dateOfBirth.current.value,
     };
-    const validateData = signUpDataValidation(signupData);
+    const validateData = signUpDataValidation(
+      signupData,
+      validationErrors,
+      setValidationErrors
+    );
 
     const isNoError = Object.keys(validateData).length === 0;
     if (isNoError) {
@@ -71,10 +79,15 @@ const Signup = () => {
                 <label
                   htmlFor="firstname"
                   className={
-                    "pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                    "pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base flex justify-between items-center"
                   }
                 >
-                  Firstname
+                  <span>Firstname</span>
+                  {validationErrors?.firstNameError && (
+                    <span className="text-red-500 text-xs md:text-sm ">
+                      <WordRotate words={[validationErrors?.firstNameError]} />
+                    </span>
+                  )}
                 </label>
                 <input
                   type="text"
@@ -88,9 +101,14 @@ const Signup = () => {
 
                 <label
                   htmlFor="lastname"
-                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base flex justify-between items-cente"
                 >
-                  Lastname
+                  <span>Lastname</span>
+                  {validationErrors?.lastNameError && (
+                    <span className="text-red-500 text-xs md:text-sm ">
+                      <WordRotate words={[validationErrors?.lastNameError]} />
+                    </span>
+                  )}
                 </label>
                 <input
                   type="text"
@@ -103,9 +121,14 @@ const Signup = () => {
                 />
                 <label
                   htmlFor="email"
-                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base flex justify-between items-cente"
                 >
-                  Email
+                  <span>Email</span>
+                  {validationErrors?.emailError && (
+                    <span className="text-red-500 text-xs md:text-sm ">
+                      <WordRotate words={[validationErrors?.emailError]} />
+                    </span>
+                  )}
                 </label>
                 <input
                   type="email"
@@ -119,9 +142,14 @@ const Signup = () => {
 
                 <label
                   htmlFor="password"
-                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base flex justify-between items-cente"
                 >
-                  Password
+                  <span>Password</span>
+                  {validationErrors?.passwordError && (
+                    <span className="text-red-500 text-xs md:text-sm ">
+                      <WordRotate words={[validationErrors?.passwordError]} />
+                    </span>
+                  )}
                 </label>
                 <input
                   type="password"
@@ -135,9 +163,14 @@ const Signup = () => {
 
                 <label
                   htmlFor="dob"
-                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base flex justify-between items-cente"
                 >
-                  Date of birth
+                  <span>Date of birth</span>
+                  {validationErrors?.dobError && (
+                    <span className="text-red-500 text-xs md:text-sm ">
+                      <WordRotate words={[validationErrors?.dobError]} />
+                    </span>
+                  )}
                 </label>
                 <input
                   type="date"
@@ -169,7 +202,6 @@ const Signup = () => {
                 </Link>
               </p>
             </div>
-            
           </div>
         </div>
       </section>

@@ -8,6 +8,7 @@ import { addUser } from "../../store/userSlice";
 import { BASE_URL } from "@/utils/constants";
 import bgImageloginDesktop from "../../assets/bgImageDesktop.webp";
 import { Eye, EyeOff } from "lucide-react";
+import { WordRotate } from "../magicui/word-rotate";
 
 const Login = () => {
   const email = useRef();
@@ -15,6 +16,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [inputType, setInputType] = useState("password");
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,18 +25,21 @@ const Login = () => {
         email: email.current.value.trim(),
         password: password.current.value,
       };
-      const isOk = loginDataValiadation(loginData);
+      const isOk = loginDataValiadation(loginData, setError);
 
       if (isOk) {
         const user = await axios.post(BASE_URL + "/login", loginData, {
           withCredentials: true,
         });
 
+        console.log(user);
+        
         dispatch(addUser(user?.data?.userData));
         navigate("/");
       }
     } catch (err) {
-      console.log("ERROR" + err.message);
+      console.log(err.response.data);
+      setError(err.response.data)
     }
   };
 
@@ -67,9 +72,10 @@ const Login = () => {
                 🧑‍💻
               </p>
             </div>
-            <div className="">
+            <div className="pt-5">
+              {error !== "" && <WordRotate words={[error]} className="text-center py-3 text-red-500"/>}
               <form className="">
-                <div className="flex flex-col px-5 md:px-10 gap-1 lg:gap-2 xl:gap-1 pt-5 md:pt-10">
+                <div className="flex flex-col px-5 md:px-10 gap-1 lg:gap-2 xl:gap-1">
                   <label
                     htmlFor="email"
                     className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
