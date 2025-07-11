@@ -2,7 +2,11 @@ import axios from "axios";
 import validator from "validator";
 import { BASE_URL } from "./constants";
 
-export const signUpDataValidation = (data) => {
+export const signUpDataValidation = (
+  data,
+  validationErrors,
+  setValidationErrors
+) => {
   const errors = {};
 
   const firstName = data.firstName.trim();
@@ -42,23 +46,45 @@ export const signUpDataValidation = (data) => {
   // dateOfBirth
   if (!validator.isDate(dateOfBirth)) {
     errors.dobError = "Enter a valid date";
+  } else {
+    const today = new Date();
+    const dob = new Date(dateOfBirth)
+    var years = today.getFullYear() - dob.getFullYear();
+
+    if (
+      today.getMonth() < dob.getMonth() ||
+      (today.getMonth() == dob.getMonth() &&
+        today.getDate() < dob.getDate())
+    ) {
+      years--;
+    }
+
+    if(years < 15) {
+      errors.dobError = "Age must be 15+";
+    }
   }
 
-  const domain = data.domain;
-  const skills = data.skills;
-  const about = data.about && data.about.trim();
-  const photoUlr = data.photoUlr && data.photoUlr.trim();
+  setValidationErrors({ ...errors });
 
   return errors;
 };
 
-export const loginDataValiadation = (data) => {
+export const loginDataValiadation = (data, setError) => {
   const email = data.email;
   const password = data.password;
-  const loginErrors = {};
 
   if (!validator.isEmail(email)) {
-    throw new Error("Enter a valid email.");
+    setError("Please Enter a valid email");
+    return;
+  }
+
+  if (password === "") {
+    setError("please enter your password");
+    return;
+  }
+
+  if (validator.isEmail(email)) {
+    setError("");
   }
 
   return true;
@@ -108,10 +134,16 @@ export const editDataValidation = async (
       editData = { ...editData, profilePhoto: profileImageLink.current.value };
     } else if (profession) {
       editData = { ...editData, profession: professionData.current.value };
-    } else if(platformName && platformUrl){
-      editData = {...editData, socialLinks: {...user?.socialLinks, [platformName.current.value]: platformUrl.current.value}}
+    } else if (platformName && platformUrl) {
+      editData = {
+        ...editData,
+        socialLinks: {
+          ...user?.socialLinks,
+          [platformName.current.value]: platformUrl.current.value,
+        },
+      };
     }
-    
+
     const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
       withCredentials: true,
     });
