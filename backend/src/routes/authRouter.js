@@ -20,37 +20,8 @@ authRouter.post("/signup", async (req, res) => {
     const user = new User(sanitizedData);
     const userData = await user.save();
 
-    const {
-      firstName,
-      lastName,
-      about,
-      gender,
-      age,
-      skills,
-      profilePhoto,
-      _id,
-      achievements,
-      dateOfBirth,
-      profession,
-      socialLinks,
-    } = userData;
-
     res.json({
       message: "User has been added to database.",
-      userData: {
-        firstName,
-        lastName,
-        about,
-        gender,
-        age,
-        skills,
-        profilePhoto,
-        _id,
-        achievements,
-        dateOfBirth,
-        profession,
-        socialLinks,
-      },
     });
   } catch (err) {
     res.status(400).send(err.message);

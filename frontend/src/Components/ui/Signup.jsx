@@ -4,13 +4,12 @@ import { signUpDataValidation } from "@/utils/validation";
 import axios from "axios";
 import { BASE_URL } from "@/utils/constants";
 import { useDispatch } from "react-redux";
-import { addUser } from "@/store/userSlice";
 import bgImagesignup from "../../assets/match-image-1.webp";
 import { WordRotate } from "../magicui/word-rotate";
 import { Eye, EyeOff } from "lucide-react";
+import Alert from "../magicui/alert";
 
 const Signup = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const firstName = useRef();
   const lastName = useRef();
@@ -19,6 +18,7 @@ const Signup = () => {
   const dateOfBirth = useRef();
   const [inputType, setInputType] = useState("password");
   const [validationErrors, setValidationErrors] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
 
   console.log(validationErrors);
 
@@ -41,9 +41,11 @@ const Signup = () => {
     if (isNoError) {
       try {
         const res = await axios.post(`${BASE_URL}/signup`, signupData);
-        dispatch(addUser(res.data.userData));
-        console.log(res.data.userData);
-        navigate("/");
+
+        setIsAlert(true);
+        const timer = setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       } catch (err) {
         console.log(err);
       }
@@ -53,6 +55,8 @@ const Signup = () => {
   return (
     <section data-theme="black" className="w-screen h-[90vh] bg-base-200 grid">
       <section className="relative w-full h-full flex xl:items-center overflow-x-hidden py-5 md:py-10">
+        <Alert message={"Redirected to login..."} isAlert={isAlert} setIsAlert={setIsAlert} waitTime={3000} />
+        
         {/* Card 2 - behind */}
         <div className="absolute w-[90%] xl:w-[70%] xl:h-[90%] rounded-lg shadow-lg z-0 lg:right-0 left-1/2 -translate-x-1/2 xl:-translate-x-1/4 overflow-hidden">
           <img
