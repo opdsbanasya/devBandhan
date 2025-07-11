@@ -9,6 +9,7 @@ import { BASE_URL } from "@/utils/constants";
 import bgImageloginDesktop from "../../assets/bgImageDesktop.webp";
 import { Eye, EyeOff } from "lucide-react";
 import { WordRotate } from "../magicui/word-rotate";
+import Alert from "../magicui/alert";
 
 const Login = () => {
   const email = useRef();
@@ -17,6 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [inputType, setInputType] = useState("password");
   const [error, setError] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,13 +35,18 @@ const Login = () => {
         });
 
         console.log(user);
-        
-        dispatch(addUser(user?.data?.userData));
-        navigate("/");
+
+        setIsAlert(true);
+        const timer = setTimeout(() => {
+          dispatch(addUser(user?.data?.userData));
+          navigate("/");
+        }, 3000);
+
+        return () => clearTimeout(timer);
       }
     } catch (err) {
       console.log(err.response.data);
-      setError(err.response.data)
+      setError(err.response.data);
     }
   };
 
@@ -49,6 +56,8 @@ const Login = () => {
       className="w-screen min-h-[90vh] bg-base-200 grid"
     >
       <div className="relative w-full h-full flex xl:items-center overflow-x-hidden py-5 md:py-10 xl:py-0">
+        <Alert message={"success"} isAlert={isAlert} setIsAlert={setIsAlert} />
+
         {/* Card 2 - behind */}
         <div className="absolute w-[90%] xl:w-[70%] xl:h-[90%] rounded-lg shadow-lg z-0 lg:right-0 left-1/2 -translate-x-1/2 xl:-translate-x-1/4 overflow-hidden">
           <img
@@ -73,7 +82,12 @@ const Login = () => {
               </p>
             </div>
             <div className="pt-5">
-              {error !== "" && <WordRotate words={[error]} className="text-center py-3 text-red-500"/>}
+              {error !== "" && (
+                <WordRotate
+                  words={[error]}
+                  className="text-center py-3 text-red-500"
+                />
+              )}
               <form className="">
                 <div className="flex flex-col px-5 md:px-10 gap-1 lg:gap-2 xl:gap-1">
                   <label
