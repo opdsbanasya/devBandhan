@@ -9,6 +9,7 @@ import Home from "./Components/ui/Home";
 import EditProfile from "./Components/ui/EditProfile";
 import Settings from "./Components/ui/Settings";
 import Premium from "./Components/ui/Premium";
+import OtpVerification from "./Components/ui/OtpVerification";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/verify" element={<OtpVerification />} />
 
           {/* Feed, connection, and request */}
           <Route path="/" element={<Home />}>
