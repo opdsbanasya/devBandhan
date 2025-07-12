@@ -117,7 +117,8 @@ const OtpVerification = () => {
                 </div>
               </form>
               <div className="px-5 md:px-10 py-5 flex justify-between">
-                <p className="text-xs md:text-base lg:text-xl xl:text-sm text-blue-400 underline ">
+                <p className="text-xs md:text-base lg:text-xl xl:text-sm text-blue-400 underline"
+                onClick={()=> alert("I am working on it...")}>
                   Resend
                 </p>
               </div>

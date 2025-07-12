@@ -45,7 +45,7 @@ function Body() {
   };
 
   useEffect(() => {
-    if (location.pathname === "/signup") {
+    if (location.pathname === "/signup" || location.pathname === "/verify") {
       return;
     }
     if (!user) {
