@@ -50,7 +50,6 @@ requestRouter.post(
         body: `Hey <b>${toUser.firstName}</b>, you have a connection request from <b>${req.user.firstName}</b>. Review it in <a href="devbandhan.tech">devbandhan.tech<a>`,
       }
       const response = await sendEmail.run(email);
-      console.log(response);
 
       res.json({
         message: "Connection request sent!",

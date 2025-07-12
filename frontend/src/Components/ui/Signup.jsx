@@ -20,8 +20,6 @@ const Signup = () => {
   const [validationErrors, setValidationErrors] = useState("");
   const [isAlert, setIsAlert] = useState(false);
 
-  console.log(validationErrors);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const signupData = {

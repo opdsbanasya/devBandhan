@@ -14,7 +14,7 @@ const Premium = () => {
       const response = await axios.get(`${BASE_URL}/payment/verify`, {
         withCredentials: true,
       });
-      console.log(response);
+
       setIsPremium(response?.data?.isPremium);
     } catch (err) {
       return err;
@@ -34,8 +34,7 @@ const Premium = () => {
           withCredentials: true,
         }
       );
-      console.log(order);
-
+      
       const { publicKeyId, amount, currency, notes, orderId, userId } =
         order.data;
 

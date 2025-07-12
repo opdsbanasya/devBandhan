@@ -45,8 +45,6 @@ paymentRouter.post("/create/order", userAuth, async (req, res) => {
 
     const orderData = await createOrder.save();
 
-    console.log("200 OK");
-
     res.json({
       ...orderData.toJSON(),
       publicKeyId: process.env.RAZORPAY_TEST_KEY_ID,
@@ -59,8 +57,6 @@ paymentRouter.post("/create/order", userAuth, async (req, res) => {
 paymentRouter.post("/payment/webhook", async (req, res) => {
   try {
     const webhookSignature = req.header("X-Razorpay-Signature");
-    console.log(webhookSignature);
-
     const isWebhookValid = validateWebhookSignature(
       JSON.stringify(req.body),
       webhookSignature,
@@ -72,7 +68,6 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     }
 
     const paymentDetails = req.body.payload.payment.entity;
-    console.log(paymentDetails);
 
     // Update payment status
     const payment = await PaymentModel.findOne({

@@ -26,7 +26,7 @@ function Body() {
       if (err.status === 401) {
         navigate("/login");
       }
-      console.log(err.message);
+
     }
   };
   const handleUserFeed = async () => {
@@ -40,7 +40,7 @@ function Body() {
       if (err.status === 401) {
         navigate("/login");
       }
-      console.log(err.message);
+
     }
   };
 

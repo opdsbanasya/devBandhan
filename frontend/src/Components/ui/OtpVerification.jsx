@@ -14,12 +14,10 @@ const OtpVerification = () => {
   const [isOk, setIsOk] = useState(null);
   const navigate = useNavigate();
 
-  console.log(location.state?.email);
 
   const handleVerifyOtp = async (e) => {
     try {
       e.preventDefault();
-      console.log(otpRef.current.value);
 
       if (otpRef.current.value.length !== 6) {
         setError("Invalid OTP");
@@ -31,17 +29,15 @@ const OtpVerification = () => {
         otpFromUser: otpRef.current.value,
         email: location.state?.email || "dharm.2245832@mygyanvihar.com",
       });
-      console.log(response);
+
       if (response?.data?.status === 200) {
         setIsOk(true);
 
         const timer = setTimeout(() => {
-          console.log("hello");
           navigate("/login");
         }, 4000);
       }
     } catch (err) {
-      console.log(err);
       setError(err?.response?.data?.message);
     }
   };

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const Alert = ({ message, isAlert, setIsAlert, waitTime = 5000 }) => {
+const Alert = ({ message, isAlert, setIsAlert, waitTime = 3000 }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsAlert(false);

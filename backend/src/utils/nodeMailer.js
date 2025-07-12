@@ -12,9 +12,6 @@ const sendMailViaNodeMailer = async (otp, email) => {
       },
     });
 
-    console.log("auth completed");
-
-    console.log("sending mail...");
     const info = await transporter.sendMail({
       from: `"Admin" <${process.env.GOOGLE_MAIL}>`,
       to: email,

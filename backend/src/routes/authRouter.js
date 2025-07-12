@@ -32,7 +32,6 @@ authRouter.post("/signup", async (req, res) => {
 
     res.json({
       message: "User has been added to database. Next, verify the code",
-      userData,
     });
   } catch (err) {
     res.status(400).send(err.message);
@@ -139,18 +138,13 @@ authRouter.post("/authcode/verify", async (req, res) => {
       throw new Error("User not found");
     }
 
-    console.log(user?.otpExpiryTime);
-
     const isOtpExpired = new Date(Date.now()) > user?.otpExpiryTime;
 
     if (isOtpExpired) {
       throw new Error("OTP is expired");
     }
 
-    console.log(otpFromUser, user?.otp);
-
     const isOtpMatched = await bcrypt.compare(otpFromUser, user?.otp);
-    console.log(isOtpMatched);
 
     if (!isOtpMatched) {
       throw new Error("Invalid OTP");

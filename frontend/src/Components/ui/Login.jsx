@@ -34,8 +34,6 @@ const Login = () => {
           withCredentials: true,
         });
 
-        console.log(user);
-
         setIsAlert(true);
         const timer = setTimeout(() => {
           dispatch(addUser(user?.data?.userData));
@@ -45,7 +43,6 @@ const Login = () => {
         return () => clearTimeout(timer);
       }
     } catch (err) {
-      console.log(err.response.data);
       setError(err.response.data);
     }
   };
