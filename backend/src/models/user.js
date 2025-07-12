@@ -83,16 +83,16 @@ const userSchema = new mongoose.Schema(
     },
     socialLinks: {
       github: {
-        type: String
+        type: String,
       },
       linkedin: {
-        type: String
+        type: String,
       },
       twitterX: {
-        type: String
+        type: String,
       },
       instagram: {
-        type: String
+        type: String,
       },
     },
     profession: {
@@ -103,6 +103,12 @@ const userSchema = new mongoose.Schema(
     },
     membershipType: {
       type: String,
+    },
+    otp: {
+      type: String,
+    },
+    otpExpiryTime: {
+      type: Date,
     },
   },
   {

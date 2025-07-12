@@ -17,17 +17,23 @@ authRouter.post("/signup", async (req, res) => {
     const passwordHash = await bcrypt.hash(sanitizedData.password, 10);
     sanitizedData.password = passwordHash;
 
+    // Encrypt the otp
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otpHash = await bcrypt.hash(otp.toString(), 10);
+    
+    sanitizedData.otp = otpHash;
+    sanitizedData.isOtpExpired = false;
+    sanitizedData.otpExpiryTime = new Date(Date.now() + 60000);
+
     // Registering the user on DB
     const user = new User(sanitizedData);
     const userData = await user.save();
 
-    const otp = Math.floor(100000 + Math.random() * 900000);
-
-    console.log("auth calling...");
     await sendMailViaNodeMailer(otp, sanitizedData.email);
 
     res.json({
       message: "User has been added to database. Next, verify the code",
+      userData,
     });
   } catch (err) {
     res.status(400).send(err.message);
@@ -104,9 +110,28 @@ authRouter.post("/logout", (req, res) => {
 
 authRouter.post("/authcode/verify", async (req, res) => {
   try {
+    const {email, otpFromUser} = req.body;
+    const user = await User.findOne({email: email});
+
+    const isOtpExpired = new Date(Date.now()) > user.otpExpiryTime;
     
+    if(isOtpExpired) {
+      throw new Error("otp is expired");
+    }
+    
+    console.log(otpFromUser.toString(), user.otp);
+    
+    const isOtpMatched = await bcrypt.compare(otpFromUser.toString(), user.otp);
+    console.log(isOtpMatched);
+    
+    if(!isOtpMatched) {
+      throw new Error("Invalid otp")
+    }
+
+    res.json({ message: "verified!"})
+
   } catch (err) {
-    res.status(400).json({ message: "failed to verify" });
+    res.status(400).json({ message: err.message });
   }
 });
 
