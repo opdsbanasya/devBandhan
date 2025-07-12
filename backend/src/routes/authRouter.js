@@ -22,8 +22,7 @@ authRouter.post("/signup", async (req, res) => {
     const otpHash = await bcrypt.hash(otp.toString(), 10);
 
     sanitizedData.otp = otpHash;
-    sanitizedData.isOtpExpired = false;
-    sanitizedData.otpExpiryTime = new Date(Date.now() + 60000*60);
+    sanitizedData.otpExpiryTime = new Date(Date.now() + 60000 * 60);
 
     // Registering the user on DB
     const user = new User(sanitizedData);
@@ -108,10 +107,37 @@ authRouter.post("/logout", (req, res) => {
   res.json({ message: "logout successful 📤" });
 });
 
+authRouter.post("/authcode/send", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otpHash = await bcrypt.hash(otp.toString(), 10);
+
+    user.otp = otpHash;
+    user.otpExpiryTime = new Date(Date.now() + 60000 * 60);
+    await user.save();
+
+    await sendMailViaNodeMailer(otp, user.email);
+
+    res.json({ message: "OTP sent" });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 authRouter.post("/authcode/verify", async (req, res) => {
   try {
     const { email, otpFromUser } = req.body;
     const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("User not found");
+    }
 
     console.log(user?.otpExpiryTime);
 
