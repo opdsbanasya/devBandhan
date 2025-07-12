@@ -41,10 +41,9 @@ const Signup = () => {
     if (isNoError) {
       try {
         const res = await axios.post(`${BASE_URL}/signup`, signupData);
-
         setIsAlert(true);
         const timer = setTimeout(() => {
-          navigate("/login");
+          navigate("/verify", {state: {email: signupData.email}});
         }, 3000);
       } catch (err) {
         console.log(err);
@@ -55,7 +54,7 @@ const Signup = () => {
   return (
     <section data-theme="black" className="w-screen h-[90vh] bg-base-200 grid">
       <section className="relative w-full h-full flex xl:items-center overflow-x-hidden py-5 md:py-10">
-        <Alert message={"Redirected to login..."} isAlert={isAlert} setIsAlert={setIsAlert} waitTime={3000} />
+        <Alert message={"Redirected to verify..."} isAlert={isAlert} setIsAlert={setIsAlert} waitTime={3000} />
         
         {/* Card 2 - behind */}
         <div className="absolute w-[90%] xl:w-[70%] xl:h-[90%] rounded-lg shadow-lg z-0 lg:right-0 left-1/2 -translate-x-1/2 xl:-translate-x-1/4 overflow-hidden">
