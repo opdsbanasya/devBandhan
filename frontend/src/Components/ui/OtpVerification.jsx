@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Alert from "../magicui/alert";
 import bgImageloginDesktop from "../../assets/bgImageDesktop.webp";
 import { BorderBeam } from "../magicui/border-beam";
@@ -6,18 +6,48 @@ import { WordRotate } from "../magicui/word-rotate";
 import { BASE_URL } from "@/utils/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import validator from "validator";
 
 const OtpVerification = () => {
   const otpRef = useRef();
   const [error, setError] = useState();
   const location = useLocation() || {};
-  const [isOk, setIsOk] = useState(null);
+  const [isOTPVerified, setIsOTPVerified] = useState(null);
   const navigate = useNavigate();
+  const [isChangeEmail, setIsChangeEmail] = useState(false);
+  const emailRef = useRef();
+  const [isOTPSent, setIsOTPSent] = useState(null);
+  const [userEmail, setUserEmail] = useState();
 
+  const sendOtp = async (e) => {
+    try {
+      e.preventDefault();
+
+      if (!userEmail || !validator.isEmail(userEmail)) {
+        setError("Please Enter a valid email");
+      }
+
+      const response = await axios.post(`${BASE_URL}/authcode/send`, {
+        email: userEmail,
+      });
+
+      if (response?.status === 200) {
+        setError("");
+        setIsOTPSent(true);
+        setIsChangeEmail(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleVerifyOtp = async (e) => {
     try {
       e.preventDefault();
+      setIsOTPSent(false);
+      if (!userEmail || !validator.isEmail(userEmail)) {
+        setError("Please enter a valid email");
+      }
 
       if (otpRef.current.value.length !== 6) {
         setError("Invalid OTP");
@@ -27,11 +57,11 @@ const OtpVerification = () => {
 
       const response = await axios.post(`${BASE_URL}/authcode/verify`, {
         otpFromUser: otpRef.current.value,
-        email: location.state?.email || "dharm.2245832@mygyanvihar.com",
+        email: userEmail,
       });
 
-      if (response?.data?.status === 200) {
-        setIsOk(true);
+      if (response?.status === 200) {
+        setIsOTPVerified(true);
 
         const timer = setTimeout(() => {
           navigate("/login");
@@ -41,6 +71,15 @@ const OtpVerification = () => {
       setError(err?.response?.data?.message);
     }
   };
+  
+  useEffect(() => {
+    if (!location.state?.email) {
+      setIsChangeEmail(true);
+    }
+    if (location.state?.email) {
+      setUserEmail(location.state?.email);
+    }
+  }, []);
 
   return (
     <section
@@ -67,28 +106,83 @@ const OtpVerification = () => {
               <p className="text-xs md:text-base lg:text-xl xl:text-sm text-center">
                 Enter 6 digit OTP recieved on email to verify
               </p>
+              {!isChangeEmail && (
+                <p className="text-xs md:text-base lg:text-xl xl:text-sm text-center text-wrap">
+                  Check email
+                  <span className="font-semibold">
+                    {" "}
+                    {location.state?.email || userEmail}{" "}
+                  </span>
+                  <span
+                    className="text-blue-500 font-semibold hover:underline hover:text-blue-400 cursor-pointer"
+                    onClick={() => setIsChangeEmail(true)}
+                  >
+                    Change
+                  </span>
+                </p>
+              )}
               <p className="text-7xl lg:text-9xl xl:text-7xl text-center hidden md:block">
                 🧑‍💻
               </p>
             </div>
-            <div className="md:pt-5">
+            <div className="">
               {error !== "" && (
                 <WordRotate
                   words={[error]}
                   className="text-center py-3 text-red-500"
                 />
               )}
-              {isOk && (
+              {isOTPVerified && (
                 <WordRotate
                   words={["OTP verified!", "Please login..."]}
+                  className="text-center py-3 text-green-500"
+                />
+              )}
+              {isOTPSent && (
+                <WordRotate
+                  words={["OTP sent!"]}
                   className="text-center py-3 text-green-500"
                 />
               )}
               <form className="">
                 <div className="flex flex-col px-5 md:px-10 gap-1 lg:gap-2 xl:gap-1">
                   <label
-                    htmlFor="password"
+                    htmlFor="email"
                     className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                  >
+                    Email
+                  </label>
+                  <div className="w-full flex items-center justify-between border border-zinc-500 rounded-sm focus-within:border-zinc-400">
+                    {isChangeEmail && (
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        id="email"
+                        name="email"
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        value={userEmail}
+                        className="flex-1 text-zinc-500 p-2 md:p-4 xl:p-2 outline-none focus-within:text-white text-[14px] md:text-lg lg:text-2xl xl:text-base"
+                      />
+                    )}
+                    {!isChangeEmail && (
+                      <p style={{scrollbarWidth: "none"}} className="w-[90%] overflow-x-scroll scrollbar-hide flex-1 p-2 md:p-4 xl:p-2 outline-none text-[14px] md:text-lg lg:text-2xl xl:text-base">
+                        {userEmail}
+                      </p>
+                    )}
+                    {
+                      <button
+                        type="button"
+                        className="px-3 text-blue-500 hover:underline hover:text-blue-400 cursor-pointer"
+                        onClick={(e) => sendOtp(e)}
+                      >
+                        Get
+                      </button>
+                    }
+                  </div>
+
+                  <label
+                    htmlFor="password"
+                    className="pl-2 text-[14px] md:text-lg lg:text-2xl xl:text-base mt-5"
                   >
                     OTP
                   </label>
@@ -113,8 +207,10 @@ const OtpVerification = () => {
                 </div>
               </form>
               <div className="px-5 md:px-10 py-5 flex justify-between">
-                <p className="text-xs md:text-base lg:text-xl xl:text-sm text-blue-400 underline"
-                onClick={()=> alert("I am working on it...")}>
+                <p
+                  className="text-sm text-blue-500 font-semibold hover:underline hover:text-blue-400 cursor-pointer"
+                  onClick={() => alert("I am working on it...")}
+                >
                   Resend
                 </p>
               </div>

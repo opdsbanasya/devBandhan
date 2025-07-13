@@ -156,7 +156,12 @@ const Login = () => {
                     Sign up
                   </Link>
                 </p>
-                <p className="text-xs md:text-base lg:text-xl xl:text-sm text-blue-400 underline ">
+                <p
+                  className="text-xs md:text-base lg:text-xl xl:text-sm underline text-blue-500 font-semibold hover:underline hover:text-blue-400 cursor-pointer"
+                  onClick={() =>
+                    navigate("/verify", { state: { isForgetPassword: true } })
+                  }
+                >
                   Forget Password
                 </p>
               </div>
