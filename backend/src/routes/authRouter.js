@@ -3,7 +3,7 @@ const User = require("../models/user");
 const { validateSignupData, validateLoginData } = require("../utils/validate");
 const bcrypt = require("bcrypt");
 const { sendMailViaNodeMailer } = require("../utils/nodeMailer");
-
+const validator = require("validator");
 const authRouter = express.Router();
 
 // POST /signup API
@@ -120,6 +120,7 @@ authRouter.post("/authcode/send", async (req, res) => {
 
     user.otp = otpHash;
     user.otpExpiryTime = new Date(Date.now() + 60000 * 60);
+    user.isVerified = false;
     await user.save();
 
     await sendMailViaNodeMailer(otp, user.email);
@@ -134,6 +135,7 @@ authRouter.post("/authcode/verify", async (req, res) => {
   try {
     const { email, otpFromUser } = req.body;
     const user = await User.findOne({ email: email });
+    console.log("OTP verifing...");
     if (!user) {
       throw new Error("User not found");
     }
@@ -150,9 +152,45 @@ authRouter.post("/authcode/verify", async (req, res) => {
       throw new Error("Invalid OTP");
     }
 
+    user.isVerified = true;
+    await user.save();
+    console.log("OTP verified");
+
     res.json({ message: "Verified!", status: 200 });
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+authRouter.patch("/reset/password/", async (req, res) => {
+  try {
+    const newPassword = req.body?.newPassword;
+    const email = req.body?.email;
+
+    // validate the data
+    if (!validator.isStrongPassword(newPassword)) {
+      throw new Error(
+        "Password must have: minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1"
+      );
+    }
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if(!user?.isVerified){
+      throw new Error("please complete varification!")
+    }
+
+    // Matching password with passwordHash
+    const newPasswordHash = await user.getPasswordHash(newPassword);
+    user.password = newPasswordHash;
+    await user.save();
+
+    res.json({ message: "User updated successfully" });
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
