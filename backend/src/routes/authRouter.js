@@ -26,6 +26,7 @@ authRouter.post("/signup", async (req, res) => {
 
     // Registering the user on DB
     const user = new User(sanitizedData);
+    user.isVerified = false;
     const userData = await user.save();
 
     await sendMailViaNodeMailer(otp, sanitizedData.email);
@@ -167,6 +168,11 @@ authRouter.patch("/reset/password/", async (req, res) => {
     const newPassword = req.body?.newPassword;
     const email = req.body?.email;
 
+    // validate the email
+    if (!validator.isEmail(email)) {
+      throw new Error("Invalid email");
+    }
+
     // validate the data
     if (!validator.isStrongPassword(newPassword)) {
       throw new Error(
@@ -176,21 +182,21 @@ authRouter.patch("/reset/password/", async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      throw new Error("User not found");
+      res.status(404).json({ message: "User not found" });
     }
 
-    if(!user?.isVerified){
-      throw new Error("please complete varification!")
+    if (!user?.isVerified) {
+      throw new Error("please complete varification!");
     }
 
-    // Matching password with passwordHash
+    // Generating new passwordHash
     const newPasswordHash = await user.getPasswordHash(newPassword);
     user.password = newPasswordHash;
     await user.save();
 
     res.json({ message: "User updated successfully" });
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    res.status(400).json({ message: err.message });
   }
 });
 
