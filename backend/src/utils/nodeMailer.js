@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
-const { otpHTML } = require("./constants");
 
-const sendMailViaNodeMailer = async (otp, email) => {
+
+const sendMailViaNodeMailer = async (emailData) => {
   try {
     // Create a test account or replace with real credentials.
     const transporter = nodemailer.createTransport({
@@ -13,10 +13,10 @@ const sendMailViaNodeMailer = async (otp, email) => {
     });
 
     const info = await transporter.sendMail({
-      from: `"Admin" <${process.env.GOOGLE_MAIL}>`,
-      to: email,
+      from: `"DevBandhan@admin.com" <${process.env.GOOGLE_MAIL}>`,
+      to: emailData?.email,
       subject: "Your OTP from Dev Bandhan",
-      html: otpHTML(otp),
+      html: emailData?.html,
     });
 
     console.log("Message sent:", info.messageId);

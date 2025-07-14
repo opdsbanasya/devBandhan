@@ -52,4 +52,62 @@ const otpHTML = (otp) => {
     </html>`;
 };
 
-module.exports = { otpHTML };
+const passwordChnageUpdateHtml = (name) => {
+  return `<html>
+  <head>
+    <style>
+      .container {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #333;
+        border-radius: 8px;
+        max-width: 500px;
+        margin: auto;
+      }
+      .brand {
+        font-size: 32px;
+        font-weight: bold;
+        text-align: center;
+        color: #2f855a;
+        margin-bottom: 20px;
+      }
+      .message {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        color: #3182ce;
+        margin: 20px 0;
+      }
+      .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+        margin-top: 20px;
+      }
+      .title {
+        text-decoration: none;
+        color: #2f855a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand">
+        <a class="title" href="https://devbandhan.tech/">Dev Bandhan</a>
+      </div>
+      <p>Hello ${name},</p>
+      <div class="message">
+        Your password has been successfully updated.
+      </div>
+      <p>If you did not request this change, please reset your password immediately and contact our support team.</p>
+      <p>If you made this change, no further action is needed.</p>
+      <div class="footer">
+        &copy; ${new Date().getFullYear()} Dev Bandhan. All rights reserved.
+      </div>
+    </div>
+  </body>
+</html>
+`
+}
+module.exports = { otpHTML, passwordChnageUpdateHtml };

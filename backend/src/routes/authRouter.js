@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const { sendMailViaNodeMailer } = require("../utils/nodeMailer");
 const validator = require("validator");
 const authRouter = express.Router();
+const { otpHTML, passwordChnageUpdateHtml } = require("../utils/constants");
 
 // POST /signup API
 authRouter.post("/signup", async (req, res) => {
@@ -29,7 +30,8 @@ authRouter.post("/signup", async (req, res) => {
     user.isVerified = false;
     const userData = await user.save();
 
-    await sendMailViaNodeMailer(otp, sanitizedData.email);
+    const html = otpHTML(otp)
+    await sendMailViaNodeMailer({otp, email: sanitizedData?.email, html});
 
     res.json({
       message: "User has been added to database. Next, verify the code",
@@ -124,7 +126,8 @@ authRouter.post("/authcode/send", async (req, res) => {
     user.isVerified = false;
     await user.save();
 
-    await sendMailViaNodeMailer(otp, user.email);
+    const html = otpHTML(otp)
+    await sendMailViaNodeMailer({otp, email, html});
 
     res.json({ message: "OTP sent" });
   } catch (err) {
@@ -193,6 +196,9 @@ authRouter.patch("/reset/password/", async (req, res) => {
     const newPasswordHash = await user.getPasswordHash(newPassword);
     user.password = newPasswordHash;
     await user.save();
+
+    const html = passwordChnageUpdateHtml(user.firstName);
+    await sendMailViaNodeMailer({email, html})
 
     res.json({ message: "User updated successfully" });
   } catch (err) {
