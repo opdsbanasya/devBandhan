@@ -45,7 +45,7 @@ const Profile = () => {
               />
               <div
                 onClick={() =>
-                  !isEditIconHidden && handleEditClick({ profileImage: true })
+                  !isEditIconHidden && handleEditClick({ isProfileImage: true })
                 }
                 className={`w-full h-full flex items-center ${
                   isEditIconHidden ? "hidden" : "block"
@@ -66,7 +66,7 @@ const Profile = () => {
                 <span className="mr-3">{user?.profession}</span>
 
                 <span
-                  onClick={() => handleEditClick({ profession: true })}
+                  onClick={() => handleEditClick({ isProfession: true })}
                   className="font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
                 >
                   {user?.profession ? <MdEdit /> : "Add Profession"}
@@ -112,7 +112,7 @@ const Profile = () => {
             <p
               href="#"
               className="hover:scale-110 transition-transform duration-200 text-zinc-500 hover:text-zinc-100"
-              onClick={() => handleEditClick({ links: true })}
+              onClick={() => handleEditClick({ isLinks: true })}
             >
               <MdEdit size={20} />
             </p>
@@ -124,7 +124,7 @@ const Profile = () => {
           {/* Basic Info */}
           <div className="border-b border-zinc-700 pb-4 sm:pb-6 relative">
             <p
-              onClick={() => handleEditClick({ basicData: true })}
+              onClick={() => handleEditClick({ isBasicData: true })}
               className="absolute right-0 top-0 cursor-pointer hover:scale-110 transition-transform duration-200"
             >
               <SquarePen />
@@ -183,7 +183,7 @@ const Profile = () => {
                 Skills
               </h4>
               <p
-                onClick={() => handleEditClick({ skills: true })}
+                onClick={() => handleEditClick({ isSkills: true })}
                 className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
               >
                 + Add
@@ -212,7 +212,7 @@ const Profile = () => {
                 Awards & Achievements
               </h4>
               <p
-                onClick={() => handleEditClick({ achievements: true })}
+                onClick={() => handleEditClick({ isAchievements: true })}
                 className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
               >
                 + Add
