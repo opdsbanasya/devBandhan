@@ -48,18 +48,17 @@ export const signUpDataValidation = (
     errors.dobError = "Enter a valid date";
   } else {
     const today = new Date();
-    const dob = new Date(dateOfBirth)
+    const dob = new Date(dateOfBirth);
     var years = today.getFullYear() - dob.getFullYear();
 
     if (
       today.getMonth() < dob.getMonth() ||
-      (today.getMonth() == dob.getMonth() &&
-        today.getDate() < dob.getDate())
+      (today.getMonth() == dob.getMonth() && today.getDate() < dob.getDate())
     ) {
       years--;
     }
 
-    if(years < 15) {
+    if (years < 15) {
       errors.dobError = "Age must be 15+";
     }
   }
@@ -93,53 +92,60 @@ export const loginDataValiadation = (data, setError) => {
 export const editDataValidation = async (
   data,
   user,
-  { basicData, skills, achievements, profileImage, profession, links }
+  setInputErrors,
+  {
+    isBasicData,
+    isSkills,
+    isAchievements,
+    isProfileImage,
+    isProfession,
+    isLinks,
+  }
 ) => {
   try {
+    console.log("Called...");
+
+    console.log("data", data);
+    console.log("user", user);
+    console.log("isLinks", isLinks);
+
     const {
       about,
       dateOfBirth,
-      male,
-      female,
-      other,
+      gender,
       profileImageLink,
-      professionData,
+      profession,
       platformName,
       platformUrl,
     } = data || {};
 
     let editData = {};
 
-    let gender = "";
-    if (basicData && male.current.checked) {
-      gender = "male";
-    } else if (basicData && female.current.checked) {
-      gender = "female";
-    } else if (basicData && other.current.checked) {
-      gender = "other";
-    }
-
-    if (basicData) {
+    if (isBasicData) {
+      if (!gender) {
+        alert("Please select gender");
+        return;
+      }
       editData = {
         ...editData,
-        about: about.current.value,
-        dateOfBirth: dateOfBirth.current.value,
+        about,
+        dateOfBirth,
         gender,
       };
-    } else if (skills) {
+    } else if (isSkills) {
       editData = { ...editData, skills: [...user.skills] };
-    } else if (achievements) {
+    } else if (isAchievements) {
       editData = { ...editData, achievements: [...user.achievements] };
-    } else if (profileImage) {
-      editData = { ...editData, profilePhoto: profileImageLink.current.value };
-    } else if (profession) {
-      editData = { ...editData, profession: professionData.current.value };
-    } else if (platformName && platformUrl) {
+    } else if (isProfileImage) {
+      editData = { ...editData, profilePhoto: profileImageLink };
+    } else if (isProfession) {
+      editData = { ...editData, profession };
+    } else if (isLinks) {
       editData = {
         ...editData,
         socialLinks: {
           ...user?.socialLinks,
-          [platformName.current.value]: platformUrl.current.value,
+          [platformName]: platformUrl,
         },
       };
     }
@@ -147,8 +153,11 @@ export const editDataValidation = async (
     const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
       withCredentials: true,
     });
+    console.log(response);
+
     return editData;
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    // setInputErrors(err.message);
   }
 };
