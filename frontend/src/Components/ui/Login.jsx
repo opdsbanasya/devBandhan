@@ -35,15 +35,13 @@ const Login = () => {
         });
 
         setIsAlert(true);
-        const timer = setTimeout(() => {
-          dispatch(addUser(user?.data?.userData));
-          navigate("/");
-        }, 3000);
 
-        return () => clearTimeout(timer);
+        dispatch(addUser(user?.data?.userData));
+        navigate("/");
       }
     } catch (err) {
       setError(err.response.data);
+      setError(err);
     }
   };
 
@@ -53,8 +51,6 @@ const Login = () => {
       className="w-screen min-h-[90vh] bg-base-200 grid"
     >
       <div className="relative w-full h-full flex xl:items-center overflow-x-hidden py-5 md:py-10 xl:py-0">
-        <Alert message={"success"} isAlert={isAlert} setIsAlert={setIsAlert} />
-
         {/* Card 2 - behind */}
         <div className="absolute w-[90%] xl:w-[70%] xl:h-[90%] rounded-lg shadow-lg z-0 lg:right-0 left-1/2 -translate-x-1/2 xl:-translate-x-1/4 overflow-hidden">
           <img
