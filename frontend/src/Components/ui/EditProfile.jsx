@@ -1,11 +1,10 @@
 import { editDataValidation } from "@/utils/validation";
 import { Plus, X } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { updateUser } from "@/store/userSlice";
-import checkbox from "daisyui/components/checkbox";
 import { useForm } from "react-hook-form";
 import { WordRotate } from "../magicui/word-rotate";
 
@@ -21,6 +20,8 @@ const EditProfile = () => {
     reset,
     formState: { errors },
   } = useForm();
+  const [isAddChipsButtonDisabled, setIsAddChipsButtonDisabled] =
+    useState(false);
 
   const {
     isBasicData,
@@ -30,70 +31,27 @@ const EditProfile = () => {
     isProfession,
     isLinks,
   } = location.state || {};
-  console.log(location.state);
-  const [inputErrors, setInputErrors] = useState();
 
-  const handleEditInfo = async (e) => {
-    try {
-      // e.preventDefault();
-      const editData = await editDataValidation(
-        {
-          about,
-          dateOfBirth,
-          male,
-          female,
-          other,
-          profileImageLink,
-          professionData,
-          platformName,
-          platformUrl,
-        },
-        user,
-        setInputErrors,
-        {
-          basicData,
-          skills,
-          achievements,
-          profileImage,
-          profession,
-          links,
-        }
-      );
-      if (basicData || profileImage || profession || links) {
-        dispatch(updateUser(editData));
-      }
-
-      navigate("/profile/" + user._id);
-      alert("Data Updated");
-    } catch (err) {
-      console.log("ERROR: " + err.message);
-    }
-  };
+  const [inputErrors, setInputErrors] = useState({});
 
   const submitForm = async (data) => {
     try {
       console.log(data);
-      const editData = await editDataValidation(
-        data,
-        user,
-        errors,
-        setInputErrors,
-        {
-          isBasicData,
-          isSkills,
-          isAchievements,
-          isProfileImage,
-          isProfession,
-          isLinks,
-        }
-      );
+      const editData = await editDataValidation(data, user, setInputErrors, {
+        isBasicData,
+        isSkills,
+        isAchievements,
+        isProfileImage,
+        isProfession,
+        isLinks,
+      });
 
       if (isBasicData || isProfileImage || isProfession || isLinks) {
         dispatch(updateUser(editData));
       }
 
-      alert("Data Updated");
-      console.log(editData);
+      alert("Data updated");
+      navigate("/profile/" + user?._id);
     } catch (err) {
       console.log(err);
     }
@@ -104,15 +62,16 @@ const EditProfile = () => {
       let updatedField;
       if (field === "skills") {
         updatedField = watch()?.skills.length !== 0 && watch()?.skills;
-        console.log(updatedField);
         reset({ skills: "" });
         dispatch(updateUser({ skills: [...user[field], updatedField] }));
       } else if (field === "achievements") {
         updatedField =
           watch()?.achievements.length !== 0 && watch()?.achievements;
-        console.log(updatedField);
         reset({ achievements: "" });
         dispatch(updateUser({ achievements: [...user[field], updatedField] }));
+      }
+      if (user?.[field].length === 10) {
+        setInputErrors(true);
       }
     } catch (err) {
       console.log(err);
@@ -141,14 +100,17 @@ const EditProfile = () => {
               }
         )
       );
+      if (user?.[field].length > 10) {
+        setInputErrors(false);
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log("inputErrors: ", inputErrors);
-  console.log("errors: ", errors);
-  console.log("watch", watch());
+  useEffect(() => {
+    setInputErrors(errors);
+  }, [errors]);
 
   return (
     <section
@@ -339,10 +301,10 @@ const EditProfile = () => {
                       </span>
                     </label>
                   </div>
-                  {errors?.gender && (
+                  {inputErrors?.gender && (
                     <span role="alert" className="">
                       <WordRotate
-                        words={[errors?.gender?.message]}
+                        words={[inputErrors?.gender?.message]}
                         className="text-xs text-left text-red-500"
                       />
                     </span>
@@ -361,13 +323,15 @@ const EditProfile = () => {
                     {...register("dateOfBirth", {
                       required: { value: true, message: "This is required!" },
                     })}
-                    defaultValue={user?.dateOfBirth.split("T")[0]}
+                    defaultValue={
+                      user?.dateOfBirth && user?.dateOfBirth.split("T")[0]
+                    }
                     className="text-zinc-500 px-2 py-2 border border-zinc-500 outline-none rounded-sm mb-3 sm:mb-4 focus-within:border-zinc-400 focus-within:text-white text-sm sm:text-base"
                   />
-                  {errors?.dateOfBirth && (
+                  {inputErrors?.dateOfBirth && (
                     <span role="alert" className="">
                       <WordRotate
-                        words={[errors?.dateOfBirth?.message]}
+                        words={[inputErrors?.dateOfBirth?.message]}
                         className="text-xs text-left text-red-500"
                       />
                     </span>
@@ -398,10 +362,10 @@ const EditProfile = () => {
                     defaultValue={user?.about}
                     className="px-2 py-2 border border-zinc-500 outline-none rounded-sm focus-within:border-zinc-400 focus-within:text-white h-20 sm:h-28 text-sm resize-y max-h-[30vh] min-h-[15vh] xl:min-h-[10vh]"
                   />
-                  {errors?.about && (
+                  {inputErrors?.about && (
                     <span role="alert" className="">
                       <WordRotate
-                        words={[errors?.about?.message]}
+                        words={[inputErrors?.about?.message]}
                         className="text-xs text-left text-red-500"
                       />
                     </span>
@@ -430,7 +394,8 @@ const EditProfile = () => {
                     <button
                       type="button"
                       onClick={() => handleAddChips("skills")}
-                      className="px-2 py-2 bg-blue-100 text-blue-500 rounded-full cursor-pointer hover:bg-blue-200 transition-colors duration-200 flex-shrink-0"
+                      disabled={isAddChipsButtonDisabled}
+                      className={`px-2 py-2 bg-blue-100 text-blue-500 rounded-full cursor-pointer hover:bg-blue-200 transition-colors duration-200 flex-shrink-0 disabled:bg-gray-500`}
                     >
                       <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
@@ -511,6 +476,17 @@ const EditProfile = () => {
                 </div>
               )}
 
+              {/* Errors */}
+              <div>
+                {inputErrors?.response && (
+                  <span role="alert" className="">
+                    <WordRotate
+                      words={[inputErrors?.response?.message]}
+                      className="text-xs text-left text-red-500"
+                    />
+                  </span>
+                )}
+              </div>
               {/* Submit Button */}
               <div className="flex justify-center pt-2">
                 <button

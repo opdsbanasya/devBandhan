@@ -103,12 +103,6 @@ export const editDataValidation = async (
   }
 ) => {
   try {
-    console.log("Called...");
-
-    console.log("data", data);
-    console.log("user", user);
-    console.log("isLinks", isLinks);
-
     const {
       about,
       dateOfBirth,
@@ -133,7 +127,7 @@ export const editDataValidation = async (
         gender,
       };
     } else if (isSkills) {
-      editData = { ...editData, skills: [...user.skills] };
+      editData = { ...editData, skills: user?.skills };
     } else if (isAchievements) {
       editData = { ...editData, achievements: [...user.achievements] };
     } else if (isProfileImage) {
@@ -150,14 +144,25 @@ export const editDataValidation = async (
       };
     }
 
-    const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
-      withCredentials: true,
-    });
-    console.log(response);
+    const isEditDataEmpty = [...Object.keys(editData)].length === 0;
 
+    if (!isEditDataEmpty) {
+      const response = await axios.patch(`${BASE_URL}/profile/edit`, editData, {
+        withCredentials: true,
+      });
+
+    } else {
+      setInputErrors({
+        dataUpdate: {
+          type: "Data empty",
+          message: "Data is already up to date",
+        },
+      });
+    }
     return editData;
   } catch (err) {
-    console.log(err.message);
-    // setInputErrors(err.message);
+    setInputErrors({
+      response: { type: "error", message: err.response?.data?.message },
+    });
   }
 };
