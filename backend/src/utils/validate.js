@@ -39,7 +39,7 @@ const validateUpdateData = (data) => {
     "achievements",
     "dateOfBirth",
     "profession",
-    "socialLinks"
+    "socialLinks",
   ];
   const isUpdatesAllowed = Object.keys(data).every((key) =>
     allowedUpdated.includes(key)
@@ -50,7 +50,7 @@ const validateUpdateData = (data) => {
   }
 
   if (data?.achievements && data?.achievements.length > 10) {
-    throw new Error("Your achievements are too large");
+    throw new Error("Achievements can't be more than 10");
   }
 
   if (data?.skills && data?.skills.length > 10) {
@@ -61,19 +61,29 @@ const validateUpdateData = (data) => {
     throw new Error("Invalid Date");
   }
 
-  
-  if(data?.socialLinks){
-    
-    if(data?.socialLinks.length > 4) {
-      throw new Error("Links can't be more than 4")
+  if (data?.profession) {
+    if (data?.profession.length > 80) {
+      throw new Error("Profession length should be max 80");
     }
-    for(let link in data?.socialLinks){
-      if(!validator.isURL(data?.socialLinks[link])){
-        throw new Error(`${link} link is invalid`)
+    if (data?.profession.length < 2) {
+      throw new Error("Profession length should be min 2");
+    }
+  }
+
+  if (data?.socialLinks) {
+    if (data?.socialLinks.length > 4) {
+      throw new Error("Links can't be more than 4");
+    }
+    for (let link in data?.socialLinks) {
+      if (!validator.isURL(data?.socialLinks[link])) {
+        throw new Error(`${link} link is invalid`);
       }
     }
   }
 
+  if (data?.profilePhoto && !validator.isURL(data?.profilePhoto)) {
+    throw new Error("Invalid Photo URL");
+  }
 };
 
 const validateLoginData = (data) => {
