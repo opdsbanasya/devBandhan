@@ -11,13 +11,38 @@ const profileRouter = express.Router();
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const userData = req.user;
-    const { firstName, lastName, about, gender, age, skills, profilePhoto, _id, achievements, dateOfBirth, profession, socialLinks } =
-      userData;
+    const {
+      firstName,
+      lastName,
+      about,
+      gender,
+      age,
+      skills,
+      profilePhoto,
+      _id,
+      achievements,
+      dateOfBirth,
+      profession,
+      socialLinks,
+    } = userData;
     res.json({
       message: "Fetch successfully",
-      user: { firstName, lastName, about, gender, age, skills, profilePhoto, _id, achievements, dateOfBirth, profession, socialLinks },
+      user: {
+        firstName,
+        lastName,
+        about,
+        gender,
+        age,
+        skills,
+        profilePhoto,
+        _id,
+        achievements,
+        dateOfBirth,
+        profession,
+        socialLinks,
+      },
     });
-  } catch (err) { 
+  } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
 });
@@ -36,7 +61,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     await User.updateOne({ _id: user._id }, data);
     res.send("User updated successfully");
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -44,7 +69,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
 profileRouter.patch("/profile/password/change", userAuth, async (req, res) => {
   try {
     const newPassword = req.body.newPassword;
-    const currentPassword = req.body.password; 
+    const currentPassword = req.body.password;
 
     // validate the data
     if (!validator.isStrongPassword(newPassword)) {
