@@ -10,6 +10,8 @@ import EditProfile from "./Components/ui/EditProfile";
 import Settings from "./Components/ui/Settings";
 import Premium from "./Components/ui/Premium";
 import OtpVerification from "./Components/ui/OtpVerification";
+import Chat from "./Components/ui/Chat";
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
             <Route path="/" element={<Feed />} />
             <Route path="/connection/:connectionId" element={<Feed />} />
             <Route path="/requests/:requestId" element={<Feed />} />
+            <Route path="/chat/:toUserId" element={<Chat />} />
           </Route>
           <Route path="/settings" element={<Settings />} />
 

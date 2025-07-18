@@ -1,9 +1,11 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Connections = () => {
   const { connections } = useSelector((store) => store.connectionRequest);
+  const navigate = useNavigate();
 
   return (
     <div className="w-full md:w-3/4 xl:w-full mx-auto px-3 py-3 md:px-5">
@@ -12,7 +14,9 @@ const Connections = () => {
         connections.map((connection, idx) => (
           <div
             key={connection._id}
-            className={`flex items-center gap-5 px-5 py-3 md:py-5 md:px-6 xl:px-4 xl:py-3 border-b border-zinc-800 ${idx === 0 && "border-t"}`}
+            className={`flex items-center gap-5 px-5 py-3 md:py-5 md:px-6 xl:px-4 xl:py-3 border-b border-zinc-800 ${
+              idx === 0 && "border-t"
+            }`}
           >
             <figure className="w-2/12 cursor-pointer">
               <img
@@ -24,7 +28,14 @@ const Connections = () => {
             <div className="w-8/12 lg:w-9/12 xl:w-8/12 md:text-lg lg:text-xl xl:text-base">
               <h2>{`${connection?.firstName} ${connection?.lastName}`}</h2>
             </div>
-            <div className=" space-x-5">
+            <div className="flex space-x-5">
+              <button
+                onClick={() => navigate("/chat/" + connection._id)}
+                className="cursor-pointer"
+              >
+                <MessageCircle />
+              </button>
+
               <button className="cursor-pointer">
                 <ArrowUpRight />
               </button>
