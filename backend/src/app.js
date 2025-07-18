@@ -8,6 +8,7 @@ const userRouter = require("./routes/userRouter");
 const cors = require("cors");
 const paymentRouter = require("./routes/paymentRouter");
 require("./utils/jobCron")
+const http = require("http");
 
 const app = express();
 
@@ -27,11 +28,13 @@ app.use("/", requestRouter);
 app.use("/", userRouter);
 app.use("/", paymentRouter);
 
+const server = http.createServer(app);
+
 connetDB()
   .then(() => {
     console.log("Connection established!");
 
-    app.listen(3000, () => {
+    server.listen(3000, () => {
       console.log("Server is running on port 3000");
     });
   })
