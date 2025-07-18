@@ -7,8 +7,9 @@ const requestRouter = require("./routes/requestRouter");
 const userRouter = require("./routes/userRouter");
 const cors = require("cors");
 const paymentRouter = require("./routes/paymentRouter");
-require("./utils/jobCron")
+require("./utils/jobCron");
 const http = require("http");
+const initilizeSocket = require("./utils/socket");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/", userRouter);
 app.use("/", paymentRouter);
 
 const server = http.createServer(app);
+initilizeSocket(server);
 
 connetDB()
   .then(() => {

@@ -13,3 +13,5 @@ const initilizeSocket = (server) => {
     socket.on("disconnect", () => {});
   });
 };
+
+module.exports = initilizeSocket;
