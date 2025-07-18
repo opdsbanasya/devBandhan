@@ -1,10 +1,22 @@
-import React from "react";
+import { createSocketConnetion } from "@/utils/socketClient";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const Chat = () => {
     const {toUserId} = useParams();
+    const user = useSelector(store => store.user)
     console.log(toUserId);
+    const [chatMessage, setChatMessage] = useState({text: "hello"})
     
+    useEffect(()=> {
+      const socket = createSocketConnetion();
+      socket.emit("joinChat", {userId: user?._id, toUserId});
+
+      return () => {
+        socket.disconnect();
+      } 
+    },[])
   return (
     <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap py-2 px-10">
       <div className="w-full flex items-center gap-5 py-5 border-b border-zinc-500">
@@ -25,10 +37,10 @@ const Chat = () => {
             </div>
           </div>
           <div className="chat-header">
-            Obi-Wan Kenobi
+            Rishabh
             <time className="text-xs opacity-50">12:45</time>
           </div>
-          <div className="chat-bubble">You were the Chosen One!</div>
+          <div className="chat-bubble">{chatMessage?.text}</div>
           <div className="chat-footer opacity-50">Delivered</div>
         </div>
         <div className="chat chat-end">
@@ -36,15 +48,15 @@ const Chat = () => {
             <div className="w-10 rounded-full">
               <img
                 alt="Tailwind CSS chat bubble component"
-                src="https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
+                src={user?.profilePhoto}
               />
             </div>
           </div>
           <div className="chat-header">
-            Anakin
+            Hardik
             <time className="text-xs opacity-50">12:46</time>
           </div>
-          <div className="chat-bubble">I hate you!</div>
+          <div className="chat-bubble">Hi</div>
           <div className="chat-footer opacity-50">Seen at 12:46</div>
         </div>
       </div>
