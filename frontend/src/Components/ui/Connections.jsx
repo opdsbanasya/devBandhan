@@ -30,7 +30,7 @@ const Connections = () => {
             </div>
             <div className="flex space-x-5">
               <button
-                onClick={() => navigate("/chat/" + connection._id)}
+                onClick={() => navigate("/chat/" + connection._id, {state: {connection}})}
                 className="cursor-pointer"
               >
                 <MessageCircle />
