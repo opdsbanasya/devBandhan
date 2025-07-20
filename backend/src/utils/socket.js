@@ -1,4 +1,5 @@
 const socket = require("socket.io");
+const Chat = require("../models/chat");
 const initilizeSocket = (server) => {
   const io = socket(server, {
     cors: {
@@ -7,25 +8,46 @@ const initilizeSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
-    // events
-    socket.on("joinChat", ({ userId, toUserId, firstName }) => {
-      const roomId = [userId, toUserId].sort().join("_");
-      console.log(firstName + " Joined :" + roomId);
-      socket.join(roomId)
-    });
-
-    socket.on("sendMessage", ({userId, toUserId, firstName, newMessage}) => {
-      const roomId = [userId, toUserId].sort().join("_");
-      console.log(firstName + " Joined:" + roomId);
-      console.log({firstName, newMessage});
-      
-      io.to(roomId).emit("messageRecieved", {
-        firstName,
-        newMessage,
+    try {
+      // events
+      socket.on("joinChat", ({ userId, toUserId, firstName }) => {
+        const roomId = [userId, toUserId].sort().join("_");
+        console.log(firstName + " Joined :" + roomId);
+        socket.join(roomId);
       });
-    });
 
-    socket.on("disconnect", () => {});
+      socket.on(
+        "sendMessage",
+        async ({ userId, toUserId, firstName, text, profilePhoto }) => {
+          const roomId = [userId, toUserId].sort().join("_");
+          console.log(firstName + " Joined: " + roomId);
+          console.log({ firstName, text });
+
+          let chat = await Chat.findOne({
+            participants: { $all: [userId, toUserId] },
+          });
+          console.log(chat);
+
+          if (!chat) {
+            chat = new Chat({
+              participants: [userId, toUserId],
+              messages: [],
+            });
+          }
+          chat.messages.push({ senderId: userId, text, profilePhoto });
+          await chat.save();
+
+          io.to(roomId).emit("messageRecieved", {
+            firstName,
+            text,
+          });
+        }
+      );
+
+      socket.on("disconnect", () => {});
+    } catch (err) {
+      console.log(err.message);
+    }
   });
 };
 
