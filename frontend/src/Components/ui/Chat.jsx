@@ -1,5 +1,6 @@
-import { IMG_LINK } from "@/utils/constants";
+import { BASE_URL, IMG_LINK } from "@/utils/constants";
 import { createSocketConnetion } from "@/utils/socketClient";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
@@ -11,6 +12,33 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   const location = useLocation();
   const toUser = location.state?.connection;
+
+  const fetchChats = async () => {
+    try {
+      const chat = await axios.get(`${BASE_URL}/chat/${toUserId}`, {
+        withCredentials: true,
+      });
+      console.log(chat?.data?.messages);
+      const messages = chat?.data?.messages.map((msg) => {
+        const { senderId, text, _id } = msg;
+        return {
+          firstName: senderId?.firstName,
+          lastName: senderId?.lastName,
+          profilePhoto: senderId?.profilePhoto,
+          text,
+          _id,
+        };
+      });
+      setChatMessage(messages);
+      console.log(messages);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchChats();
+  }, []);
 
   useEffect(() => {
     const socket = createSocketConnetion();
@@ -25,12 +53,9 @@ const Chat = () => {
         firstName: user?.firstName,
       });
 
-      socket.on("messageRecieved", ({ firstName, newMessage }) => {
-        console.log(firstName + " sent: " + newMessage);
-        setChatMessage((messages) => [
-          ...messages,
-          { firstName, text: newMessage },
-        ]);
+      socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
+        console.log(firstName + " sent: " + text);
+        setChatMessage((messages) => [...messages, { firstName, text, profilePhoto }]);
       });
     });
 
@@ -47,36 +72,43 @@ const Chat = () => {
       userId: user?._id,
       toUserId,
       firstName: user?.firstName,
-      newMessage,
+      text: newMessage,
+      profilePhoto: user?.profilePhoto
     });
-    setNewMessage("")
+    setNewMessage("");
   };
   return (
     <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap py-2 px-10">
       <div className="w-full flex items-center gap-5 py-5 border-b border-zinc-500">
         <div className="size-14 bg-amber-400 rounded-full text-black font-semibold overflow-hidden">
-          <img src={toUser?.profilePhoto} className="h-full  object-cover" alt="" />
+          <img
+            src={toUser?.profilePhoto}
+            className="h-full  object-cover"
+            alt=""
+          />
         </div>
-        <div>{toUser?.firstName} {toUser?.lastName}</div>
+        <div>
+          {toUser?.firstName} {toUser?.lastName}
+        </div>
         {/* <div>Other</div> */}
       </div>
-      <div className="px-2 w-full h-[67vh] py-5">
+      <div className="px-2 w-full h-[67vh] py-5 overflow-y-scroll scroll-smooth">
         {chatMessage &&
-          chatMessage.map((message, index) => (
-            <div key={index} className="chat chat-start">
+          chatMessage.map((msg, index) => (
+            <div key={msg?._id} className={`chat ${user?.firstName === msg?.firstName ? "chat-end": "chat-start"}`}>
               <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS chat bubble component"
-                    src={IMG_LINK}
+                    src={msg?.profilePhoto}
                   />
                 </div>
               </div>
               <div className="chat-header">
-                {message?.firstName}
+                {msg?.firstName}
                 {/* <time className="text-xs opacity-50">12:45</time> */}
               </div>
-              <div className="chat-bubble">{message?.text}</div>
+              <div className="chat-bubble">{msg?.text}</div>
               {/* <div className="chat-footer opacity-50">Delivered</div> */}
             </div>
           ))}
