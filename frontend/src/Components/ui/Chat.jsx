@@ -1,3 +1,4 @@
+import { IMG_LINK } from "@/utils/constants";
 import { createSocketConnetion } from "@/utils/socketClient";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
