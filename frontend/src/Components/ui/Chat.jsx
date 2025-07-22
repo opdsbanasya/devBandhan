@@ -1,7 +1,7 @@
-import { BASE_URL, IMG_LINK } from "@/utils/constants";
+import { BASE_URL } from "@/utils/constants";
 import { createSocketConnetion } from "@/utils/socketClient";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -10,6 +10,7 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const [chatMessage, setChatMessage] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const chatRef = useRef();
   const location = useLocation();
   const toUser = location.state?.connection;
 
@@ -18,7 +19,7 @@ const Chat = () => {
       const chat = await axios.get(`${BASE_URL}/chat/${toUserId}`, {
         withCredentials: true,
       });
-      console.log(chat?.data?.messages);
+
       const messages = chat?.data?.messages.map((msg) => {
         const { senderId, text, _id } = msg;
         return {
@@ -30,7 +31,6 @@ const Chat = () => {
         };
       });
       setChatMessage(messages);
-      console.log(messages);
     } catch (err) {
       console.log(err);
     }
@@ -44,18 +44,21 @@ const Chat = () => {
     const socket = createSocketConnetion();
     if (!socket) return;
     socket.on("connect", () => {
-      console.log(socket);
-      console.log("Socket connected");
-
       socket.emit("joinChat", {
         userId: user?._id,
         toUserId,
         firstName: user?.firstName,
+        profilePhoto: user?.profilePhoto,
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
+        console.log({ firstName, text, profilePhoto });
+
         console.log(firstName + " sent: " + text);
-        setChatMessage((messages) => [...messages, { firstName, text, profilePhoto }]);
+        setChatMessage((messages) => [
+          ...messages,
+          { firstName, text, profilePhoto },
+        ]);
       });
     });
 
@@ -63,6 +66,10 @@ const Chat = () => {
       socket.disconnect();
     };
   }, [user?._id, toUserId]);
+
+  useEffect(()=> {    
+    chatRef.current.scrollTop = chatRef.current.scrollHeight;
+  }, [chatMessage])
 
   const handleSendMessage = () => {
     const socket = createSocketConnetion();
@@ -73,7 +80,7 @@ const Chat = () => {
       toUserId,
       firstName: user?.firstName,
       text: newMessage,
-      profilePhoto: user?.profilePhoto
+      profilePhoto: user?.profilePhoto,
     });
     setNewMessage("");
   };
@@ -92,10 +99,15 @@ const Chat = () => {
         </div>
         {/* <div>Other</div> */}
       </div>
-      <div className="px-2 w-full h-[67vh] py-5 overflow-y-scroll scroll-smooth">
+      <div className={`px-2 w-full h-[67vh] py-5 overflow-y-scroll scroll-smooth`} ref={chatRef}>
         {chatMessage &&
           chatMessage.map((msg, index) => (
-            <div key={msg?._id} className={`chat ${user?.firstName === msg?.firstName ? "chat-end": "chat-start"}`}>
+            <div
+              key={msg?._id || index}
+              className={`chat ${
+                user?.firstName === msg?.firstName ? "chat-end" : "chat-start"
+              }`}
+            >
               <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
                   <img
