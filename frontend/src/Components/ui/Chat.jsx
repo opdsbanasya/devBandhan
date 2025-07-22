@@ -3,7 +3,7 @@ import { createSocketConnetion } from "@/utils/socketClient";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const Chat = () => {
   const { toUserId } = useParams();
@@ -13,6 +13,7 @@ const Chat = () => {
   const chatRef = useRef();
   const location = useLocation();
   const toUser = location.state?.connection;
+  const navigate = useNavigate();
 
   const fetchChats = async () => {
     try {
@@ -60,6 +61,16 @@ const Chat = () => {
           { firstName, text, profilePhoto },
         ]);
       });
+
+      socket.on("userNotFound", ({ error }) => {
+        alert(error?.message);
+        navigate("/");
+      });
+
+      socket.on("unAuthorizedConnection", ({ error }) => {
+        alert(error?.message);
+        navigate("/");
+      });
     });
 
     return () => {
@@ -67,9 +78,9 @@ const Chat = () => {
     };
   }, [user?._id, toUserId]);
 
-  useEffect(()=> {    
+  useEffect(() => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  }, [chatMessage])
+  }, [chatMessage]);
 
   const handleSendMessage = () => {
     const socket = createSocketConnetion();
@@ -99,7 +110,10 @@ const Chat = () => {
         </div>
         {/* <div>Other</div> */}
       </div>
-      <div className={`px-2 w-full h-[67vh] py-5 overflow-y-scroll scroll-smooth`} ref={chatRef}>
+      <div
+        className={`px-2 w-full h-[67vh] py-5 overflow-y-scroll scroll-smooth`}
+        ref={chatRef}
+      >
         {chatMessage &&
           chatMessage.map((msg, index) => (
             <div

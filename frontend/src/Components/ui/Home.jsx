@@ -67,8 +67,6 @@ const Home = () => {
     navigate("/?tab=" + tab);
   };
 
-  console.log(location)
-
   return (
     <div
       data-theme="black"
