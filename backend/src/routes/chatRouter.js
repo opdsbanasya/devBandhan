@@ -9,7 +9,6 @@ chatRouter.get("/chat/:toUserId", userAuth, async (req, res) => {
   try {
     let { toUserId } = req.params;
     const userId = req.user._id;
-    console.log(toUserId);
 
     // find the existing chat
     let chat = await Chat.findOne({

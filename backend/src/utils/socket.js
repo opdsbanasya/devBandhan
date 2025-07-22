@@ -1,5 +1,7 @@
 const socket = require("socket.io");
 const Chat = require("../models/chat");
+const crypto = require("crypto")
+
 const initilizeSocket = (server) => {
   const io = socket(server, {
     cors: {
@@ -10,23 +12,22 @@ const initilizeSocket = (server) => {
   io.on("connection", (socket) => {
     try {
       // events
-      socket.on("joinChat", ({ userId, toUserId, firstName }) => {
-        const roomId = [userId, toUserId].sort().join("_");
-        console.log(firstName + " Joined :" + roomId);
+      socket.on("joinChat", ({ userId, toUserId, firstName, profilePhoto}) => {
+        const roomId = crypto.createHash("sha256").update([userId, toUserId].sort().join("_")).digest("hex")
+        // console.log(firstName + " Joined :" + roomId);
         socket.join(roomId);
       });
 
       socket.on(
         "sendMessage",
         async ({ userId, toUserId, firstName, text, profilePhoto }) => {
-          const roomId = [userId, toUserId].sort().join("_");
-          console.log(firstName + " Joined: " + roomId);
-          console.log({ firstName, text });
+          let roomId = crypto.createHash("sha256").update([userId, toUserId].sort().join("_")).digest("hex")
+          // console.log(firstName + " Joined: " + roomId);
+          // console.log({ firstName, text });
 
           let chat = await Chat.findOne({
             participants: { $all: [userId, toUserId] },
           });
-          console.log(chat);
 
           if (!chat) {
             chat = new Chat({
@@ -34,12 +35,13 @@ const initilizeSocket = (server) => {
               messages: [],
             });
           }
-          chat.messages.push({ senderId: userId, text, profilePhoto });
+          chat.messages.push({ senderId: userId, text });
           await chat.save();
 
           io.to(roomId).emit("messageRecieved", {
             firstName,
             text,
+            profilePhoto
           });
         }
       );
