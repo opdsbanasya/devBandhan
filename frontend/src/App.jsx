@@ -27,8 +27,8 @@ function App() {
           {/* Feed, connection, and request */}
           <Route path="/" element={<Home />}>
             <Route path="/" element={<Feed />} />
-            <Route path="/connection/:connectionId" element={<Feed />} />
-            <Route path="/requests/:requestId" element={<Feed />} />
+            <Route path="/connection" element={<Feed />} />
+            <Route path="/requests" element={<Feed />} />
             <Route path="/chat/:toUserId" element={<Chat />} />
           </Route>
           <Route path="/settings" element={<Settings />} />

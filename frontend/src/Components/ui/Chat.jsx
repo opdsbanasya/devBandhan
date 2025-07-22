@@ -85,12 +85,12 @@ const Chat = () => {
     setNewMessage("");
   };
   return (
-    <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap py-2 px-10">
+    <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap py-2 xl:px-10">
       <div className="w-full flex items-center gap-5 py-5 border-b border-zinc-500">
         <div className="size-14 bg-amber-400 rounded-full text-black font-semibold overflow-hidden">
           <img
             src={toUser?.profilePhoto}
-            className="h-full  object-cover"
+            className="h-full object-cover"
             alt=""
           />
         </div>
@@ -120,7 +120,7 @@ const Chat = () => {
                 {msg?.firstName}
                 {/* <time className="text-xs opacity-50">12:45</time> */}
               </div>
-              <div className="chat-bubble">{msg?.text}</div>
+              <div className="chat-bubble text-sm">{msg?.text}</div>
               {/* <div className="chat-footer opacity-50">Delivered</div> */}
             </div>
           ))}
