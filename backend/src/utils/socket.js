@@ -19,8 +19,6 @@ const initilizeSocket = (server) => {
         "joinChat",
         async ({ userId, toUserId, firstName, profilePhoto }) => {
           // find to userId in Db
-          console.log({ firstName, m: "Joined" });
-
           const toUser = await User.findById({ _id: toUserId });
 
           if (!toUser) {
@@ -65,7 +63,6 @@ const initilizeSocket = (server) => {
         "sendMessage",
         async ({ userId, toUserId, firstName, text, profilePhoto }) => {
           const toUser = await User.findById({ _id: toUserId });
-          console.log({ userId, toUserId, firstName, text, profilePhoto });
 
           if (!toUser) return;
 
@@ -107,7 +104,9 @@ const initilizeSocket = (server) => {
         }
       );
 
-      socket.on("disconnect", () => {});
+      socket.on("disconnect", () => {
+        
+      });
     } catch (err) {
       console.log(err.message);
     }

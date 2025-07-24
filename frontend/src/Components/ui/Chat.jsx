@@ -54,8 +54,7 @@ const Chat = () => {
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
-        console.log({ firstName, text, profilePhoto });
-        console.log(firstName + " sent: " + text);
+
 
         setChatMessage((messages) => [
           ...messages,
@@ -74,7 +73,7 @@ const Chat = () => {
       });
 
       socket.on("userDisconnected", ({ userId, message }) => {
-        console.log({ userId, message });
+        
       });
     });
 
