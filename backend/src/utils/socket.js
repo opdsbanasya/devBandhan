@@ -19,7 +19,6 @@ const initilizeSocket = (server) => {
         "joinChat",
         async ({ userId, toUserId, firstName, profilePhoto }) => {
           // find to userId in Db
-          console.log({ firstName, m: "Joining..." });
 
           const toUser = await User.findById({ _id: toUserId });
           // console.log(toUser);
@@ -94,7 +93,7 @@ const initilizeSocket = (server) => {
               messages: [],
             });
           }
-          
+
           chat.messages.push({ senderId: userId, text });
           await chat.save();
 

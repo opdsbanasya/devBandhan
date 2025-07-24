@@ -53,9 +53,7 @@ const Chat = () => {
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
-        console.log({ firstName, text, profilePhoto });
 
-        console.log(firstName + " sent: " + text);
         setChatMessage((messages) => [
           ...messages,
           { firstName, text, profilePhoto },
@@ -95,6 +93,7 @@ const Chat = () => {
     });
     setNewMessage("");
   };
+
   return (
     <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap py-2 xl:px-10">
       <div className="w-full flex items-center gap-5 py-5 border-b border-zinc-500">
