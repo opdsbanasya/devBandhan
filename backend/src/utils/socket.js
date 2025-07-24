@@ -19,9 +19,9 @@ const initilizeSocket = (server) => {
         "joinChat",
         async ({ userId, toUserId, firstName, profilePhoto }) => {
           // find to userId in Db
+          console.log({ firstName, m: "Joined" });
 
           const toUser = await User.findById({ _id: toUserId });
-          // console.log(toUser);
 
           if (!toUser) {
             socket.emit("userNotFound", {
@@ -56,7 +56,7 @@ const initilizeSocket = (server) => {
             .createHash("sha256")
             .update([userId, toUserId].sort().join("_"))
             .digest("hex");
-          // console.log(firstName + " Joined :" + roomId);
+
           socket.join(roomId);
         }
       );
@@ -65,14 +65,16 @@ const initilizeSocket = (server) => {
         "sendMessage",
         async ({ userId, toUserId, firstName, text, profilePhoto }) => {
           const toUser = await User.findById({ _id: toUserId });
-          // console.log(toUser);
+          console.log({ userId, toUserId, firstName, text, profilePhoto });
 
           if (!toUser) return;
 
           // Search is user and toUser have connection request with interested status
           const connection = await ConnectionRequestModel.findOne({
-            fromUserId: userId,
-            toUserId,
+            $or :[
+              {fromUserId: userId, toUserId},
+              {fromUserId: toUserId, toUserId: userId}
+            ],
             status: "accepted",
           });
 
