@@ -10,6 +10,7 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const [chatMessage, setChatMessage] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [internetStatus, setinternetStatus] = useState(navigator.onLine);
   const chatRef = useRef();
   const location = useLocation();
   const toUser = location.state?.connection;
@@ -55,7 +56,6 @@ const Chat = () => {
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
 
-
         setChatMessage((messages) => [
           ...messages,
           { firstName, text, profilePhoto },
@@ -73,14 +73,19 @@ const Chat = () => {
       });
 
       socket.on("userDisconnected", ({ userId, message }) => {
-        
+
       });
     });
 
     return () => {
+      socket.emmit()
       socket.disconnect();
     };
   }, [user?._id, toUserId]);
+
+  useEffect(()=> {
+    
+  }, [])
 
   useEffect(() => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -107,7 +112,7 @@ const Chat = () => {
           <img
             src={toUser?.profilePhoto}
             className="h-full object-cover"
-            alt=""
+            alt={toUser?.firstName}
           />
         </div>
         <div>
@@ -130,7 +135,7 @@ const Chat = () => {
               <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
                   <img
-                    alt="Tailwind CSS chat bubble component"
+                    alt={msg?.firstName}
                     src={msg?.profilePhoto}
                   />
                 </div>
