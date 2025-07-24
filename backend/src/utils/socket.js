@@ -71,9 +71,9 @@ const initilizeSocket = (server) => {
 
           // Search is user and toUser have connection request with interested status
           const connection = await ConnectionRequestModel.findOne({
-            $or :[
-              {fromUserId: userId, toUserId},
-              {fromUserId: toUserId, toUserId: userId}
+            $or: [
+              { fromUserId: userId, toUserId },
+              { fromUserId: toUserId, toUserId: userId },
             ],
             status: "accepted",
           });

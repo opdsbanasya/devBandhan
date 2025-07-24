@@ -43,6 +43,7 @@ const Chat = () => {
 
   useEffect(() => {
     const socket = createSocketConnetion();
+
     if (!socket) return;
     socket.on("connect", () => {
       socket.emit("joinChat", {
@@ -53,6 +54,8 @@ const Chat = () => {
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
+        console.log({ firstName, text, profilePhoto });
+        console.log(firstName + " sent: " + text);
 
         setChatMessage((messages) => [
           ...messages,
@@ -68,6 +71,10 @@ const Chat = () => {
       socket.on("unAuthorizedConnection", ({ error }) => {
         alert(error?.message);
         navigate("/");
+      });
+
+      socket.on("userDisconnected", ({ userId, message }) => {
+        console.log({ userId, message });
       });
     });
 
