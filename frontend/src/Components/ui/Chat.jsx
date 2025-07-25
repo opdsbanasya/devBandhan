@@ -10,7 +10,7 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const [chatMessage, setChatMessage] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [internetStatus, setinternetStatus] = useState(navigator.onLine);
+  const [internetStatus, setinternetStatus] = useState();
   const chatRef = useRef();
   const location = useLocation();
   const toUser = location.state?.connection;
@@ -39,6 +39,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    const socket = createSocketConnetion();
     fetchChats();
   }, []);
 
@@ -55,6 +56,8 @@ const Chat = () => {
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
+        console.log({ firstName, text, profilePhoto });
+        console.log(firstName + " sent: " + text);
 
         setChatMessage((messages) => [
           ...messages,
@@ -72,20 +75,36 @@ const Chat = () => {
         navigate("/");
       });
 
-      socket.on("userDisconnected", ({ userId, message }) => {
+      const timer = setInterval(() => {
+        socket.emit("ping", {
+          userId: user?._id,
+          toUserId,
+          firstName: user?.firstName,
+          status: navigator.onLine,
+        });
+      }, 5000);
 
+      socket.on("online", ({ userId, message, status }) => {
+        if(toUserId === userId){
+          setinternetStatus(status);
+        }
       });
+
+      socket.on("userLeft", ({ userId, message, status }) => {
+        if(toUserId === userId){
+          setinternetStatus(status);
+        }
+      });
+
+      return () => {
+        clearInterval(timer);
+      };
     });
 
     return () => {
-      socket.emmit()
       socket.disconnect();
     };
   }, [user?._id, toUserId]);
-
-  useEffect(()=> {
-    
-  }, [])
 
   useEffect(() => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -117,6 +136,7 @@ const Chat = () => {
         </div>
         <div>
           {toUser?.firstName} {toUser?.lastName}
+          <span className="text-xs">{internetStatus ? " 🟢": " 🔴"}</span>
         </div>
         {/* <div>Other</div> */}
       </div>
@@ -134,10 +154,7 @@ const Chat = () => {
             >
               <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
-                  <img
-                    alt={msg?.firstName}
-                    src={msg?.profilePhoto}
-                  />
+                  <img alt={msg?.firstName} src={msg?.profilePhoto} />
                 </div>
               </div>
               <div className="chat-header">

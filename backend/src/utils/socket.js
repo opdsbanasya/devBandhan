@@ -12,6 +12,8 @@ const initilizeSocket = (server) => {
     },
   });
 
+  const activeUsers = new Map();
+
   io.on("connection", (socket) => {
     try {
       // events
@@ -19,6 +21,8 @@ const initilizeSocket = (server) => {
         "joinChat",
         async ({ userId, toUserId, firstName, profilePhoto }) => {
           // find to userId in Db
+          console.log({ firstName, m: "Joined" });
+
           const toUser = await User.findById({ _id: toUserId });
 
           if (!toUser) {
@@ -54,6 +58,8 @@ const initilizeSocket = (server) => {
             .createHash("sha256")
             .update([userId, toUserId].sort().join("_"))
             .digest("hex");
+          
+          io.to(roomId).emit("")
 
           socket.join(roomId);
         }
@@ -63,6 +69,7 @@ const initilizeSocket = (server) => {
         "sendMessage",
         async ({ userId, toUserId, firstName, text, profilePhoto }) => {
           const toUser = await User.findById({ _id: toUserId });
+          console.log({ userId, toUserId, firstName, text, profilePhoto });
 
           if (!toUser) return;
 
@@ -104,8 +111,38 @@ const initilizeSocket = (server) => {
         }
       );
 
+      socket.on("ping", ({ userId, toUserId, firstName, status }) => {
+        const roomId = crypto
+          .createHash("sha256")
+          .update([userId, toUserId].sort().join("_"))
+          .digest("hex");
+
+        activeUsers.set(userId, { roomId, lastPing: Date.now(), firstName, status });
+
+      });
+
+      const timer = setInterval(() => {
+        const now = Date.now();
+        for (let [userId, user] of activeUsers.entries()) {
+          if (now - user.lastPing > 15000) {
+            io.to(user.roomId).emit("userLeft", {
+              userId,
+              message: "user left the chat room.",
+              status: !user.status
+            });
+            activeUsers.delete(userId);
+          } else {
+            io.to(user.roomId).emit("online", {
+              userId,
+              message: "User is online",
+              status: user.status
+            })
+          }
+        }
+      }, 10000);
+
       socket.on("disconnect", () => {
-        
+        clearInterval(timer);
       });
     } catch (err) {
       console.log(err.message);
