@@ -39,7 +39,6 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    const socket = createSocketConnetion();
     fetchChats();
   }, []);
 
@@ -56,8 +55,6 @@ const Chat = () => {
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
-        console.log({ firstName, text, profilePhoto });
-        console.log(firstName + " sent: " + text);
 
         setChatMessage((messages) => [
           ...messages,
