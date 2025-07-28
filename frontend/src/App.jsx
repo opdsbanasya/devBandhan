@@ -11,7 +11,9 @@ import Settings from "./Components/ui/Settings";
 import Premium from "./Components/ui/Premium";
 import OtpVerification from "./Components/ui/OtpVerification";
 import Chat from "./Components/ui/Chat";
-
+import PrivacyPolicy from "./Components/ui/PrivacyPolicy";
+import TermsAndConditions from "./Components/ui/TermsAndConditions ";
+import ContactUs from "./Components/ui/contact";
 
 function App() {
   return (
@@ -40,6 +42,10 @@ function App() {
 
           {/* Upgrade or payment releted */}
           <Route path="/upgrade" element={<Premium />} />
+
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/contact-us" element={<ContactUs />} />
         </Route>
       </Routes>
     </>

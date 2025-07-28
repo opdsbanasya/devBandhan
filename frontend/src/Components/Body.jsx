@@ -15,6 +15,7 @@ function Body() {
   const feed = useSelector((store) => store.feed);
   const location = useLocation();
 
+
   const handleUserData = async () => {
     try {
       const userData = await axios.get(BASE_URL + "/profile/view", {
@@ -43,9 +44,9 @@ function Body() {
 
     }
   };
-
+  const list = ["/signup", "/get-started", "/verify", "/privacy", "/terms", "/contact-us"]
   useEffect(() => {
-    if (location.pathname === "/signup" || location.pathname === "/verify") {
+    if (list.includes(location.pathname)) {
       return;
     }
     if (!user) {
