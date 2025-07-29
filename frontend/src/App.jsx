@@ -26,7 +26,12 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify" element={<OtpVerification />} />
 
-          {/* Feed, connection, and request */}
+          {/* Non-Auth - not needed auth*/}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+
+          {/* Feed, connection, and request - needed auth */}
           <Route path="/" element={<Home />}>
             <Route path="/" element={<Feed />} />
             <Route path="/connection" element={<Feed />} />
@@ -43,9 +48,7 @@ function App() {
           {/* Upgrade or payment releted */}
           <Route path="/upgrade" element={<Premium />} />
 
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsAndConditions />} />
-          <Route path="/contact-us" element={<ContactUs />} />
+          
         </Route>
       </Routes>
     </>

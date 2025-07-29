@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/utils/constants";
 import { createSocketConnetion } from "@/utils/socketClient";
 import axios from "axios";
+import { Phone, Undo2, Video } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -55,7 +56,6 @@ const Chat = () => {
       });
 
       socket.on("messageRecieved", ({ firstName, text, profilePhoto }) => {
-
         setChatMessage((messages) => [
           ...messages,
           { firstName, text, profilePhoto },
@@ -82,13 +82,13 @@ const Chat = () => {
       }, 5000);
 
       socket.on("online", ({ userId, message, status }) => {
-        if(toUserId === userId){
+        if (toUserId === userId) {
           setinternetStatus(status);
         }
       });
 
       socket.on("userLeft", ({ userId, message, status }) => {
-        if(toUserId === userId){
+        if (toUserId === userId) {
           setinternetStatus(status);
         }
       });
@@ -122,9 +122,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap py-2 xl:px-10">
-      <div className="w-full flex items-center gap-5 py-5 border-b border-zinc-500">
-        <div className="size-14 bg-amber-400 rounded-full text-black font-semibold overflow-hidden">
+    <div className="w-11/12 xl:w-full h-full bg-transparent relative flex-wrap xl:py-2 xl:px-10">
+      <div className="w-full flex items-center gap-5 py-3 xl:py-5 border-b border-zinc-500">
+        <div className="size-10 xl:size-14 rounded-full overflow-hidden">
           <img
             src={toUser?.profilePhoto}
             className="h-full object-cover"
@@ -133,9 +133,18 @@ const Chat = () => {
         </div>
         <div>
           {toUser?.firstName} {toUser?.lastName}
-          <span className="text-xs">{internetStatus ? " 🟢": " 🔴"}</span>
+          <span className="text-xs">{internetStatus ? " 🟢" : " 🔴"}</span>
         </div>
-        {/* <div>Other</div> */}
+        <div className="flex gap-3 items-center justify-center">
+          <div className="tooltip" data-tip="Comming Soon..">
+            <Phone size={20} />
+          </div>
+          <div className="tooltip" data-tip="Comming Soon..">
+            <Video size={20} />
+          </div>
+
+          <Undo2 size={20} onClick={() => navigate("/?tab=connection")} />
+        </div>
       </div>
       <div
         className={`px-2 w-full h-[67vh] py-5 overflow-y-scroll scroll-smooth`}
@@ -168,7 +177,7 @@ const Chat = () => {
           onChange={(e) => setNewMessage(e.target.value)}
           type="text"
           value={newMessage}
-          className="w-9/10 h-full outline-0 px-5 border-2 border-zinc-100 rounded-md"
+          className="w-9/10 py-2 outline-0 px-4 xl:px-5 border-2 border-zinc-100 rounded-md"
           placeholder="Enter a message"
         />
         <button

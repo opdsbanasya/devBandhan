@@ -7,11 +7,11 @@ const GetStarted = () => {
   const user = useSelector((store) => store.user);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // },[user]);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  },[user]);
 
   return (
     <div

@@ -16,6 +16,7 @@ const Home = () => {
   const user = useSelector((store) => store.user);
   const location = useLocation();
   const [isChat, setIsChat] = useState(null)
+  const [isDock, setIsDock] = useState();
 
   useEffect(() => {
     if (!user) {
@@ -29,6 +30,7 @@ const Home = () => {
 
   useEffect(()=> {
     setIsChat(location.pathname.includes("chat"));
+    setIsDock(isChat && !isChat)
   }, [location.pathname])
 
   useEffect(() => {
@@ -70,9 +72,9 @@ const Home = () => {
   return (
     <div
       data-theme="black"
-      className={`w-screen min-h-[90vh] bg-base-200 xl:flex ${isChat && "flex-col xl:flex-row"}`}
+      className={`w-screen min-h-[90vh] bg-base-200 ${isChat || tabName === "" ? "flex flex-col xl:flex-row" : "flex flex-row"}`}
     >
-      <div className="w-11/12 xl:w-[28%] min-h-full bg-base-200 xl:border-r border-zinc-700 text-white mx-auto">
+      <div className={`w-11/12 xl:w-[28%] min-h-full bg-base-200 xl:border-r border-zinc-700 text-white mx-auto ${isChat ? "hidden": "block"} ${isDock && "block"}`}>
         <div className="relative flex w-full px-5 gap-4 xl:border-b border-zinc-500 py-5 justify-center">
           <Dock direction="middle">
             <div className="block xl:hidden">
@@ -101,15 +103,14 @@ const Home = () => {
             </DockIcon>
           </Dock>
         </div>
-        <div className={`${tabName === "" ? "hidden" : "block"} ${isChat ? "hidden xl:block" : "block"}`}>
-          {tabName === "chat" && "Coming Soon..."}  
+        <div className={`${tabName === "" ? "hidden" : "block"} ${isChat ? "hidden xl:block" : "block"}`}> 
           {tabName === "connection" && <Connections />}
           {tabName === "request" && <Requests />}
         </div>
       </div>
       <div
         className={`w-11/12 xl:w-[72%] h-full bg-transparent flex items-center justify-center relative flex-wrap gap-5 ${
-          tabName === "" ? "block" : "hidden"
+          tabName === "" || isChat ? "block" : "hidden"
         } xl:block mx-auto`}
       >
         <Outlet />
