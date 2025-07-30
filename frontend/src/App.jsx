@@ -13,7 +13,7 @@ import OtpVerification from "./Components/ui/OtpVerification";
 import Chat from "./Components/ui/Chat";
 import PrivacyPolicy from "./Components/ui/PrivacyPolicy";
 import TermsAndConditions from "./Components/ui/TermsAndConditions ";
-import ContactUs from "./Components/ui/contact";
+import ContactUs from "./Components/ui/Contact";
 
 function App() {
   return (
