@@ -22,11 +22,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const loginData = {
+      email: email.current.value.trim(),
+      password: password.current.value,
+    };
     try {
-      const loginData = {
-        email: email.current.value.trim(),
-        password: password.current.value,
-      };
       const isOk = loginDataValiadation(loginData, setError);
 
       if (isOk) {
@@ -34,14 +34,18 @@ const Login = () => {
           withCredentials: true,
         });
 
+        console.log(user);
         setIsAlert(true);
 
         dispatch(addUser(user?.data?.userData));
         navigate("/");
       }
     } catch (err) {
-      setError(err.response.data);
-      setError(err);
+      if (err.status == 401) {
+        setError(err.response.data.message);
+        return navigate("/verify", { state: { email: loginData.email, message: "Your email is not verified, please verify your email." } });
+      }
+      setError(err.response.data || err);
     }
   };
 

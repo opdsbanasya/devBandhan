@@ -54,11 +54,11 @@ const ResetPassword = ({ isOTPVerified, userEmail, setIsOTPVerified }) => {
         <h5 className="text-xl md:text-2xl lg:text-4xl xl:text-xl font-semibold text-center">
           Forget password
         </h5>
-        (
+        
         <p className="text-xs md:text-base lg:text-xl xl:text-sm text-center">
           Enter a new strong password
         </p>
-        )
+        
         <p className="text-7xl lg:text-9xl xl:text-7xl text-center hidden md:block">
           🧑‍💻
         </p>

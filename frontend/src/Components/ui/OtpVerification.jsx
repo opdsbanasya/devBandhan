@@ -8,7 +8,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import validator from "validator";
 import ResetPassword from "./ResetPassword";
-import { useSelector } from "react-redux";
 
 const OtpVerification = () => {
   const otpRef = useRef();
@@ -22,13 +21,48 @@ const OtpVerification = () => {
   const [isPasswordForget, setIsPasswordForget] = useState(
     location.state?.isForgetPassword || false
   );
+  const [message, setMessage] = useState();
+  const [timerForResendOTP, setTimerForResendOTP] = useState(0);
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
 
+  const handleTimerForResendOTP = () => {
+    setIsResendDisabled(true);
+    setTimerForResendOTP(300); // 5 minutes = 300 seconds
+    
+    const interval = setInterval(() => {
+      setTimerForResendOTP((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setIsResendDisabled(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const formatTimer = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleResendOtp = async (e) => {
+    setMessage("Resending OTP...");
+    await sendOtp(e);
+    
+    // Clear the resending message after 3 seconds
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
+  };
   const sendOtp = async (e) => {
     try {
       e.preventDefault();
 
       if (!userEmail || !validator.isEmail(userEmail)) {
         setError("Please Enter a valid email");
+        return;
       }
 
       const response = await axios.post(`${BASE_URL}/authcode/send`, {
@@ -39,6 +73,7 @@ const OtpVerification = () => {
         setError("");
         setIsOTPSent(true);
         setIsChangeEmail(false);
+        handleTimerForResendOTP(); // Start timer when OTP is sent
       }
     } catch (err) {
       setError(err.response?.data?.message);
@@ -66,11 +101,11 @@ const OtpVerification = () => {
 
       if (response?.status === 200) {
         setIsOTPVerified(true);
-        // if (!isPasswordForget) {
-        //   const timer = setTimeout(() => {
-        //     navigate("/login");
-        //   }, 4000);
-        // }
+        if (!isPasswordForget) {
+          setTimeout(() => {
+            navigate("/login");
+          }, 4000);
+        }
       }
     } catch (err) {
       setError(err?.response?.data?.message);
@@ -84,6 +119,9 @@ const OtpVerification = () => {
     }
     if (location.state?.email) {
       setUserEmail(location.state?.email);
+    }
+    if (location.state?.message) {
+      setMessage(location.state?.message);
     }
   }, []);
 
@@ -119,6 +157,11 @@ const OtpVerification = () => {
                 {isOTPSent && (
                   <p className="text-xs md:text-base lg:text-xl xl:text-sm text-center">
                     Enter 6 digit OTP recieved on email to verify
+                  </p>
+                )}
+                {message && (
+                  <p className="text-xs md:text-base lg:text-xl xl:text-sm text-center">
+                    {message}
                   </p>
                 )}
                 {isChangeEmail && (
@@ -173,7 +216,7 @@ const OtpVerification = () => {
                     >
                       Email
                     </label>
-                    <div className="w-full flex items-center justify-between border border-zinc-500 rounded-sm focus-within:border-zinc-400">
+                    <div className="relative w-full flex items-center justify-between border border-zinc-500 rounded-sm focus-within:border-zinc-400">
                       {isChangeEmail && (
                         <input
                           type="email"
@@ -193,7 +236,7 @@ const OtpVerification = () => {
                           {userEmail}
                         </p>
                       )}
-                      {
+                      {!isOTPSent && (
                         <button
                           type="button"
                           className="px-3 text-blue-500 hover:underline hover:text-blue-400 cursor-pointer"
@@ -201,7 +244,26 @@ const OtpVerification = () => {
                         >
                           Get
                         </button>
-                      }
+                      )}
+                      {isOTPSent && (
+                        <button
+                          type="button"
+                          disabled={isResendDisabled}
+                          className={`px-3 ${
+                            isResendDisabled 
+                              ? 'text-gray-400 cursor-not-allowed' 
+                              : 'text-blue-500 hover:underline hover:text-blue-400 cursor-pointer'
+                          }`}
+                          onClick={(e) => handleResendOtp(e)}
+                        >
+                          Resend
+                        </button>
+                      )}
+                      {isOTPSent && timerForResendOTP > 0 && (
+                        <span className="absolute right-0 -bottom-7 px-3 text-sm text-gray-500">
+                          {formatTimer(timerForResendOTP)}
+                        </span>
+                      )}
                     </div>
 
                     <label

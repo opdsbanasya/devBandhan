@@ -59,6 +59,10 @@ authRouter.post("/login", async (req, res) => {
     );
 
     if (isPasswordMatched) {
+      if(user.isVerified == false){
+        return res.status(401).json({message: "Please verify your email"});
+      }
+
       // Creating JWT Token
       const token = await user.getJWT();
 
