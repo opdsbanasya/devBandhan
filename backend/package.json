@@ -8,13 +8,13 @@
     "JavaScript",
     "MERN"
   ],
-  "homepage": "https://github.com/opdsbanasya/devTinder#readme",
+  "homepage": "https://github.com/opdsbanasya/devBandhan#readme",
   "bugs": {
-    "url": "https://github.com/opdsbanasya/devTinder/issues"
+    "url": "https://github.com/opdsbanasya/devBandhan/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/opdsbanasya/devTinder.git"
+    "url": "git+https://github.com/opdsbanasya/devBandhan.git"
   },
   "license": "ISC",
   "author": "Dharm Singh Saini",

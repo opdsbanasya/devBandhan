@@ -458,7 +458,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Developer**: Dharm Singh Saini
 - **GitHub**: [@opdsbanasya](https://github.com/opdsbanasya)
-- **Repository**: [DevTinder](https://github.com/opdsbanasya/devTinder)
+- **Repository**: [DevTinder](https://github.com/opdsbanasya/devBandhan.git)
 
 ## 🙏 Acknowledgments
 
