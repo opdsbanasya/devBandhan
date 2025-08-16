@@ -5,6 +5,14 @@
 [![React](https://img.shields.io/badge/React-v19+-blue.svg)](https://reactjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-v6+-green.svg)](https://www.mongodb.com/)
 
+## Checkout
+<div style="display: flex; align-items: center; gap: 8px; margin: 16px 0;">
+  <img src="./frontend/src/assets/logo.jpg" alt="Website" style="width: 25px; height: 25px; border-radius: 50%;" />
+  <a href="https://devbandhan.tech" target="_blank" style="color: #3b82f6; font-size:18px; text-decoration: none; font-weight: 500;">
+    https://devbandhan.tech
+  </a>
+</div>
+
 ## 📋 Table of Contents
 - [Overview](#overview)
 - [Features](#features)
