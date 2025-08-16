@@ -1,4 +1,4 @@
-# DevTinder - Developer Networking Platform 🚀
+# DevBandhan - Developer Networking Platform 🚀
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
@@ -22,7 +22,7 @@
 
 ## 🌟 Overview
 
-DevTinder is a professional networking platform inspired by Tinder, designed specifically for developers to connect, collaborate, and grow their careers. Unlike traditional dating apps, DevTinder focuses on professional relationships, mentorship, skill sharing, and career opportunities.
+DevBandhan is a professional networking platform inspired by Tinder, designed specifically for developers to connect, collaborate, and grow their careers. Unlike traditional dating apps, DevBandhan focuses on professional relationships, mentorship, skill sharing, and career opportunities.
 
 **Key Objectives:**
 - Connect developers based on skills and interests
@@ -195,8 +195,8 @@ frontend/
 ### Backend Setup
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/opdsbanasya/devTinder.git
-   cd devTinder/backend
+   git clone https://github.com/opdsbanasya/devBandhan.git
+   cd devBandhan/backend
    ```
 
 2. **Install dependencies**
@@ -208,7 +208,7 @@ frontend/
    Create a `.env` file in the backend directory:
    ```env
    # Database
-   URI=mongodb://localhost:27017/devtinder
+   URI=mongodb://localhost:27017/devBandhan
 
    # JWT
    SECRET_KEY=your_jwt_secret_key
@@ -458,7 +458,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Developer**: Dharm Singh Saini
 - **GitHub**: [@opdsbanasya](https://github.com/opdsbanasya)
-- **Repository**: [DevTinder](https://github.com/opdsbanasya/devBandhan.git)
+- **Repository**: [devBandhan](https://github.com/opdsbanasya/devBandhan.git)
 
 ## 🙏 Acknowledgments
 
