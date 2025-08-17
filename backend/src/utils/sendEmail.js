@@ -1,57 +1,25 @@
-const { SendEmailCommand } = require("@aws-sdk/client-ses");
-const { sesClient } = require("./sesClient");
+const { EmailClient } = require("@azure/communication-email");
 
-const createSendEmailCommand = (toAddress, fromAddress, email) => {
-  return new SendEmailCommand({
-    Destination: {
-      /* required */
-      CcAddresses: [],
-      ToAddresses: [toAddress],
+const connectionString = process.env.AZURE_CONNECTION_STRING;
+const client = new EmailClient(connectionString);
+
+async function sendEmail(emailData) {
+  const emailMessage = {
+    senderAddress: "DoNotReply@devbandhan.tech",
+    content: {
+      subject: emailData.subject,
+      plainText: emailData?.text || "Hello world via email.",
+      html: emailData?.html || `<p>devBandhan</p>`,
     },
-    Message: {
-      /* required */
-      Body: {
-        /* required */
-        Html: {
-          Charset: "UTF-8",
-          Data: `<p> ${email.body}</p>`,
-        },
-        Text: {
-          Charset: "UTF-8",
-          Data: "TEXT_FORMAT_BODY",
-        },
-      },
-      Subject: {
-        Charset: "UTF-8",
-        Data: email?.title
-          ? `${email?.title} sent request`
-          : "You have recieved a request",
-      },
+    recipients: {
+      to: emailData.adresses,
     },
-    Source: fromAddress,
-    ReplyToAddresses: [
-      /* more items */
-    ],
-  });
-};
+    attachments: [],
+  };
 
-const run = async (email) => {
-  const sendEmailCommand = createSendEmailCommand(
-    "opdsbanasya@gmail.com",
-    "admin@devbandhan.tech",
-    email
-  );
+  const poller = await client.beginSend(emailMessage);
+  const result = await poller.pollUntilDone();
+  console.log(result);
+}
 
-  try {
-    return await sesClient.send(sendEmailCommand);
-  } catch (caught) {
-    if (caught instanceof Error && caught.name === "MessageRejected") {
-      const messageRejectedError = caught;
-      return messageRejectedError;
-    }
-    throw caught;
-  }
-};
-
-// snippet-end:[ses.JavaScript.email.sendEmailV3]
-module.exports = { run };
+module.exports = { sendEmail };

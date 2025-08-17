@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const { subDays, startOfDay, endOfDay } = require("date-fns");
 const ConnectionRequestModel = require("../models/connectionRequest");
 const sendEmail = require("./sendEmail");
+const { cronJobHtml } = require("./constants");
 
 cron.schedule("0 8 * * *", async () => {
   const yesterday = subDays(new Date(), 0);
@@ -22,11 +23,9 @@ cron.schedule("0 8 * * *", async () => {
 
   for (let email of emailList) {
     const emailData = {
-      title: "Review requests",
-      body: `<p>Hey ${
-        email.split("@")[0]
-      }, you have recieved connection requests. Review all on <a href="devbandhan.tech">devbandhan.tech<a></p>`,
+      title: "New Connection Requests - Daily Summary",
+      body: cronJobHtml(email),
     };
-    const response = await sendEmail.run(emailData);
+    const response = await sendEmail(emailData);
   }
 });

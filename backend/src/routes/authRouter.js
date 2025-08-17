@@ -5,7 +5,12 @@ const bcrypt = require("bcrypt");
 const { sendMailViaNodeMailer } = require("../utils/nodeMailer");
 const validator = require("validator");
 const authRouter = express.Router();
-const { otpHTML, passwordChnageUpdateHtml } = require("../utils/constants");
+const {
+  otpHTML,
+  passwordChnageUpdateHtml,
+  emailSubjects,
+} = require("../utils/constants");
+const { sendEmail } = require("../utils/sendEmail");
 
 // POST /signup API
 authRouter.post("/signup", async (req, res) => {
@@ -30,8 +35,12 @@ authRouter.post("/signup", async (req, res) => {
     user.isVerified = false;
     const userData = await user.save();
 
-    const html = otpHTML(otp)
-    await sendMailViaNodeMailer({otp, email: sanitizedData?.email, html});
+    const html = otpHTML(otp);
+    await sendEmail({
+      subject: emailSubjects.otp,
+      html,
+      adresses: [{ address: sanitizedData?.email }],
+    });
 
     res.json({
       message: "User has been added to database. Next, verify the code",
@@ -59,15 +68,14 @@ authRouter.post("/login", async (req, res) => {
     );
 
     if (isPasswordMatched) {
-      if(user.isVerified == false){
-        return res.status(401).json({message: "Please verify your email"});
+      if (user.isVerified == false) {
+        return res.status(401).json({ message: "Please verify your email" });
       }
 
       // Creating JWT Token
       const token = await user.getJWT();
 
       const {
-        _id,
         firstName,
         lastName,
         about,
@@ -75,8 +83,11 @@ authRouter.post("/login", async (req, res) => {
         age,
         skills,
         profilePhoto,
+        _id,
         achievements,
+        dateOfBirth,
         profession,
+        socialLinks,
       } = user;
 
       // Sending Cookies
@@ -86,7 +97,6 @@ authRouter.post("/login", async (req, res) => {
       res.json({
         message: "Login Successful!!",
         userData: {
-          _id,
           firstName,
           lastName,
           about,
@@ -94,8 +104,11 @@ authRouter.post("/login", async (req, res) => {
           age,
           skills,
           profilePhoto,
+          _id,
           achievements,
+          dateOfBirth,
           profession,
+          socialLinks,
         },
       });
     } else {
@@ -130,8 +143,13 @@ authRouter.post("/authcode/send", async (req, res) => {
     user.isVerified = false;
     await user.save();
 
-    const html = otpHTML(otp)
-    await sendMailViaNodeMailer({otp, email, html});
+    const html = otpHTML(otp);
+    // await sendMailViaNodeMailer({ otp, email, html });
+    await sendEmail({
+      subject: emailSubjects.otp,
+      html,
+      adresses: [{ address: user?.email }],
+    });
 
     res.json({ message: "OTP sent" });
   } catch (err) {
@@ -202,7 +220,7 @@ authRouter.patch("/reset/password/", async (req, res) => {
     await user.save();
 
     const html = passwordChnageUpdateHtml(user.firstName);
-    await sendMailViaNodeMailer({email, html})
+    await sendMailViaNodeMailer({ email, html });
 
     res.json({ message: "User updated successfully" });
   } catch (err) {
