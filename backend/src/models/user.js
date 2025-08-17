@@ -75,7 +75,7 @@ const userSchema = new mongoose.Schema(
     about: {
       type: String,
       default:
-        "Curious learner, creative thinker, problem solver, tech enthusiast. Passionate about growth, innovation, and meaningful connections. Always open to opportunities.",
+        "Curious learner, creative thinker, problem solver, tech enthusiast. Passionate about growth, innovation, and meaningful connections.",
       trim: true,
     },
     achievements: {
