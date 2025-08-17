@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "devbandhan-backend",
   "version": "1.0.0",
   "description": "Web apllication for developers to collabartion with another developers",
   "keywords": [
@@ -25,7 +25,7 @@
     "dev": "nodemon src/app.js"
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.830.0",
+    "@azure/communication-email": "^1.0.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
