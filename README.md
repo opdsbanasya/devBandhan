@@ -74,7 +74,7 @@ DevBandhan is a professional networking platform inspired by Tinder, designed sp
 - **Email Templates**: Professional email formatting
 - **SMTP Integration**: Reliable email delivery
 - **Scheduled Emails**: Cron job-based email reminders
-- **Multi-provider Support**: AWS SES and NodeMailer integration
+- **Multi-provider Support**: Azure Email Communication Service and NodeMailer integration
 
 ### 📱 User Interface
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
