@@ -11,6 +11,7 @@ const profileRouter = express.Router();
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     const userData = req.user;
+
     const {
       firstName,
       lastName,
@@ -25,6 +26,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
       profession,
       socialLinks,
     } = userData;
+
     res.json({
       message: "Fetch successfully",
       user: {
@@ -45,6 +47,52 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
+});
+
+profileRouter.get("/profile/feedUser/:feedUserId", userAuth, async (req, res) => {
+  const feedUserId = req.params?.feedUserId;
+  console.log(req.params);
+  
+  if (!feedUserId) {
+    return res.status(400).json({ message: "Invalid user id" });
+  }
+
+  const feedUser = await User.findById({ _id: feedUserId });
+  if (!feedUser) {
+    return res.status(404).json({ message: "User Not found" });
+  }
+
+  const {
+    firstName,
+    lastName,
+    about,
+    gender,
+    age,
+    skills,
+    profilePhoto,
+    _id,
+    achievements,
+    dateOfBirth,
+    profession,
+    socialLinks,
+  } = feedUser;
+
+  console.log(feedUser);
+
+  return res.json({
+    firstName,
+    lastName,
+    about,
+    gender,
+    age,
+    skills,
+    profilePhoto,
+    _id,
+    achievements,
+    dateOfBirth,
+    profession,
+    socialLinks,
+  });
 });
 
 // PATCH /user API - to update an user

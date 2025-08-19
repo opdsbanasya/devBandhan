@@ -2,19 +2,53 @@ import { Facebook, Github, Instagram, Linkedin, SquarePen } from "lucide-react";
 import { FaXTwitter, FaLinkedin, FaInstagram } from "react-icons/fa6";
 import { FiGithub } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { AuroraText } from "../magicui/aurora-text";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "@/utils/constants";
 
 const Profile = () => {
   const user = useSelector((store) => store.user);
   const navigate = useNavigate();
   const [isEditIconHidden, setIsEditIconHidden] = useState(true);
+  const location = useLocation();
+  const { feedUserId } = location.state;
+  const [infoUser, setInfoUser] = useState();
+  const [isLoggedinUserProfile, setIsLoggedInUserProfile] = useState(false);
 
   if (!user) return;
 
   const { socialLinks } = user || {};
+
+  const getFeedUserData = async (feedUserId) => {
+    try {
+      const feedUserData = await axios.get(
+        `${BASE_URL}/profile/feedUser/${feedUserId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return feedUserData;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (feedUserId) {
+        const feedUser = await getFeedUserData(feedUserId);
+        setInfoUser(feedUser.data);
+      } else {
+        setInfoUser(user);
+        setIsLoggedInUserProfile(true);
+      }
+    };
+    
+    fetchUserData();
+  }, [feedUserId, user]);
 
   const handleEditClick = (data) => {
     navigate("edit", { state: data });
@@ -23,6 +57,7 @@ const Profile = () => {
       behavior: "smooth",
     });
   };
+
   return (
     <div
       data-theme="black"
@@ -40,37 +75,42 @@ const Profile = () => {
             >
               <img
                 alt="Profile Photo"
-                src={user?.profilePhoto}
+                src={infoUser?.profilePhoto}
                 className="w-full h-full object-cover"
               />
-              <div
-                onClick={() =>
-                  !isEditIconHidden && handleEditClick({ isProfileImage: true })
-                }
-                className={`w-full h-full flex items-center ${
-                  isEditIconHidden ? "hidden" : "block"
-                } justify-center bg-transparent hover:bg-zinc-500/75 hover:text-white absolute top-0 text-black z-10 transition-all duration-200 cursor-pointer`}
-              >
-                <MdEdit className="bg-transparent text-lg sm:text-xl md:text-2xl transition-all duration-200" />
-              </div>
+              {isLoggedinUserProfile && (
+                <div
+                  onClick={() =>
+                    !isEditIconHidden &&
+                    handleEditClick({ isProfileImage: true })
+                  }
+                  className={`w-full h-full flex items-center ${
+                    isEditIconHidden ? "hidden" : "block"
+                  } justify-center bg-transparent hover:bg-zinc-500/75 hover:text-white absolute top-0 text-black z-10 transition-all duration-200 cursor-pointer`}
+                >
+                  <MdEdit className="bg-transparent text-lg sm:text-xl md:text-2xl transition-all duration-200" />
+                </div>
+              )}
             </div>
 
             {/* Profile Info */}
             <div className="text-center sm:text-left flex-1">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-clip-text text-transparent mb-2 md:mb-3">
                 <AuroraText>
-                  {user?.firstName} {user?.lastName}
+                  {infoUser?.firstName} {infoUser?.lastName}
                 </AuroraText>
               </h2>
               <p className="text-base md:text-lg flex items-center">
-                <span className="mr-3">{user?.profession}</span>
+                <span className="mr-3">{infoUser?.profession}</span>
 
-                <span
-                  onClick={() => handleEditClick({ isProfession: true })}
-                  className="font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
-                >
-                  {user?.profession ? <MdEdit /> : "Add Profession"}
-                </span>
+                {isLoggedinUserProfile && (
+                  <span
+                    onClick={() => handleEditClick({ isProfession: true })}
+                    className="font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
+                  >
+                    {infoUser?.profession ? <MdEdit /> : "Add Profession"}
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -109,13 +149,15 @@ const Profile = () => {
                 <FaInstagram size={24} />
               </a>
             )}
-            <p
-              href="#"
-              className="hover:scale-110 transition-transform duration-200 text-zinc-500 hover:text-zinc-100"
-              onClick={() => handleEditClick({ isLinks: true })}
-            >
-              <MdEdit size={20} />
-            </p>
+            {isLoggedinUserProfile && (
+              <p
+                href="#"
+                className="hover:scale-110 transition-transform duration-200 text-zinc-500 hover:text-zinc-100"
+                onClick={() => handleEditClick({ isLinks: true })}
+              >
+                <MdEdit size={20} />
+              </p>
+            )}
           </div>
         </div>
 
@@ -123,12 +165,14 @@ const Profile = () => {
         <div className="w-11/12 sm:w-10/12 md:w-9/12 lg:w-8/12 xl:w-7/12 mx-auto space-y-6 sm:space-y-8 lg:space-y-10 px-2 sm:px-0">
           {/* Basic Info */}
           <div className="border-b border-zinc-700 pb-4 sm:pb-6 relative">
-            <p
-              onClick={() => handleEditClick({ isBasicData: true })}
-              className="absolute right-0 top-0 cursor-pointer hover:scale-110 transition-transform duration-200"
-            >
-              <SquarePen />
-            </p>
+            {isLoggedinUserProfile && (
+              <p
+                onClick={() => handleEditClick({ isBasicData: true })}
+                className="absolute right-0 top-0 cursor-pointer hover:scale-110 transition-transform duration-200"
+              >
+                <SquarePen />
+              </p>
+            )}
             <h4 className="text-lg sm:text-xl font-semibold text-zinc-100 pb-2 sm:pb-3">
               Basic Info
             </h4>
@@ -139,10 +183,10 @@ const Profile = () => {
                 </span>
                 <span
                   className={`text-sm sm:text-base ${
-                    !user?.gender && "text-zinc-500"
+                    !infoUser?.gender && "text-zinc-500"
                   }`}
                 >
-                  {user?.gender ? user?.gender : "Add"}
+                  {infoUser?.gender ? infoUser?.gender : "Add"}
                 </span>
               </li>
               <li className="flex sm:flex-row sm:items-center">
@@ -151,11 +195,11 @@ const Profile = () => {
                 </span>
                 <span
                   className={`text-sm sm:text-base ${
-                    !user?.dateOfBirth && "text-zinc-500"
+                    !infoUser?.dateOfBirth && "text-zinc-500"
                   }`}
                 >
-                  {user?.dateOfBirth
-                    ? user?.dateOfBirth.split("T")[0]
+                  {infoUser?.dateOfBirth
+                    ? infoUser?.dateOfBirth.split("T")[0]
                     : "YYYY-MM-DD"}
                 </span>
               </li>
@@ -163,14 +207,14 @@ const Profile = () => {
                 <span className="w-20 md:w-24 inline-block font-semibold text-sm sm:text-base">
                   Age:
                 </span>
-                <span className="text-sm sm:text-base">{user?.age}</span>
+                <span className="text-sm sm:text-base">{infoUser?.age}</span>
               </li>
               <li className="flex flex-col sm:flex-row sm:items-start">
                 <span className="w-full sm:w-20 md:w-24 inline-block font-semibold text-sm sm:text-base mb-1 sm:mb-0">
                   About:
                 </span>
                 <span className="text-sm sm:text-base flex-1">
-                  {user?.about}
+                  {infoUser?.about}
                 </span>
               </li>
             </ul>
@@ -182,16 +226,18 @@ const Profile = () => {
               <h4 className="text-lg sm:text-xl font-semibold text-zinc-100">
                 Skills
               </h4>
-              <p
-                onClick={() => handleEditClick({ isSkills: true })}
-                className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
-              >
-                + Add
-              </p>
+              {isLoggedinUserProfile && (
+                <p
+                  onClick={() => handleEditClick({ isSkills: true })}
+                  className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
+                >
+                  + Add
+                </p>
+              )}
             </div>
             <div className="flex flex-wrap gap-2 sm:gap-3">
-              {user?.skills && user?.skills.length !== 0 ? (
-                user?.skills.map((skill, index) => (
+              {infoUser?.skills && infoUser?.skills.length !== 0 ? (
+                infoUser?.skills.map((skill, index) => (
                   <p
                     key={index}
                     className="px-2 sm:px-3 py-1 rounded-md bg-[#FFFACD]/10 text-[#FFFACD] text-xs sm:text-sm tracking-wide"
@@ -211,16 +257,18 @@ const Profile = () => {
               <h4 className="text-lg sm:text-xl font-semibold text-zinc-100">
                 Awards & Achievements
               </h4>
-              <p
-                onClick={() => handleEditClick({ isAchievements: true })}
-                className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
-              >
-                + Add
-              </p>
+              {isLoggedinUserProfile && (
+                <p
+                  onClick={() => handleEditClick({ isAchievements: true })}
+                  className="text-sm font-medium text-zinc-400 hover:text-blue-400 cursor-pointer transition-colors duration-200"
+                >
+                  + Add
+                </p>
+              )}
             </div>
             <div className="flex flex-wrap gap-2 sm:gap-3">
-              {user?.achievements && user?.achievements.length !== 0 ? (
-                user?.achievements.map((achievement, index) => (
+              {infoUser?.achievements && infoUser?.achievements.length !== 0 ? (
+                infoUser?.achievements.map((achievement, index) => (
                   <p
                     key={index}
                     className="px-2 sm:px-3 py-1 rounded-md bg-blue-500/10 text-blue-300 text-xs sm:text-sm tracking-wide"
