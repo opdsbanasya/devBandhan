@@ -3,6 +3,7 @@ const { userAuth } = require("../middlewares/authMiddleware");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 const sendEmail = require("../utils/sendEmail");
+const { getRequestHtml } = require("../utils/constants");
 const requestRouter = express.Router();
 
 requestRouter.post(
@@ -45,11 +46,13 @@ requestRouter.post(
 
       const request = await connectionRequest.save();
       
+      let reqHtml = getRequestHtml(toUser.firstName, req.user.firstName)
       const email = {
-        title: req.user.firstName,
-        body: `Hey <b>${toUser.firstName}</b>, you have a connection request from <b>${req.user.firstName}</b>. Review it in <a href="devbandhan.tech">devbandhan.tech<a>`,
+        subject: `${req.user.firstName} sent you a request!`,
+        html: reqHtml,
+        adresses: [{ address: toUser?.email }],
       }
-      const response = await sendEmail.run(email);
+      const response = await sendEmail(emailData);
 
       res.json({
         message: "Connection request sent!",
