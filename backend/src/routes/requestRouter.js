@@ -2,7 +2,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/authMiddleware");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-const sendEmail = require("../utils/sendEmail");
+const { sendEmail } = require("../utils/sendEmail");
 const { getRequestHtml } = require("../utils/constants");
 const requestRouter = express.Router();
 
@@ -45,13 +45,13 @@ requestRouter.post(
       });
 
       const request = await connectionRequest.save();
-      
-      let reqHtml = getRequestHtml(toUser.firstName, req.user.firstName)
-      const email = {
+
+      let reqHtml = getRequestHtml(toUser.firstName, req.user.firstName);
+      const emailData = {
         subject: `${req.user.firstName} sent you a request!`,
         html: reqHtml,
         adresses: [{ address: toUser?.email }],
-      }
+      };
       const response = await sendEmail(emailData);
 
       res.json({
